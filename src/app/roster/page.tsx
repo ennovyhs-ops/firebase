@@ -1,3 +1,5 @@
+"use client";
+import * as React from "react";
 import { PageHeader } from "@/components/page-header";
 import {
   Card,
@@ -8,21 +10,38 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { players } from "./data";
+import { players as initialPlayers } from "./data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { AddPlayerForm } from "./add-player-form";
+import type { Player } from "@/lib/types";
 
 export default function RosterPage() {
+  const [open, setOpen] = React.useState(false);
+  const [players, setPlayers] = React.useState(initialPlayers);
+  
+  const handlePlayerAdd = (player: Player) => {
+    // NOTE: This only adds the player to the client-side state.
+    // The data is not persisted.
+    setPlayers((prev) => [...prev, player]);
+    console.log("New player added:", player);
+  };
+  
   return (
     <div className="container mx-auto px-4 py-8">
       <PageHeader title="Team Roster" description={`Manage your ${players.length} players.`}>
-        <Button>
-            <PlusCircle className="mr-2 size-4"/>
-            Add Player
-        </Button>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button>
+                <PlusCircle className="mr-2 size-4"/>
+                Add Player
+            </Button>
+          </DialogTrigger>
+          <AddPlayerForm onPlayerAdd={handlePlayerAdd} setOpen={setOpen} />
+        </Dialog>
       </PageHeader>
       <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {players.map((player) => {
