@@ -29,6 +29,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import type { TeamEvent } from "@/lib/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type AddEventFormProps = {
   onEventAdd: (event: TeamEvent) => void;
@@ -64,74 +65,78 @@ export function AddEventForm({ onEventAdd, setOpen, selectedDate }: AddEventForm
           Fill in the details for the new team event.
         </DialogDescription>
       </DialogHeader>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="title">Event Title</Label>
-          <Input id="title" name="title" required />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="type">Event Type</Label>
-            <Select name="type" required>
-              <SelectTrigger id="type">
-                <SelectValue placeholder="Select type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Practice">Practice</SelectItem>
-                <SelectItem value="Game">Game</SelectItem>
-                <SelectItem value="Event">Event</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="date">Date</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
+      <form onSubmit={handleSubmit}>
+        <ScrollArea className="h-96">
+            <div className="space-y-4 p-6">
+                <div className="space-y-2">
+                <Label htmlFor="title">Event Title</Label>
+                <Input id="title" name="title" required />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="type">Event Type</Label>
+                    <Select name="type" required>
+                    <SelectTrigger id="type">
+                        <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Practice">Practice</SelectItem>
+                        <SelectItem value="Game">Game</SelectItem>
+                        <SelectItem value="Event">Event</SelectItem>
+                    </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="date">Date</Label>
+                    <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                        variant={"outline"}
+                        className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                        )}
+                        >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                        <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                        />
+                    </PopoverContent>
+                    </Popover>
+                </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="startTime">Start Time</Label>
+                    <Input id="startTime" name="startTime" type="time" required />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="endTime">End Time</Label>
+                    <Input id="endTime" name="endTime" type="time" required />
+                </div>
+                </div>
+                <div className="space-y-2">
+                <Label htmlFor="location">Location</Label>
+                <Input id="location" name="location" required />
+                </div>
+                <div className="space-y-2">
+                <Label htmlFor="description">Description (Optional)</Label>
+                <Textarea
+                    id="description"
+                    name="description"
+                    placeholder="Add any extra details..."
                 />
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="startTime">Start Time</Label>
-            <Input id="startTime" name="startTime" type="time" required />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="endTime">End Time</Label>
-            <Input id="endTime" name="endTime" type="time" required />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="location">Location</Label>
-          <Input id="location" name="location" required />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="description">Description (Optional)</Label>
-          <Textarea
-            id="description"
-            name="description"
-            placeholder="Add any extra details..."
-          />
-        </div>
-        <DialogFooter>
+                </div>
+            </div>
+        </ScrollArea>
+        <DialogFooter className="pt-4 border-t">
           <Button type="submit">Create Event</Button>
         </DialogFooter>
       </form>
