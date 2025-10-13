@@ -52,7 +52,7 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
   };
 
   return (
-    <DialogContent className="sm:max-w-[425px]">
+    <DialogContent className="sm:max-w-md">
       <DialogHeader>
         <DialogTitle>Add New Player</DialogTitle>
         <DialogDescription>
@@ -60,55 +60,45 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
         </DialogDescription>
       </DialogHeader>
       <form onSubmit={handleSubmit}>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input id="name" name="name" required className="col-span-3" />
+        <div className="space-y-4 py-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" name="name" required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="position">Position</Label>
+              <Input id="position" name="position" required />
+            </div>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="number" className="text-right">
-              Number
-            </Label>
-            <Input id="number" name="number" type="number" required className="col-span-3" />
+          <div className="space-y-2">
+            <Label htmlFor="number">Jersey Number</Label>
+            <Input id="number" name="number" type="number" required />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="position" className="text-right">
-              Position
-            </Label>
-            <Input id="position" name="position" required className="col-span-3" />
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" name="email" type="email" required />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="email" className="text-right">
-              Email
-            </Label>
-            <Input id="email" name="email" type="email" required className="col-span-3" />
+          <div className="space-y-2">
+            <Label htmlFor="phone">Phone</Label>
+            <Input id="phone" name="phone" type="tel" required />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="phone" className="text-right">
-              Phone
-            </Label>
-            <Input id="phone" name="phone" type="tel" required className="col-span-3" />
+          
+          <h4 className="text-sm font-medium pt-4 border-t">Emergency Contact</h4>
+          
+          <div className="space-y-2">
+            <Label htmlFor="emergencyName">Full Name</Label>
+            <Input id="emergencyName" name="emergencyName" required />
           </div>
-          <h4 className="text-sm font-medium mt-4 border-t pt-4 col-span-4">Emergency Contact</h4>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="emergencyName" className="text-right">
-              Name
-            </Label>
-            <Input id="emergencyName" name="emergencyName" required className="col-span-3" />
-          </div>
-           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="emergencyPhone" className="text-right">
-              Phone
-            </Label>
-            <Input id="emergencyPhone" name="emergencyPhone" type="tel" required className="col-span-3" />
-          </div>
-           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="emergencyRelation" className="text-right">
-              Relation
-            </Label>
-            <Input id="emergencyRelation" name="emergencyRelation" required className="col-span-3" />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="emergencyPhone">Phone</Label>
+              <Input id="emergencyPhone" name="emergencyPhone" type="tel" required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="emergencyRelation">Relation</Label>
+              <Input id="emergencyRelation" name="emergencyRelation" required />
+            </div>
           </div>
         </div>
         <DialogFooter>
