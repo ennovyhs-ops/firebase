@@ -14,6 +14,7 @@ import {
   SidebarFooter,
   SidebarInset,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboard,
@@ -38,24 +39,25 @@ const navItems = [
   { href: "/performance", icon: BarChart3, label: "Performance" },
 ];
 
-export function AppShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
+function NavMenu() {
+    const pathname = usePathname();
+    const { setOpenMobile, isMobile } = useSidebar();
 
-  return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-          <Logo />
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
+    const handleLinkClick = () => {
+        if (isMobile) {
+            setOpenMobile(false);
+        }
+    }
+
+    return (
+        <SidebarMenu>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === item.href}
                   tooltip={item.label}
+                  onClick={handleLinkClick}
                 >
                   <Link href={item.href}>
                     <item.icon />
@@ -65,6 +67,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
+    )
+}
+
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
+
+  return (
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader>
+          <Logo />
+        </SidebarHeader>
+        <SidebarContent>
+          <NavMenu />
         </SidebarContent>
         <SidebarFooter>
           <div className="flex items-center gap-3">
