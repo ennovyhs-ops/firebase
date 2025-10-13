@@ -79,46 +79,46 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="position">Position</Label>
-                    <Input id="position" name="position" required />
+                    <Input id="position" name="position" />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="number">Jersey Number</Label>
-                    <Input id="number" name="number" type="number" required />
+                    <Input id="number" name="number" type="number" />
                 </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                 <Label htmlFor="birthMonth">Birth Month</Label>
-                <Input id="birthMonth" name="birthMonth" type="number" placeholder="MM" required />
+                <Input id="birthMonth" name="birthMonth" type="number" placeholder="MM" />
                 </div>
                 <div className="space-y-2">
                 <Label htmlFor="birthYear">Birth Year</Label>
-                <Input id="birthYear" name="birthYear" type="number" placeholder="YYYY" required />
+                <Input id="birthYear" name="birthYear" type="number" placeholder="YYYY" />
                 </div>
             </div>
             <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" required />
+                <Input id="email" name="email" type="email" />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" name="phone" type="tel" required />
+                <Input id="phone" name="phone" type="tel" />
             </div>
             
             <h4 className="text-sm font-medium pt-4 border-t">Emergency Contact</h4>
             
             <div className="space-y-2">
                 <Label htmlFor="emergencyName">Full Name</Label>
-                <Input id="emergencyName" name="emergencyName" required />
+                <Input id="emergencyName" name="emergencyName" />
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                 <Label htmlFor="emergencyPhone">Phone</Label>
-                <Input id="emergencyPhone" name="emergencyPhone" type="tel" required />
+                <Input id="emergencyPhone" name="emergencyPhone" type="tel" />
                 </div>
                 <div className="space-y-2">
                 <Label htmlFor="emergencyRelation">Relation</Label>
-                <Input id="emergencyRelation" name="emergencyRelation" required />
+                <Input id="emergencyRelation" name="emergencyRelation" />
                 </div>
             </div>
             </div>
