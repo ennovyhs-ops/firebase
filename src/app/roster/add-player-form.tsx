@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Player } from "@/lib/types";
 
 type AddPlayerFormProps = {
@@ -63,64 +64,66 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
         </DialogDescription>
       </DialogHeader>
       <form onSubmit={handleSubmit}>
-        <div className="space-y-4 py-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" name="firstName" required />
+        <ScrollArea className="h-96">
+            <div className="space-y-4 py-4 px-6">
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                <Label htmlFor="firstName">First Name</Label>
+                <Input id="firstName" name="firstName" required />
+                </div>
+                <div className="space-y-2">
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input id="lastName" name="lastName" required />
+                </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="position">Position</Label>
+                    <Input id="position" name="position" required />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="number">Jersey Number</Label>
+                    <Input id="number" name="number" type="number" required />
+                </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                <Label htmlFor="birthMonth">Birth Month</Label>
+                <Input id="birthMonth" name="birthMonth" type="number" placeholder="MM" required />
+                </div>
+                <div className="space-y-2">
+                <Label htmlFor="birthYear">Birth Year</Label>
+                <Input id="birthYear" name="birthYear" type="number" placeholder="YYYY" required />
+                </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" name="lastName" required />
-            </div>
-          </div>
-           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-                <Label htmlFor="position">Position</Label>
-                <Input id="position" name="position" required />
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" name="email" type="email" required />
             </div>
             <div className="space-y-2">
-                <Label htmlFor="number">Jersey Number</Label>
-                <Input id="number" name="number" type="number" required />
+                <Label htmlFor="phone">Phone</Label>
+                <Input id="phone" name="phone" type="tel" required />
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-             <div className="space-y-2">
-              <Label htmlFor="birthMonth">Birth Month</Label>
-              <Input id="birthMonth" name="birthMonth" type="number" placeholder="MM" required />
-            </div>
+            
+            <h4 className="text-sm font-medium pt-4 border-t">Emergency Contact</h4>
+            
             <div className="space-y-2">
-              <Label htmlFor="birthYear">Birth Year</Label>
-              <Input id="birthYear" name="birthYear" type="number" placeholder="YYYY" required />
+                <Label htmlFor="emergencyName">Full Name</Label>
+                <Input id="emergencyName" name="emergencyName" required />
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" required />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone</Label>
-            <Input id="phone" name="phone" type="tel" required />
-          </div>
-          
-          <h4 className="text-sm font-medium pt-4 border-t">Emergency Contact</h4>
-          
-          <div className="space-y-2">
-            <Label htmlFor="emergencyName">Full Name</Label>
-            <Input id="emergencyName" name="emergencyName" required />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="emergencyPhone">Phone</Label>
-              <Input id="emergencyPhone" name="emergencyPhone" type="tel" required />
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                <Label htmlFor="emergencyPhone">Phone</Label>
+                <Input id="emergencyPhone" name="emergencyPhone" type="tel" required />
+                </div>
+                <div className="space-y-2">
+                <Label htmlFor="emergencyRelation">Relation</Label>
+                <Input id="emergencyRelation" name="emergencyRelation" required />
+                </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="emergencyRelation">Relation</Label>
-              <Input id="emergencyRelation" name="emergencyRelation" required />
             </div>
-          </div>
-        </div>
-        <DialogFooter>
+        </ScrollArea>
+        <DialogFooter className="pt-4 border-t">
           <Button type="submit">Add Player</Button>
         </DialogFooter>
       </form>
