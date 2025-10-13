@@ -1,0 +1,44 @@
+export type Player = {
+  id: string;
+  name: string;
+  number: number;
+  position: string;
+  avatarId: string;
+  contact: {
+    email: string;
+    phone: string;
+  };
+  emergencyContact: {
+    name: string;
+    phone: string;
+    relation: string;
+  };
+  medicalInfo: {
+    allergies: string;
+    conditions: string;
+  };
+  skillAssessments: {
+    shooting: number;
+    dribbling: number;
+    passing: number;
+    defense: number;
+  };
+};
+
+export type TeamEvent = {
+  id: string;
+  type: "Practice" | "Game" | "Event";
+  title: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+  description?: string;
+};
+
+export type AttendanceStatus = "Present" | "Absent" | "Pending";
+
+export type AttendanceRecord = {
+  eventId: string;
+  playerAttendances: Record<string, AttendanceStatus>;
+};

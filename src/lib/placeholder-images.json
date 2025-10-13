@@ -1,3 +1,82 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "player1",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p1/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player2",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p2/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player3",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p3/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player4",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p4/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player5",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p5/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player6",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p6/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player7",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p7/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player8",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p8/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player9",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p9/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player10",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p10/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player11",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p11/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "player12",
+      "description": "Profile picture of a basketball player",
+      "imageUrl": "https://picsum.photos/seed/p12/200/200",
+      "imageHint": "basketball player"
+    },
+    {
+      "id": "coach",
+      "description": "Profile picture of the coach",
+      "imageUrl": "https://picsum.photos/seed/coach/40/40",
+      "imageHint": "coach portrait"
+    }
+  ]
 }
