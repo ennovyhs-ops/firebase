@@ -93,7 +93,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <span className="text-sm font-semibold text-sidebar-foreground">
                 Coach Steve
               </span>
-              <span className="text-xs text-sidebar-foreground/70">
+              <Link href="/settings" className="text-xs text-sidebar-foreground/70 hover:underline">
+                Team Settings
+              </Link>
+              <span className="text-xs text-sidebar-foreground/50">
                 Administrator
               </span>
             </div>
