@@ -70,12 +70,18 @@ function NavMenu() {
     )
 }
 
-
-export function AppShell({ children }: { children: React.ReactNode }) {
+function AppShellInternal({ children }: { children: React.ReactNode }) {
   const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
+  const { isMobile, setOpenMobile } = useSidebar();
 
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+  
   return (
-    <SidebarProvider>
+    <>
       <Sidebar>
         <SidebarHeader>
           <Logo />
@@ -93,7 +99,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <span className="text-sm font-semibold text-sidebar-foreground">
                 Coach Steve
               </span>
-              <Link href="/settings" className="text-xs text-sidebar-foreground/70 hover:underline">
+              <Link href="/settings" className="text-xs text-sidebar-foreground/70 hover:underline" onClick={handleLinkClick}>
                 Team Settings
               </Link>
               <span className="text-xs text-sidebar-foreground/50">
@@ -120,6 +126,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </header>
         <main>{children}</main>
       </SidebarInset>
+    </>
+  )
+}
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider>
+      <AppShellInternal>{children}</AppShellInternal>
     </SidebarProvider>
   );
 }
