@@ -23,9 +23,12 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
     const formData = new FormData(e.currentTarget);
     const newPlayer: Player = {
       id: `p${Date.now()}`,
-      name: formData.get("name") as string,
+      firstName: formData.get("firstName") as string,
+      lastName: formData.get("lastName") as string,
       number: Number(formData.get("number")),
       position: formData.get("position") as string,
+      birthMonth: Number(formData.get("birthMonth")),
+      birthYear: Number(formData.get("birthYear")),
       avatarId: `player${Math.floor(Math.random() * 12) + 1}`,
       contact: {
         email: formData.get("email") as string,
@@ -63,17 +66,33 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
         <div className="space-y-4 py-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" required />
+              <Label htmlFor="firstName">First Name</Label>
+              <Input id="firstName" name="firstName" required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="position">Position</Label>
-              <Input id="position" name="position" required />
+              <Label htmlFor="lastName">Last Name</Label>
+              <Input id="lastName" name="lastName" required />
             </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="number">Jersey Number</Label>
-            <Input id="number" name="number" type="number" required />
+           <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+                <Label htmlFor="position">Position</Label>
+                <Input id="position" name="position" required />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="number">Jersey Number</Label>
+                <Input id="number" name="number" type="number" required />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+             <div className="space-y-2">
+              <Label htmlFor="birthMonth">Birth Month</Label>
+              <Input id="birthMonth" name="birthMonth" type="number" placeholder="MM" required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="birthYear">Birth Year</Label>
+              <Input id="birthYear" name="birthYear" type="number" placeholder="YYYY" required />
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>

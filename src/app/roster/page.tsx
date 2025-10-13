@@ -55,10 +55,10 @@ export default function RosterPage() {
               <CardHeader className="flex flex-row items-center gap-4">
                 <Avatar className="size-16">
                   <AvatarImage src={avatar?.imageUrl} data-ai-hint={avatar?.imageHint}/>
-                  <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
+                  <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <CardTitle>#{player.number} {player.name}</CardTitle>
+                  <CardTitle>#{player.number} {player.firstName} {player.lastName}</CardTitle>
                   <CardDescription>{player.position}</CardDescription>
                 </div>
               </CardHeader>
