@@ -87,8 +87,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <header className="flex items-center justify-between border-b p-2 lg:px-4">
             <SidebarTrigger />
             <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon">
+                <Button asChild variant="ghost" size="icon">
+                  <Link href="/settings">
                     <Settings className="size-5" />
+                  </Link>
                 </Button>
                  <Avatar className="size-9">
                     <AvatarImage src={coachImage?.imageUrl} alt="Coach" data-ai-hint={coachImage?.imageHint} />
