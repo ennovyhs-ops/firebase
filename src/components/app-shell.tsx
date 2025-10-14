@@ -26,7 +26,6 @@ import {
   Settings,
   LogOut,
   LogIn,
-  PanelLeft,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -118,6 +117,32 @@ function AuthButton() {
   )
 }
 
+function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
+    const { user, isUserLoading } = useUser();
+    const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
+
+    if (isUserLoading) return null; // Or a skeleton loader
+    if (!user) return null;
+
+    return (
+        <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
+            <Avatar className="size-9">
+                <AvatarImage src={user.photoURL ?? coachImage?.imageUrl} alt={user.displayName ?? "Coach"} data-ai-hint={coachImage?.imageHint} />
+                <AvatarFallback>{user.displayName?.charAt(0) ?? 'U'}</AvatarFallback>
+            </Avatar>
+            {!collapsed && (
+                <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-foreground truncate">
+                        {user.displayName}
+                    </span>
+                    <span className="text-xs text-muted-foreground">Coach</span>
+                </div>
+            )}
+        </div>
+    );
+}
+
+
 function BottomBar() {
   const pathname = usePathname();
   return (
@@ -142,17 +167,9 @@ function BottomBar() {
 }
 
 function AppShellInternal({ children }: { children: React.ReactNode }) {
-  const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
-  const { isMobile, setOpenMobile } = useSidebar();
-  const { user, isUserLoading } = useUser();
+  const { isMobile } = useSidebar();
+  const { user } = useUser();
 
-
-  const handleLinkClick = () => {
-    if (isMobile) {
-      setOpenMobile(false);
-    }
-  };
-  
   return (
     <>
       <Sidebar collapsible="icon">
@@ -163,7 +180,7 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
           <NavMenu />
         </SidebarContent>
         <SidebarFooter>
-          { !isUserLoading && user ? (
+          { user ? (
             <div className="flex items-center gap-3">
               <Avatar className="size-10">
                 <AvatarImage src={user.photoURL ?? undefined} alt={user.displayName ?? "User"} />
@@ -178,18 +195,21 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
                 </button>
               </div>
             </div>
-          ) : !isUserLoading ? (
+          ) : (
              <AuthButton />
-          ) : null}
+          )}
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="flex items-center justify-between border-b p-2 lg:px-4">
-            <div className="md:hidden">
-                <Logo />
-            </div>
-            <div className="hidden md:block">
-                <SidebarTrigger />
+        <header className="flex items-center justify-between border-b p-2 lg:px-4 h-14">
+            <div className="flex items-center gap-4">
+                <div className="md:hidden">
+                    <Logo />
+                </div>
+                 <div className="hidden md:flex items-center gap-4">
+                    <SidebarTrigger />
+                    <UserProfile />
+                </div>
             </div>
             <div className="flex items-center gap-4">
                 <Button asChild variant="ghost" size="icon">
@@ -197,14 +217,13 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
                     <Settings className="size-5" />
                   </Link>
                 </Button>
-                 <Avatar className="size-9">
-                    <AvatarImage src={user?.photoURL ?? coachImage?.imageUrl} alt={user?.displayName ?? "Coach"} data-ai-hint={coachImage?.imageHint} />
-                    <AvatarFallback>{user?.displayName?.charAt(0) ?? 'CS'}</AvatarFallback>
-                </Avatar>
+                <div className="md:hidden">
+                  <UserProfile />
+                </div>
             </div>
         </header>
         <main className="pb-16 md:pb-0">{children}</main>
-        <BottomBar />
+        {!isMobile && <BottomBar />}
       </SidebarInset>
     </>
   )
