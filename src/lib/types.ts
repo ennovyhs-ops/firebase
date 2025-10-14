@@ -7,6 +7,7 @@ export type Player = {
   number: number;
   position: string;
   avatarId: string;
+  avatarUrl?: string;
   contact: {
     email: string;
     phone: string;
