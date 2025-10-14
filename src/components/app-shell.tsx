@@ -124,19 +124,14 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
     const { user, isUserLoading } = useUser();
     const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
 
-    if (isUserLoading && !user) { // Show placeholder when loading and no user
+    if (isUserLoading) {
         return (
              <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
-                <Avatar className="size-9">
-                    <AvatarImage src={coachImage?.imageUrl} alt={"Johnny"} data-ai-hint={coachImage?.imageHint} />
-                    <AvatarFallback>J</AvatarFallback>
-                </Avatar>
+                <Avatar className="size-9" />
                 {!collapsed && (
                     <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-foreground truncate">
-                            Johnny
-                        </span>
-                        <span className="text-xs text-muted-foreground">Coach</span>
+                         <div className="h-4 w-16 bg-muted-foreground/20 rounded-md" />
+                         <div className="h-3 w-10 bg-muted-foreground/20 rounded-md mt-1" />
                     </div>
                 )}
             </div>
@@ -243,12 +238,10 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="flex items-center justify-between border-b p-2 lg:px-4 h-14">
+        <header className="sticky top-0 z-10 flex items-center justify-between border-b bg-background p-2 lg:px-4 h-14">
             <div className="flex items-center gap-4">
+                <Logo />
                 <SidebarTrigger />
-                <div className="md:hidden">
-                    <Logo />
-                </div>
                 <div className="hidden md:block">
                     <TeamSwitcher />
                 </div>
