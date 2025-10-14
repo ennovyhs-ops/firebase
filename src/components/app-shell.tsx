@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -34,7 +35,7 @@ const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/roster", icon: Users, label: "Roster" },
   { href: "/schedule", icon: Calendar, label: "Schedule" },
-  { href: "/communication", icon: MessageSquare, label: "Communication" },
+  { href: "/communication", icon: MessageSquare, label: "Messages" },
   { href: "/attendance", icon: ClipboardCheck, label: "Attendance" },
   { href: "/performance", icon: BarChart3, label: "Performance" },
 ];
