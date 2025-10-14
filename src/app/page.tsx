@@ -19,43 +19,40 @@ import { PageHeader } from "@/components/page-header";
 import { schedule } from './schedule/data';
 import { format, parseISO } from 'date-fns';
 import { players } from "./roster/data";
-import { conversations } from "./communication/data";
+import { conversations as initialConversations } from "./communication/data";
 
 export default function Home() {
   const nextEvent = schedule.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0];
-  const latestConversations = conversations.sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime()).slice(0,3);
+  const conversations = initialConversations.sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime()).slice(0,3);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <PageHeader
         title="Welcome Back, Coach!"
       />
-      <div className="mt-8 grid gap-6 md:grid-cols-12">
-        <Card className="md:col-span-7">
+      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Card>
            <CardHeader>
             <div className="flex items-center gap-4">
               <div className="bg-accent text-accent-foreground p-3 rounded-full">
                 <CalendarDays className="size-6" />
               </div>
-              <div>
-                <CardTitle>Next Up</CardTitle>
-                <CardDescription>Your next scheduled event</CardDescription>
-              </div>
+              <CardTitle>Next Up</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             {nextEvent ? (
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-semibold text-primary">{nextEvent.title} ({nextEvent.type})</h3>
-                  <p className="text-muted-foreground">
-                    {format(new Date(nextEvent.date), "EEEE, MMMM d, yyyy")} from {nextEvent.startTime} to {nextEvent.endTime}
+                  <h3 className="text-lg font-semibold text-primary">{nextEvent.title} ({nextEvent.type})</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {format(new Date(nextEvent.date), "EEE, MMM d")} @ {nextEvent.startTime}
                   </p>
                   <p className="text-sm">{nextEvent.location}</p>
                 </div>
-                <Button asChild>
+                <Button asChild size="sm">
                   <Link href="/schedule">
-                    View Full Schedule <ArrowRight className="ml-2 size-4" />
+                    View Schedule <ArrowRight className="ml-2 size-4" />
                   </Link>
                 </Button>
               </div>
@@ -64,15 +61,13 @@ export default function Home() {
             )}
           </CardContent>
         </Card>
-        <Card className="md:col-span-5">
+        <Card>
            <CardHeader>
             <div className="flex items-center gap-4">
               <div className="bg-accent text-accent-foreground p-3 rounded-full">
                 <Users className="size-6" />
               </div>
-              <div>
-                <CardTitle>Team Roster</CardTitle>
-              </div>
+              <CardTitle>Team Roster</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
@@ -89,21 +84,23 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
-      </div>
-
-       <div className="mt-6 grid gap-6 sm:grid-cols-1 md:grid-cols-2">
-         <Card>
+        <Card className="sm:col-span-2 lg:col-span-1">
           <CardHeader>
-             <CardTitle>Recent Messages</CardTitle>
+             <div className="flex items-center gap-4">
+              <div className="bg-accent text-accent-foreground p-3 rounded-full">
+                <MessageSquare className="size-6" />
+              </div>
+              <CardTitle>Recent Messages</CardTitle>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-                {latestConversations.map(convo => (
+            <div className="space-y-3">
+                {conversations.map(convo => (
                     <div key={convo.id} className="text-sm">
-                        <Link href={`/communication?id=${convo.id}`} className="font-medium text-primary hover:underline">
+                        <Link href={`/communication?id=${convo.id}`} className="font-medium text-primary hover:underline leading-tight">
                             {convo.subject}
                         </Link>
-                        <p className="text-xs text-muted-foreground">To: {convo.recipient}</p>
+                        <p className="text-xs text-muted-foreground truncate">To: {convo.recipient}</p>
                     </div>
                 ))}
             </div>
@@ -114,21 +111,25 @@ export default function Home() {
             </Button>
           </CardContent>
         </Card>
-         <Card>
+         <Card className="sm:col-span-2 lg:col-span-3">
           <CardHeader>
-             <CardTitle>Performance Analysis</CardTitle>
-             <CardDescription>Get AI-powered insights.</CardDescription>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="bg-accent text-accent-foreground p-3 rounded-full">
+                    <BarChart3 className="size-6" />
+                </div>
+                <div className="flex-1">
+                    <CardTitle>Performance Analysis</CardTitle>
+                    <CardDescription>Get AI-powered insights from your team's game and player data.</CardDescription>
+                </div>
+                <Button asChild>
+                    <Link href="/performance">
+                        Analyze Performance <ArrowRight className="ml-2 size-4" />
+                    </Link>
+                </Button>
+            </div>
           </CardHeader>
-          <CardContent>
-             <Button asChild className="w-full">
-                  <Link href="/performance">
-                    <BarChart3 className="mr-2 size-4"/> Analyze Performance
-                  </Link>
-             </Button>
-          </CardContent>
         </Card>
       </div>
     </div>
   );
 }
-
