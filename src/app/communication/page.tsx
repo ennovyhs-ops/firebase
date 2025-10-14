@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -10,11 +11,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Send, ArrowLeft } from "lucide-react";
+import { Send, ArrowLeft, MessageSquarePlus } from "lucide-react";
 import { players } from "../roster/data";
 import { conversations, type Conversation } from "./data";
 import {
@@ -26,7 +36,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format, parseISO } from "date-fns";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Combobox } from "@/components/ui/combobox";
 
 function ConversationDetails({
@@ -40,15 +49,16 @@ function ConversationDetails({
     <Card>
       <CardHeader>
         <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={onBack}>
-                <ArrowLeft />
-            </Button>
-            <div>
-                <CardTitle>{conversation.subject}</CardTitle>
-                <CardDescription>
-                To: {conversation.recipient} on {format(parseISO(conversation.timestamp), "PPP")}
-                </CardDescription>
-            </div>
+          <Button variant="ghost" size="icon" onClick={onBack}>
+            <ArrowLeft />
+          </Button>
+          <div>
+            <CardTitle>{conversation.subject}</CardTitle>
+            <CardDescription>
+              To: {conversation.recipient} on{" "}
+              {format(parseISO(conversation.timestamp), "PPP")}
+            </CardDescription>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
@@ -58,20 +68,19 @@ function ConversationDetails({
   );
 }
 
-export default function CommunicationPage() {
+function ComposeMessageDialog() {
   const { toast } = useToast();
-  const [selectedConversation, setSelectedConversation] =
-    useState<Conversation | null>(null);
+  const [open, setOpen] = useState(false);
 
   const recipientOptions = [
     { value: "all", label: "Entire Team (Players & Parents)" },
     { value: "players", label: "Players Only" },
     { value: "parents", label: "Parents Only" },
-    ...players.map(player => ({
+    ...players.map((player) => ({
       value: player.id,
       label: `${player.firstName} ${player.lastName} (#${player.number})`,
-    }))
-  ]
+    })),
+  ];
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -80,7 +89,68 @@ export default function CommunicationPage() {
       description: "Your message has been successfully queued for delivery.",
     });
     (e.target as HTMLFormElement).reset();
+    setOpen(false);
   };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <MessageSquarePlus className="mr-2" />
+          Compose Message
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Compose New Message</DialogTitle>
+          <DialogDescription>
+            Send a message to your team members.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4 pt-4">
+          <div className="grid gap-2">
+            <Label htmlFor="recipients">Recipients</Label>
+            <Combobox
+              options={recipientOptions}
+              placeholder="Select recipients..."
+              searchPlaceholder="Search recipients..."
+              emptyPlaceholder="No recipients found."
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="subject">Subject</Label>
+            <Input
+              id="subject"
+              name="subject"
+              placeholder="e.g., Practice Canceled"
+              required
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="message">Message</Label>
+            <Textarea
+              id="message"
+              name="message"
+              placeholder="Type your message here..."
+              className="min-h-[150px]"
+              required
+            />
+          </div>
+          <DialogFooter>
+            <Button type="submit">
+              <Send className="mr-2" />
+              Send Message
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export default function CommunicationPage() {
+  const [selectedConversation, setSelectedConversation] =
+    useState<Conversation | null>(null);
 
   if (selectedConversation) {
     return (
@@ -98,63 +168,10 @@ export default function CommunicationPage() {
       <PageHeader
         title="Messages"
         description="Send announcements, schedule updates, and messages to your team."
-      />
+      >
+        <ComposeMessageDialog />
+      </PageHeader>
       <div className="mt-8 space-y-6">
-        <Accordion type="single" collapsible className="w-full" defaultValue="compose-message">
-            <AccordionItem value="compose-message">
-                <Card>
-                    <AccordionTrigger className="px-6 w-full">
-                        <div className="text-left">
-                            <h3 className="text-lg font-medium">Compose Message</h3>
-                            <p className="text-sm text-muted-foreground">
-                                Click to expand or collapse.
-                            </p>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        <CardContent>
-                            <form onSubmit={handleSubmit} className="space-y-4 pt-4">
-                            <div className="grid gap-2">
-                                <Label htmlFor="recipients">Recipients</Label>
-                                <Combobox
-                                  options={recipientOptions}
-                                  placeholder="Select recipients..."
-                                  searchPlaceholder="Search recipients..."
-                                  emptyPlaceholder="No recipients found."
-                                />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="subject">Subject</Label>
-                                <Input
-                                id="subject"
-                                name="subject"
-                                placeholder="e.g., Practice Canceled"
-                                required
-                                />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="message">Message</Label>
-                                <Textarea
-                                id="message"
-                                name="message"
-                                placeholder="Type your message here..."
-                                className="min-h-[150px]"
-                                required
-                                />
-                            </div>
-                            <div className="flex justify-end">
-                                <Button type="submit">
-                                <Send className="mr-2 size-4" />
-                                Send Message
-                                </Button>
-                            </div>
-                            </form>
-                        </CardContent>
-                    </AccordionContent>
-                </Card>
-            </AccordionItem>
-        </Accordion>
-
         <Card>
           <CardHeader>
             <CardTitle>Previous Messages</CardTitle>
@@ -176,7 +193,7 @@ export default function CommunicationPage() {
                     onClick={() => setSelectedConversation(convo)}
                     className="cursor-pointer"
                   >
-                     <TableCell className="text-xs text-muted-foreground py-2">
+                    <TableCell className="text-xs text-muted-foreground py-2">
                       {format(parseISO(convo.timestamp), "MMM d")}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell py-2">
