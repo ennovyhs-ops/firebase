@@ -47,7 +47,6 @@ export default function SchedulePage() {
     <div className="container mx-auto px-4 py-8">
       <PageHeader
         title="Team Schedule"
-        description="Manage all practices, games, and team events."
       >
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
