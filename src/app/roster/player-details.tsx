@@ -233,18 +233,15 @@ export function PlayerDetails({
           </div>
         </ScrollArea>
         <DialogFooter className="pt-4 border-t sm:justify-between">
+            <Button type="submit">Save Changes</Button>
             <Button 
                 type="button" 
                 variant="destructive" 
-                onClick={() => onPlayerDelete(player)} 
-                className="mr-auto sm:mr-0"
+                onClick={() => onPlayerDelete(player)}
             >
                 <Trash2 />
                 Delete Player
             </Button>
-            <div className="flex gap-2">
-                <Button type="submit">Save Changes</Button>
-            </div>
         </DialogFooter>
       </form>
     </DialogContent>
