@@ -12,7 +12,6 @@ import {
   ArrowRight,
   BarChart3,
   CalendarDays,
-  ClipboardCheck,
   MessageSquare,
   Users,
 } from "lucide-react";
@@ -91,7 +90,7 @@ export default function Home() {
         </Card>
       </div>
 
-       <div className="mt-6 grid gap-6 sm:grid-cols-1 md:grid-cols-3">
+       <div className="mt-6 grid gap-6 sm:grid-cols-1 md:grid-cols-2">
          <Card>
           <CardHeader>
              <CardTitle>Communication</CardTitle>
@@ -101,19 +100,6 @@ export default function Home() {
              <Button asChild className="w-full">
                   <Link href="/communication">
                     <MessageSquare className="mr-2 size-4"/> Send a Message
-                  </Link>
-             </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-             <CardTitle>Attendance</CardTitle>
-             <CardDescription>Track player attendance.</CardDescription>
-          </CardHeader>
-          <CardContent>
-             <Button asChild className="w-full">
-                  <Link href="/attendance">
-                    <ClipboardCheck className="mr-2 size-4"/> Track Attendance
                   </Link>
              </Button>
           </CardContent>
