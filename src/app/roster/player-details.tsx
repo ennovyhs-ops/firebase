@@ -68,6 +68,7 @@ export function PlayerDetails({
         name: formData.get("emergencyName") as string,
         phone: formData.get("emergencyPhone") as string,
         relation: formData.get("emergencyRelation") as string,
+        email: formData.get("emergencyEmail") as string,
       }
     };
     onPlayerUpdate(updatedPlayer);
@@ -184,6 +185,15 @@ export function PlayerDetails({
                 id="emergencyName"
                 name="emergencyName"
                 defaultValue={player.emergencyContact.name}
+                />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="emergencyEmail">Email</Label>
+                <Input
+                id="emergencyEmail"
+                name="emergencyEmail"
+                type="email"
+                defaultValue={player.emergencyContact.email}
                 />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

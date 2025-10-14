@@ -1,3 +1,4 @@
+
 import type { Player } from '@/lib/types';
 
 export const players: Player[] = [
@@ -10,7 +11,7 @@ export const players: Player[] = [
     position: 'Forward',
     avatarId: 'player1',
     contact: { email: 'alex.j@example.com', phone: '555-0101' },
-    emergencyContact: { name: 'Sarah Johnson', phone: '555-0201', relation: 'Mother' },
+    emergencyContact: { name: 'Sarah Johnson', phone: '555-0201', relation: 'Mother', email: 'sarah.j@example.com' },
     medicalInfo: { allergies: 'None', conditions: 'None' },
     skillAssessments: { shooting: 8, dribbling: 7, passing: 6, defense: 9 }
   },
@@ -23,7 +24,7 @@ export const players: Player[] = [
     position: 'Guard',
     avatarId: 'player2',
     contact: { email: 'maria.g@example.com', phone: '555-0102' },
-    emergencyContact: { name: 'Carlos Garcia', phone: '555-0202', relation: 'Father' },
+    emergencyContact: { name: 'Carlos Garcia', phone: '555-0202', relation: 'Father', email: 'carlos.g@example.com' },
     medicalInfo: { allergies: 'Peanuts', conditions: 'Asthma' },
     skillAssessments: { shooting: 9, dribbling: 9, passing: 8, defense: 7 }
   },
@@ -36,7 +37,7 @@ export const players: Player[] = [
     position: 'Center',
     avatarId: 'player3',
     contact: { email: 'james.s@example.com', phone: '555-0103' },
-    emergencyContact: { name: 'Emily Smith', phone: '555-0203', relation: 'Wife' },
+    emergencyContact: { name: 'Emily Smith', phone: '555-0203', relation: 'Wife', email: 'emily.s@example.com' },
     medicalInfo: { allergies: 'None', conditions: 'None' },
     skillAssessments: { shooting: 6, dribbling: 5, passing: 7, defense: 9 }
   },
@@ -49,7 +50,7 @@ export const players: Player[] = [
     position: 'Guard',
     avatarId: 'player4',
     contact: { email: 'chen.w@example.com', phone: '555-0104' },
-    emergencyContact: { name: 'Li Wang', phone: '555-0204', relation: 'Father' },
+    emergencyContact: { name: 'Li Wang', phone: '555-0204', relation: 'Father', email: 'li.w@example.com' },
     medicalInfo: { allergies: 'None', conditions: 'None' },
     skillAssessments: { shooting: 8, dribbling: 9, passing: 9, defense: 6 }
   },
@@ -62,7 +63,7 @@ export const players: Player[] = [
     position: 'Forward',
     avatarId: 'player5',
     contact: { email: 'emily.d@example.com', phone: '555-0105' },
-    emergencyContact: { name: 'Robert Davis', phone: '555-0205', relation: 'Father' },
+    emergencyContact: { name: 'Robert Davis', phone: '555-0205', relation: 'Father', email: 'robert.d@example.com' },
     medicalInfo: { allergies: 'None', conditions: 'None' },
     skillAssessments: { shooting: 7, dribbling: 7, passing: 8, defense: 8 }
   },
@@ -75,7 +76,7 @@ export const players: Player[] = [
     position: 'Guard',
     avatarId: 'player6',
     contact: { email: 'david.w@example.com', phone: '555-0106' },
-    emergencyContact: { name: 'Jessica Wilson', phone: '555-0206', relation: 'Mother' },
+    emergencyContact: { name: 'Jessica Wilson', phone: '555-0206', relation: 'Mother', email: 'jessica.w@example.com' },
     medicalInfo: { allergies: 'Pollen', conditions: 'None' },
     skillAssessments: { shooting: 9, dribbling: 8, passing: 7, defense: 7 }
   },
@@ -88,7 +89,7 @@ export const players: Player[] = [
     position: 'Center',
     avatarId: 'player7',
     contact: { email: 'olivia.b@example.com', phone: '555-0107' },
-    emergencyContact: { name: 'Michael Brown', phone: '555-0207', relation: 'Father' },
+    emergencyContact: { name: 'Michael Brown', phone: '555-0207', relation: 'Father', email: 'michael.b@example.com' },
     medicalInfo: { allergies: 'None', conditions: 'None' },
     skillAssessments: { shooting: 7, dribbling: 6, passing: 6, defense: 9 }
   },
@@ -101,7 +102,7 @@ export const players: Player[] = [
     position: 'Guard',
     avatarId: 'player8',
     contact: { email: 'liam.m@example.com', phone: '555-0108' },
-    emergencyContact: { name: 'Sophia Miller', phone: '555-0208', relation: 'Mother' },
+    emergencyContact: { name: 'Sophia Miller', phone: '555-0208', relation: 'Mother', email: 'sophia.m@example.com' },
     medicalInfo: { allergies: 'None', conditions: 'None' },
     skillAssessments: { shooting: 8, dribbling: 9, passing: 8, defense: 8 }
   },
@@ -114,7 +115,7 @@ export const players: Player[] = [
     position: 'Forward',
     avatarId: 'player9',
     contact: { email: 'sophia.r@example.com', phone: '555-0109' },
-    emergencyContact: { name: 'Daniel Rodriguez', phone: '555-0209', relation: 'Father' },
+    emergencyContact: { name: 'Daniel Rodriguez', phone: '555-0209', relation: 'Father', email: 'daniel.r@example.com' },
     medicalInfo: { allergies: 'None', conditions: 'None' },
     skillAssessments: { shooting: 8, dribbling: 7, passing: 8, defense: 8 }
   },
@@ -127,7 +128,7 @@ export const players: Player[] = [
     position: 'Guard',
     avatarId: 'player10',
     contact: { email: 'michael.j@example.com', phone: '555-0110' },
-    emergencyContact: { name: 'Linda Jones', phone: '555-0210', relation: 'Mother' },
+    emergencyContact: { name: 'Linda Jones', phone: '555-0210', relation: 'Mother', email: 'linda.j@example.com' },
     medicalInfo: { allergies: 'None', conditions: 'None' },
     skillAssessments: { shooting: 10, dribbling: 9, passing: 8, defense: 7 }
   },
@@ -140,7 +141,7 @@ export const players: Player[] = [
     position: 'Forward',
     avatarId: 'player11',
     contact: { email: 'isabella.m@example.com', phone: '555-0111' },
-    emergencyContact: { name: 'Jose Martinez', phone: '555-0211', relation: 'Father' },
+    emergencyContact: { name: 'Jose Martinez', phone: '555-0211', relation: 'Father', email: 'jose.m@example.com' },
     medicalInfo: { allergies: 'Dust', conditions: 'None' },
     skillAssessments: { shooting: 7, dribbling: 8, passing: 7, defense: 8 }
   },
@@ -153,7 +154,7 @@ export const players: Player[] = [
     position: 'Center',
     avatarId: 'player12',
     contact: { email: 'william.t@example.com', phone: '555-0112' },
-    emergencyContact: { name: 'Patricia Taylor', phone: '555-0212', relation: 'Mother' },
+    emergencyContact: { name: 'Patricia Taylor', phone: '555-0212', relation: 'Mother', email: 'patricia.t@example.com' },
     medicalInfo: { allergies: 'None', conditions: 'None' },
     skillAssessments: { shooting: 6, dribbling: 5, passing: 6, defense: 10 }
   }

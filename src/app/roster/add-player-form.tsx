@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,7 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
         name: (formData.get("emergencyName") as string) || "",
         phone: (formData.get("emergencyPhone") as string) || "",
         relation: (formData.get("emergencyRelation") as string) || "",
+        email: (formData.get("emergencyEmail") as string) || "",
       },
       medicalInfo: {
         allergies: "None",
@@ -116,6 +118,10 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
               <Label htmlFor="emergencyName">Full Name</Label>
               <Input id="emergencyName" name="emergencyName" />
             </div>
+             <div className="space-y-2">
+                <Label htmlFor="emergencyEmail">Email</Label>
+                <Input id="emergencyEmail" name="emergencyEmail" type="email" />
+              </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="emergencyPhone">Phone</Label>

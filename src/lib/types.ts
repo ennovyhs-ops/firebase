@@ -1,3 +1,4 @@
+
 export type Player = {
   id: string;
   name: string;
@@ -15,6 +16,7 @@ export type Player = {
     name: string;
     phone: string;
     relation: string;
+    email?: string;
   };
   medicalInfo: {
     allergies: string;
