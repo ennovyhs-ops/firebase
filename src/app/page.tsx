@@ -31,7 +31,7 @@ export default function Home() {
         title="Welcome Back, Coach!"
       />
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <Card>
+        <Card className="flex flex-col">
            <CardHeader>
             <div className="flex items-center gap-4">
               <div className="bg-accent text-accent-foreground p-3 rounded-full">
@@ -40,9 +40,9 @@ export default function Home() {
               <CardTitle>Next Up</CardTitle>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-grow flex flex-col">
             {upcomingEvents.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-4 flex-grow flex flex-col justify-between">
                 <div className="space-y-3">
                   {upcomingEvents.map((event, index) => (
                     <div key={event.id}>
@@ -70,7 +70,7 @@ export default function Home() {
             )}
           </CardContent>
         </Card>
-        <Card>
+        <Card className="flex flex-col">
           <CardHeader>
              <div className="flex items-center gap-4">
               <div className="bg-accent text-accent-foreground p-3 rounded-full">
@@ -79,7 +79,7 @@ export default function Home() {
               <CardTitle>Recent Messages</CardTitle>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-grow flex flex-col justify-between">
             <div className="space-y-3">
                 {conversations.map(convo => (
                     <div key={convo.id} className="text-sm">
@@ -90,7 +90,7 @@ export default function Home() {
                     </div>
                 ))}
             </div>
-            <Button asChild variant="secondary" className="w-full mt-4">
+            <Button asChild className="w-full mt-4">
                 <Link href="/communication">
                 View All Messages <ArrowRight className="ml-2 size-4" />
                 </Link>
