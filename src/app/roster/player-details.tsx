@@ -232,8 +232,8 @@ export function PlayerDetails({
             </div>
           </div>
         </ScrollArea>
-        <DialogFooter className="pt-4 border-t gap-2 flex justify-between">
-           <Button 
+        <DialogFooter className="pt-4 border-t">
+            <Button 
                 type="button" 
                 variant="destructive" 
                 onClick={() => onPlayerDelete(player)} 
