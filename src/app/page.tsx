@@ -31,7 +31,7 @@ export default function Home() {
         title="Welcome Back, Coach!"
       />
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <Card className="sm:col-span-2 lg:col-span-1">
+        <Card>
            <CardHeader>
             <div className="flex items-center gap-4">
               <div className="bg-accent text-accent-foreground p-3 rounded-full">
@@ -97,7 +97,7 @@ export default function Home() {
             </Button>
           </CardContent>
         </Card>
-         <Card className="sm:col-span-2 lg:col-span-3">
+         <Card>
           <CardHeader>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <div className="bg-accent text-accent-foreground p-3 rounded-full">
