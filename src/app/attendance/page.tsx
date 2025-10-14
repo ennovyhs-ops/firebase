@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -28,12 +29,8 @@ import {
 import { players } from "../roster/data";
 import { schedule } from "../schedule/data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import type { AttendanceStatus, Player } from "@/lib/types";
+import type { AttendanceStatus, Player, TeamEvent } from "@/lib/types";
 import { format } from "date-fns";
-
-const upcomingEvents = schedule
-  .filter((event) => new Date(event.date) >= new Date())
-  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
 function AttendanceSheet({ eventId }: { eventId: string }) {
   const [attendance, setAttendance] = React.useState<
@@ -97,6 +94,11 @@ function AttendanceSheet({ eventId }: { eventId: string }) {
 }
 
 export default function AttendancePage() {
+  const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
+
+  const allEvents = schedule.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const selectedEvent = allEvents.find(event => event.id === selectedEventId);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <PageHeader
@@ -104,26 +106,39 @@ export default function AttendancePage() {
         description="Mark and review player attendance for all team events."
       />
       <div className="mt-8 space-y-8">
-        {upcomingEvents.length > 0 ? (
-          upcomingEvents.map((event) => (
-            <Card key={event.id}>
+        <Card>
+            <CardHeader>
+                <CardTitle>Select Event</CardTitle>
+                <CardDescription>Choose an event to view or manage attendance.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Select onValueChange={setSelectedEventId} value={selectedEventId ?? undefined}>
+                    <SelectTrigger className="w-full md:w-1/2">
+                        <SelectValue placeholder="Select an event..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {allEvents.map(event => (
+                            <SelectItem key={event.id} value={event.id}>
+                                {event.title} - {format(new Date(event.date), "MMM d, yyyy")}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </CardContent>
+        </Card>
+
+        {selectedEvent && (
+            <Card>
               <CardHeader>
-                <CardTitle>{event.title}</CardTitle>
+                <CardTitle>{selectedEvent.title}</CardTitle>
                 <CardDescription>
-                  {format(new Date(event.date), "EEEE, MMMM d, yyyy")} @ {event.location}
+                  {format(new Date(selectedEvent.date), "EEEE, MMMM d, yyyy")} @ {selectedEvent.location}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <AttendanceSheet eventId={event.id} />
+                <AttendanceSheet eventId={selectedEvent.id} />
               </CardContent>
             </Card>
-          ))
-        ) : (
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-center text-muted-foreground">No upcoming events to track.</p>
-            </CardContent>
-          </Card>
         )}
       </div>
     </div>
