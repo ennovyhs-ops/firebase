@@ -16,7 +16,7 @@ export function PageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between",
+        "relative flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between",
         className
       )}
     >
@@ -28,7 +28,7 @@ export function PageHeader({
           <p className="text-lg text-muted-foreground">{description}</p>
         )}
       </div>
-      {children && <div className="flex shrink-0 gap-2">{children}</div>}
+      {children && <div className="absolute top-0 right-0 flex shrink-0 gap-2">{children}</div>}
     </div>
   );
 }
