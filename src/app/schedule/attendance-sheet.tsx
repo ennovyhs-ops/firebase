@@ -66,7 +66,6 @@ export function AttendanceSheet({ eventId }: { eventId: string }) {
         <TableHeader>
             <TableRow>
             <TableHead>Player</TableHead>
-            <TableHead className="w-[120px] text-center hidden sm:table-cell">Indicated</TableHead>
             <TableHead className="w-[150px] text-right">Actual Status</TableHead>
             </TableRow>
         </TableHeader>
@@ -79,17 +78,20 @@ export function AttendanceSheet({ eventId }: { eventId: string }) {
                 <TableRow key={player.id}>
                 <TableCell>
                     <div className="flex items-center gap-3">
-                    <Avatar>
-                        <AvatarImage src={avatar?.imageUrl} data-ai-hint={avatar?.imageHint} />
-                        <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div className="font-medium">{playerName}</div>
+                        <Avatar>
+                            <AvatarImage src={avatar?.imageUrl} data-ai-hint={avatar?.imageHint} />
+                            <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <div className="font-medium">{playerName}</div>
+                            <div className="text-xs text-muted-foreground">
+                                Indicated:
+                                <Badge variant={getStatusVariant(playerAttendance.indicated)} className="ml-1.5 w-[70px] justify-center text-xs">
+                                    {playerAttendance.indicated}
+                                </Badge>
+                            </div>
+                        </div>
                     </div>
-                </TableCell>
-                <TableCell className="text-center hidden sm:table-cell">
-                    <Badge variant={getStatusVariant(playerAttendance.indicated)} className="w-[70px] justify-center">
-                        {playerAttendance.indicated}
-                    </Badge>
                 </TableCell>
                 <TableCell className="text-right">
                     <Select
@@ -117,4 +119,3 @@ export function AttendanceSheet({ eventId }: { eventId: string }) {
     </div>
   );
 }
-
