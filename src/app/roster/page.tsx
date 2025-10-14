@@ -7,11 +7,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { players as allPlayers } from "./data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Trash2 } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { AddPlayerForm } from "./add-player-form";
 import type { Player } from "@/lib/types";
-import { PlayerDetails } from "./player-details";
 import {
   Table,
   TableBody,
@@ -32,6 +30,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useTeam } from "@/context/team-context";
+import dynamic from "next/dynamic";
+
+const AddPlayerForm = dynamic(() => import("./add-player-form").then(mod => mod.AddPlayerForm));
+const PlayerDetails = dynamic(() => import("./player-details").then(mod => mod.PlayerDetails));
+
 
 export default function RosterPage() {
   const { toast } = useToast();
