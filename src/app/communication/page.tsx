@@ -208,10 +208,6 @@ export default function CommunicationPage() {
       </PageHeader>
       <div className="mt-8 space-y-6">
         <Card>
-          <CardHeader>
-            <CardTitle>Previous Messages</CardTitle>
-            <CardDescription>Review your past conversations.</CardDescription>
-          </CardHeader>
           <CardContent className="p-0">
             <Table>
               <TableHeader>
