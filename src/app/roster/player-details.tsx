@@ -97,7 +97,7 @@ export function PlayerDetails({
         </div>
       </DialogHeader>
       <form onSubmit={handleSubmit}>
-        <ScrollArea className="h-[50vh]">
+        <ScrollArea className="h-[60vh] md:h-[50vh]">
           <div className="space-y-6 p-6">
             <div className="space-y-2">
               <Label>Profile Picture</Label>
@@ -127,7 +127,7 @@ export function PlayerDetails({
             
             <h3 className="text-lg font-medium border-b pb-2">Player Information</h3>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
@@ -147,7 +147,7 @@ export function PlayerDetails({
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="position">Position</Label>
                 <Input
@@ -168,7 +168,7 @@ export function PlayerDetails({
             </div>
 
             <h3 className="text-lg font-medium border-b pb-2 pt-4">Contact Information</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -199,7 +199,7 @@ export function PlayerDetails({
                 defaultValue={player.emergencyContact.name}
                 />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                 <Label htmlFor="emergencyPhone">Phone</Label>
                 <Input

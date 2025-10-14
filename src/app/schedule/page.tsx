@@ -59,8 +59,8 @@ export default function SchedulePage() {
           <AddEventForm onEventAdd={handleEventAdd} setOpen={setOpen} selectedDate={date} />
         </Dialog>
       </PageHeader>
-      <div className="mt-8 grid gap-8 md:grid-cols-3">
-        <div className="md:col-span-1">
+      <div className="mt-8 grid gap-8 md:grid-cols-1 lg:grid-cols-3">
+        <div className="lg:col-span-1">
           <Card>
             <CardContent className="p-1">
               <Calendar
@@ -74,7 +74,7 @@ export default function SchedulePage() {
             </CardContent>
           </Card>
         </div>
-        <div className="md:col-span-2">
+        <div className="lg:col-span-2">
           <Card className="min-h-full">
             <CardHeader>
               <CardTitle>
