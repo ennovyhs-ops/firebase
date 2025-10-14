@@ -232,7 +232,7 @@ export function PlayerDetails({
             </div>
           </div>
         </ScrollArea>
-        <DialogFooter className="pt-4 border-t sm:justify-between">
+        <DialogFooter className="pt-4 border-t flex flex-col space-y-2">
             <Button type="submit">Save Changes</Button>
             <Button 
                 type="button" 
