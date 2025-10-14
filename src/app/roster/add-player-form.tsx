@@ -25,7 +25,8 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
     const formData = new FormData(e.currentTarget);
     const newPlayer: Player = {
       id: `p${Date.now()}`,
-      name: formData.get("name") as string,
+      firstName: formData.get("firstName") as string,
+      lastName: formData.get("lastName") as string,
       number: Number(formData.get("number")) || 0,
       position: (formData.get("position") as string) || "",
       birthMonth: Number(formData.get("birthMonth")) || 0,
@@ -67,9 +68,15 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
       <form onSubmit={handleSubmit}>
         <ScrollArea className="h-96">
           <div className="space-y-4 py-4 px-6">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input id="name" name="name" required />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">First Name</Label>
+                <Input id="firstName" name="firstName" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input id="lastName" name="lastName" required />
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">

@@ -37,6 +37,7 @@ export function PlayerDetails({
     (p) => p.id === player.avatarId
   );
   const avatarSrc = player.avatarUrl || avatarPlaceholder?.imageUrl;
+  const playerName = `${player.firstName} ${player.lastName}`;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -54,7 +55,8 @@ export function PlayerDetails({
     const formData = new FormData(e.currentTarget);
     const updatedPlayer: Player = {
       ...player,
-      name: formData.get("name") as string,
+      firstName: formData.get("firstName") as string,
+      lastName: formData.get("lastName") as string,
       number: Number(formData.get("number")),
       position: formData.get("position") as string,
       avatarUrl: previewUrl || player.avatarUrl,
@@ -82,12 +84,12 @@ export function PlayerDetails({
           <Avatar className="size-20">
             <AvatarImage src={avatarSrc} />
             <AvatarFallback>
-              {player.name.split(' ').map(n => n[0]).join('')}
+              {player.firstName.charAt(0)}{player.lastName.charAt(0)}
             </AvatarFallback>
           </Avatar>
           <div>
             <DialogTitle className="text-3xl">
-              {player.name}
+              {playerName}
             </DialogTitle>
             <DialogDescription>
               #{player.number} | {player.position}
@@ -126,14 +128,25 @@ export function PlayerDetails({
             
             <h3 className="text-lg font-medium border-b pb-2">Player Information</h3>
             
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                name="name"
-                defaultValue={player.name}
-                required
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                        id="firstName"
+                        name="firstName"
+                        defaultValue={player.firstName}
+                        required
+                    />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                        id="lastName"
+                        name="lastName"
+                        defaultValue={player.lastName}
+                        required
+                    />
+                </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">

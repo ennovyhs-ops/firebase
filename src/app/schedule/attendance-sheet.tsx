@@ -49,15 +49,16 @@ export function AttendanceSheet({ eventId }: { eventId: string }) {
         <TableBody>
             {players.map((player) => {
             const avatar = PlaceHolderImages.find(p => p.id === player.avatarId);
+            const playerName = `${player.firstName} ${player.lastName}`;
             return (
                 <TableRow key={player.id}>
                 <TableCell>
                     <div className="flex items-center gap-3">
                     <Avatar>
                         <AvatarImage src={avatar?.imageUrl} data-ai-hint={avatar?.imageHint} />
-                        <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
+                        <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>
                     </Avatar>
-                    <div className="font-medium">{player.name}</div>
+                    <div className="font-medium">{playerName}</div>
                     </div>
                 </TableCell>
                 <TableCell className="text-right">

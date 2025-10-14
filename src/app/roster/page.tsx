@@ -48,9 +48,9 @@ export default function RosterPage() {
       >
         <Dialog open={addPlayerOpen} onOpenChange={setAddPlayerOpen}>
           <DialogTrigger asChild>
-            <Button size={isMobile ? "icon" : "default"}>
-              <PlusCircle />
-              <span className="sr-only sm:not-sr-only sm:ml-2">Add Player</span>
+            <Button>
+              <PlusCircle className="mr-2 sm:hidden" />
+              <span className="hidden sm:inline">Add Player</span>
             </Button>
           </DialogTrigger>
           <AddPlayerForm
@@ -75,6 +75,7 @@ export default function RosterPage() {
                     (p) => p.id === player.avatarId
                   );
                   const avatarSrc = player.avatarUrl || avatar?.imageUrl;
+                  const playerName = `${player.firstName} ${player.lastName}`;
                   return (
                     <TableRow key={player.id}>
                       <TableCell>
@@ -85,11 +86,11 @@ export default function RosterPage() {
                               data-ai-hint={avatar?.imageHint}
                             />
                             <AvatarFallback>
-                              {player.name.split(' ').map(n => n[0]).join('')}
+                              {player.firstName.charAt(0)}{player.lastName.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
                            <div>
-                            <span className="font-medium">{player.name}</span>
+                            <span className="font-medium">{playerName}</span>
                             <div className="text-sm text-muted-foreground">
                                 #{player.number || 'N/A'} | {player.position || 'N/A'}
                             </div>
