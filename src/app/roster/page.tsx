@@ -1,25 +1,17 @@
+
 "use client";
 import * as React from "react";
 import { PageHeader } from "@/components/page-header";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { players as initialPlayers } from "./data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { AddPlayerForm } from "./add-player-form";
 import type { Player } from "@/lib/types";
 import { PlayerDetails } from "./player-details";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
 const PLAYER_STORAGE_KEY = "roster-players";
 
@@ -70,100 +62,48 @@ export default function RosterPage() {
           />
         </Dialog>
       </PageHeader>
-      <div className="mt-8">
-        <Card>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Player</TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Position
-                  </TableHead>
-                  <TableHead className="hidden lg:table-cell">
-                    Overall Skill
-                  </TableHead>
-                  <TableHead className="hidden sm:table-cell">
-                    Contact
-                  </TableHead>
-                  <TableHead>
-                    <span className="sr-only">Actions</span>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {players.map((player) => {
-                  const avatar = PlaceHolderImages.find(
-                    (p) => p.id === player.avatarId
-                  );
-                  const avatarSrc = player.avatarUrl || avatar?.imageUrl;
-                  const overallSkill = Math.round(
-                    (Object.values(player.skillAssessments).reduce(
-                      (a, b) => a + b,
-                      0
-                    ) /
-                      (Object.values(player.skillAssessments).length * 10)) *
-                      100
-                  );
-                  return (
-                    <TableRow key={player.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <Avatar>
-                            <AvatarImage
-                              src={avatarSrc}
-                              data-ai-hint={avatar?.imageHint}
-                            />
-                            <AvatarFallback>
-                              {player.firstName.charAt(0)}
-                              {player.lastName.charAt(0)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <div className="font-medium">
-                              {player.firstName} {player.lastName}
-                            </div>
-                            <div className="text-muted-foreground text-sm">
-                              #{player.number || "N/A"}
-                            </div>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {player.position || "N/A"}
-                      </TableCell>
-                      <TableCell className="hidden lg:table-cell">
-                        <div className="flex items-center gap-2">
-                          <Progress value={overallSkill} className="w-24" />
-                          <span className="text-muted-foreground text-xs">
-                            {overallSkill}%
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <div className="text-sm">
-                          <div>{player.contact.email || "N/A"}</div>
-                          <div className="text-muted-foreground">
-                            {player.contact.phone || "N/A"}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedPlayer(player)}
-                        >
-                          View Details
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {players.map((player) => {
+          const avatar = PlaceHolderImages.find(
+            (p) => p.id === player.avatarId
+          );
+          const avatarSrc = player.avatarUrl || avatar?.imageUrl;
+          
+          return (
+            <Card key={player.id} className="flex flex-col">
+              <CardHeader className="flex-row items-center gap-4 space-y-0 pb-4">
+                  <Avatar className="size-12">
+                    <AvatarImage
+                      src={avatarSrc}
+                      data-ai-hint={avatar?.imageHint}
+                    />
+                    <AvatarFallback>
+                      {player.firstName.charAt(0)}
+                      {player.lastName.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                   <div>
+                    <CardTitle className="text-lg">
+                      {player.firstName} {player.lastName}
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                        #{player.number || "N/A"} | {player.position || "N/A"}
+                    </p>
+                  </div>
+              </CardHeader>
+              <CardContent className="flex-grow flex items-end justify-end p-4 pt-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedPlayer(player)}
+                  className="w-full"
+                >
+                  View Details
+                </Button>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
       <Dialog
         open={!!selectedPlayer}
