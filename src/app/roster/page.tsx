@@ -20,14 +20,14 @@ export default function RosterPage() {
   const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(
     null
   );
+  const [players, setPlayers] = React.useState<Player[]>(initialPlayers);
 
-  const [players, setPlayers] = React.useState<Player[]>(() => {
-    if (typeof window === "undefined") {
-      return initialPlayers;
-    }
+  React.useEffect(() => {
     const storedPlayers = localStorage.getItem(PLAYER_STORAGE_KEY);
-    return storedPlayers ? JSON.parse(storedPlayers) : initialPlayers;
-  });
+    if (storedPlayers) {
+      setPlayers(JSON.parse(storedPlayers));
+    }
+  }, []);
 
   React.useEffect(() => {
     localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(players));
