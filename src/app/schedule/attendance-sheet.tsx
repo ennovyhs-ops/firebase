@@ -34,7 +34,7 @@ export function AttendanceSheet({ eventId }: { eventId: string }) {
       const randomStatus = indicatedStatuses[Math.floor(Math.random() * 3)];
       acc[player.id] = {
         indicated: randomStatus,
-        actual: "Pending" 
+        actual: randomStatus, 
       };
       return acc;
     }, {} as Record<string, PlayerAttendance>)
@@ -117,3 +117,4 @@ export function AttendanceSheet({ eventId }: { eventId: string }) {
     </div>
   );
 }
+
