@@ -64,7 +64,6 @@ export default function RosterPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Player</TableHead>
-                  <TableHead className="hidden md:table-cell w-[100px]">Jersey</TableHead>
                   <TableHead className="w-[120px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -95,7 +94,6 @@ export default function RosterPage() {
                            </div>
                         </div>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell text-center">#{player.number || 'N/A'}</TableCell>
                       <TableCell className="text-right">
                         <Button
                           variant="outline"
