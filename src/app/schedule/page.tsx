@@ -63,7 +63,7 @@ export default function SchedulePage() {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button>
-              <PlusCircle className="mr-2" />
+              <PlusCircle />
               <span className="hidden sm:inline">Create Event</span>
             </Button>
           </DialogTrigger>

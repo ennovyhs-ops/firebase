@@ -47,7 +47,7 @@ export default function RosterPage() {
         <Dialog open={addPlayerOpen} onOpenChange={setAddPlayerOpen}>
           <DialogTrigger asChild>
             <Button>
-              <PlusCircle className="mr-2 sm:hidden" />
+              <PlusCircle />
               <span className="hidden sm:inline">Add Player</span>
             </Button>
           </DialogTrigger>

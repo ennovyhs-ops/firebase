@@ -172,8 +172,8 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <MessageSquarePlus className="mr-2" />
-          Compose Message
+          <MessageSquarePlus />
+          <span className="hidden sm:inline">Compose Message</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
