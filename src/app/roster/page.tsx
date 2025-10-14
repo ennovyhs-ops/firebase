@@ -29,7 +29,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { useTeam } from "@/context/team-context";
 import dynamic from "next/dynamic";
 
 const AddPlayerForm = dynamic(() => import("./add-player-form").then(mod => mod.AddPlayerForm));
@@ -38,17 +37,12 @@ const PlayerDetails = dynamic(() => import("./player-details").then(mod => mod.P
 
 export default function RosterPage() {
   const { toast } = useToast();
-  const { selectedTeam } = useTeam();
   const [addPlayerOpen, setAddPlayerOpen] = React.useState(false);
   const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(
     null
   );
   const [playerToDelete, setPlayerToDelete] = React.useState<Player | null>(null);
   const [players, setPlayers] = React.useState<Player[]>(allPlayers);
-
-  const teamPlayers = React.useMemo(() => {
-    return players.filter(p => p.teamId === selectedTeam);
-  }, [players, selectedTeam]);
 
   const handlePlayerAdd = (player: Player) => {
     setPlayers((prev) => [...prev, player]);
@@ -108,7 +102,7 @@ export default function RosterPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {teamPlayers.map((player) => {
+                {players.map((player) => {
                   const avatar = PlaceHolderImages.find(
                     (p) => p.id === player.avatarId
                   );

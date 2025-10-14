@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useTeam } from "@/context/team-context";
 import type { Player } from "@/lib/types";
 
 type AddPlayerFormProps = {
@@ -21,12 +20,11 @@ type AddPlayerFormProps = {
 };
 
 export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
-  const { selectedTeam } = useTeam();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const newPlayer: Player = {
+    const newPlayer: Omit<Player, 'teamId'> = {
       id: `p${Date.now()}`,
       firstName: formData.get("firstName") as string,
       lastName: formData.get("lastName") as string,
@@ -35,7 +33,6 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
       birthMonth: Number(formData.get("birthMonth")) || 0,
       birthYear: Number(formData.get("birthYear")) || 0,
       avatarId: `player${Math.floor(Math.random() * 12) + 1}`,
-      teamId: selectedTeam || "",
       contact: {
         email: (formData.get("email") as string) || "",
         phone: (formData.get("phone") as string) || "",
@@ -57,7 +54,7 @@ export function AddPlayerForm({ onPlayerAdd, setOpen }: AddPlayerFormProps) {
         defense: 5,
       },
     };
-    onPlayerAdd(newPlayer);
+    onPlayerAdd(newPlayer as Player);
     setOpen(false);
   };
 

@@ -40,7 +40,6 @@ import {
 import { format, formatISO, parseISO } from "date-fns";
 import { MultiSelectCombobox } from "@/components/ui/multi-select-combobox";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useTeam } from "@/context/team-context";
 
 function ConversationDetails({
   conversation,
@@ -122,20 +121,18 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [recipients, setRecipients] = useState<string[]>([]);
-  const { selectedTeam } = useTeam();
 
   const recipientOptions = useMemo(() => {
-    const teamPlayers = allPlayers.filter(p => p.teamId === selectedTeam);
     return [
         { value: "entire-team", label: "Entire Team (Players & Parents)" },
         { value: "players-only", label: "Players Only" },
         { value: "parents-only", label: "Parents Only" },
-        ...teamPlayers.map((player) => ({
+        ...allPlayers.map((player) => ({
         value: player.id,
         label: `${player.firstName} ${player.lastName} (#${player.number})`,
         })),
     ];
-  }, [selectedTeam]);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -161,7 +158,6 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
         recipient: recipientLabels.join(', '),
         timestamp: formatISO(new Date()),
         body: body,
-        teamId: selectedTeam || "",
     }
 
     onMessageSend(newMessage);
@@ -236,15 +232,14 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
 function CommunicationPageContent() {
   const searchParams = useSearchParams();
   const conversationId = searchParams.get('id');
-  const { selectedTeam } = useTeam();
 
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
 
   const teamConversations = useMemo(() => {
-      return conversations.filter(c => c.teamId === selectedTeam).sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime());
-  }, [conversations, selectedTeam]);
+      return conversations.sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime());
+  }, [conversations]);
 
   useEffect(() => {
     if (conversationId) {
@@ -256,24 +251,19 @@ function CommunicationPageContent() {
         setSelectedConversation(null);
     }
   }, [conversationId, teamConversations]);
-  
-  useEffect(() => {
-    setSelectedConversation(null);
-  }, [selectedTeam])
 
   const handleMessageSend = (message: Conversation) => {
     setConversations(prev => [message, ...prev]);
   }
 
   const handleReply = (conversationId: string, replyBody: string) => {
-    const newReply: Conversation = {
+    const newReply: Omit<Conversation, 'replies'> = {
         id: `reply${Date.now()}`,
         subject: `Re: ${selectedConversation?.subject}`,
         sender: 'Coach Steve', // Assuming the coach is always the one replying from this UI
         recipient: selectedConversation?.sender || '',
         timestamp: formatISO(new Date()),
         body: replyBody,
-        teamId: selectedTeam || "",
     };
 
     const updatedConversations = conversations.map(convo => {

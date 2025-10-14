@@ -22,18 +22,16 @@ import { schedule as allSchedule } from '../schedule/data';
 import { format, parseISO } from 'date-fns';
 import { conversations as allConversations } from "../communication/data";
 import { Separator } from "@/components/ui/separator";
-import { useTeam } from "@/context/team-context";
 
 export function DashboardClient() {
-  const { selectedTeam } = useTeam();
 
   const upcomingEvents = React.useMemo(() => {
-    return allSchedule.filter(e => e.teamId === selectedTeam).sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 2);
-  }, [selectedTeam]);
+    return allSchedule.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 2);
+  }, []);
 
   const conversations = React.useMemo(() => {
-    return allConversations.filter(c => c.teamId === selectedTeam).sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime()).slice(0,3);
-  }, [selectedTeam]);
+    return allConversations.sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime()).slice(0,3);
+  }, []);
 
 
   return (

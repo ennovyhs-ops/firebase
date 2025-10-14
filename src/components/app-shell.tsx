@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   SidebarProvider,
   Sidebar,
@@ -24,16 +24,11 @@ import {
   MessageSquare,
   BarChart3,
   Settings,
-  LogOut,
-  LogIn,
   ClipboardCheck,
-  SwitchCamera,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { useAuth, useUser } from "@/firebase";
-import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import {
@@ -71,11 +66,11 @@ function NavMenu() {
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname === item.href}
+                  isActive={pathname === item.href || (item.href === '/dashboard' && pathname === '/')}
                   tooltip={item.label}
                   onClick={handleLinkClick}
                 >
-                  <Link href={item.href}>
+                  <Link href={item.href === '/dashboard' ? '/' : item.href}>
                     <item.icon />
                     <span>{item.label}</span>
                   </Link>
@@ -129,10 +124,10 @@ function BottomBar() {
         {mobileNavItems.map((item) => (
           <Link
             key={item.href}
-            href={item.href}
+            href={item.href === '/dashboard' ? '/' : item.href}
             className={cn(
               "flex flex-col items-center gap-1 rounded-md p-2 text-xs font-medium text-muted-foreground transition-colors hover:text-primary",
-              pathname === item.href && "text-primary"
+              (pathname === item.href || (item.href === '/dashboard' && pathname === '/')) && "text-primary"
             )}
           >
             <item.icon className="size-5" />
