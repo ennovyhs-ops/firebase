@@ -64,8 +64,7 @@ export default function RosterPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Player</TableHead>
-                  <TableHead className="hidden lg:table-cell">Email</TableHead>
-                  <TableHead className="hidden md:table-cell">Phone</TableHead>
+                  <TableHead className="hidden md:table-cell">Contact</TableHead>
                   <TableHead className="w-[120px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -97,8 +96,10 @@ export default function RosterPage() {
                            </div>
                         </div>
                       </TableCell>
-                      <TableCell className="hidden lg:table-cell">{player.contact.email}</TableCell>
-                      <TableCell className="hidden md:table-cell">{player.contact.phone}</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <div>{player.contact.email}</div>
+                        <div className="text-muted-foreground">{player.contact.phone}</div>
+                      </TableCell>
                       <TableCell className="text-right">
                         <Button
                           variant="outline"
