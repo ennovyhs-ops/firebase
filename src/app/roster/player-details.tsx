@@ -232,12 +232,12 @@ export function PlayerDetails({
             </div>
           </div>
         </ScrollArea>
-        <DialogFooter className="pt-4 border-t">
+        <DialogFooter className="pt-4 border-t sm:justify-between">
             <Button 
                 type="button" 
                 variant="destructive" 
                 onClick={() => onPlayerDelete(player)} 
-                className="mr-auto"
+                className="mr-auto sm:mr-0"
             >
                 <Trash2 />
                 Delete Player
