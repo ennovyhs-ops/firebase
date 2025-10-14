@@ -15,19 +15,21 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import type { Player } from "@/lib/types";
-import { Upload } from "lucide-react";
+import { Upload, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 type PlayerDetailsProps = {
   player: Player;
   onPlayerUpdate: (player: Player) => void;
+  onPlayerDelete: (player: Player) => void;
   setOpen: (open: boolean) => void;
 };
 
 export function PlayerDetails({
   player,
   onPlayerUpdate,
+  onPlayerDelete,
   setOpen,
 }: PlayerDetailsProps) {
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(
@@ -230,9 +232,20 @@ export function PlayerDetails({
             </div>
           </div>
         </ScrollArea>
-        <DialogFooter className="pt-4 border-t gap-2 sm:gap-0">
-          <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button type="submit">Save Changes</Button>
+        <DialogFooter className="pt-4 border-t gap-2 flex justify-between">
+           <Button 
+                type="button" 
+                variant="destructive" 
+                onClick={() => onPlayerDelete(player)} 
+                className="mr-auto"
+            >
+                <Trash2 />
+                Delete Player
+            </Button>
+            <div className="flex gap-2">
+                <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                <Button type="submit">Save Changes</Button>
+            </div>
         </DialogFooter>
       </form>
     </DialogContent>
