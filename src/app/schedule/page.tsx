@@ -1,3 +1,4 @@
+
 "use client";
 import * as React from "react";
 import { PageHeader } from "@/components/page-header";
@@ -12,36 +13,40 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { schedule as initialSchedule } from "./data";
 import { PlusCircle, Pin } from "lucide-react";
-import { format, isSameDay } from "date-fns";
+import { format, isSameDay, parseISO } from "date-fns";
 import type { TeamEvent } from "@/lib/types";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { AddEventForm } from "./add-event-form";
+import { AttendanceSheet } from "./attendance-sheet";
 
 export default function SchedulePage() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [open, setOpen] = React.useState(false);
   const [schedule, setSchedule] = React.useState(initialSchedule);
+  const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
 
   const handleEventAdd = (event: TeamEvent) => {
-    // NOTE: This only adds the event to the client-side state.
-    // The data is not persisted.
     setSchedule((prev) => [...prev, event].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()));
-    console.log("New event added:", event);
-    // If the new event is on the currently selected day, we don't need to do anything.
-    // If not, we might want to switch the calendar to the new event's date.
     if (date && !isSameDay(new Date(event.date), date)) {
         setDate(new Date(event.date));
     }
   };
+  
+  React.useEffect(() => {
+    // When the selected day changes, clear the selected event
+    setSelectedEventId(null);
+  }, [date]);
 
   const eventsOnSelectedDay = React.useMemo(() => {
     if (!date) return [];
-    return schedule.filter((event) => isSameDay(new Date(event.date), date));
+    return schedule.filter((event) => isSameDay(parseISO(event.date), date));
   }, [date, schedule]);
 
   const eventDays = React.useMemo(() => {
-      return schedule.map((event) => new Date(event.date));
+      return schedule.map((event) => parseISO(event.date));
   }, [schedule]);
+
+  const selectedEvent = schedule.find(e => e.id === selectedEventId);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -68,7 +73,7 @@ export default function SchedulePage() {
                 onSelect={setDate}
                 className="w-full"
                 modifiers={{ event: eventDays }}
-                modifiersClassNames={{ event: "bg-primary/20 rounded-full" }}
+                modifiersClassNames={{ event: "bg-primary/20 rounded-full font-semibold" }}
               />
             </CardContent>
           </Card>
@@ -87,7 +92,7 @@ export default function SchedulePage() {
               {eventsOnSelectedDay.length > 0 ? (
                 <ul className="space-y-4">
                   {eventsOnSelectedDay.map((event: TeamEvent) => (
-                    <li key={event.id} className="rounded-lg border p-4">
+                    <li key={event.id} className="rounded-lg border p-4 cursor-pointer hover:bg-accent" onClick={() => setSelectedEventId(event.id)}>
                       <p className="font-semibold text-primary">{event.title}</p>
                       <p className="text-sm text-muted-foreground">
                         {event.startTime} - {event.endTime}
@@ -98,6 +103,9 @@ export default function SchedulePage() {
                       </div>
                       {event.description && (
                         <p className="text-sm mt-2">{event.description}</p>
+                      )}
+                      {selectedEventId === event.id && selectedEvent && (
+                          <AttendanceSheet eventId={selectedEvent.id} />
                       )}
                     </li>
                   ))}

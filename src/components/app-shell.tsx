@@ -22,7 +22,6 @@ import {
   Users,
   Calendar,
   MessageSquare,
-  ClipboardCheck,
   BarChart3,
   Settings,
   LogOut,
@@ -40,7 +39,6 @@ const navItems = [
   { href: "/roster", icon: Users, label: "Roster" },
   { href: "/schedule", icon: Calendar, label: "Schedule" },
   { href: "/communication", icon: MessageSquare, label: "Messages" },
-  { href: "/attendance", icon: ClipboardCheck, label: "Attendance" },
   { href: "/performance", icon: BarChart3, label: "Performance" },
 ];
 
