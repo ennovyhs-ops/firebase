@@ -26,6 +26,7 @@ import {
   Settings,
   LogOut,
   LogIn,
+  PanelLeft,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -33,6 +34,8 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "./ui/button";
 import { useAuth, useUser } from "@/firebase";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -115,6 +118,29 @@ function AuthButton() {
   )
 }
 
+function BottomBar() {
+  const pathname = usePathname();
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-10 border-t bg-background/95 backdrop-blur-sm md:hidden">
+      <div className="grid h-16 grid-cols-5 items-center justify-items-center">
+        {navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              "flex flex-col items-center gap-1 rounded-md p-2 text-xs font-medium text-muted-foreground transition-colors hover:text-primary",
+              pathname === item.href && "text-primary"
+            )}
+          >
+            <item.icon className="size-5" />
+            <span>{item.label}</span>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function AppShellInternal({ children }: { children: React.ReactNode }) {
   const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
   const { isMobile, setOpenMobile } = useSidebar();
@@ -129,7 +155,7 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
   
   return (
     <>
-      <Sidebar>
+      <Sidebar collapsible="icon">
         <SidebarHeader>
           <Logo />
         </SidebarHeader>
@@ -159,7 +185,12 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
       </Sidebar>
       <SidebarInset>
         <header className="flex items-center justify-between border-b p-2 lg:px-4">
-            <SidebarTrigger />
+            <div className="md:hidden">
+                <Logo />
+            </div>
+            <div className="hidden md:block">
+                <SidebarTrigger />
+            </div>
             <div className="flex items-center gap-4">
                 <Button asChild variant="ghost" size="icon">
                   <Link href="/settings">
@@ -172,7 +203,8 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
                 </Avatar>
             </div>
         </header>
-        <main>{children}</main>
+        <main className="pb-16 md:pb-0">{children}</main>
+        <BottomBar />
       </SidebarInset>
     </>
   )
