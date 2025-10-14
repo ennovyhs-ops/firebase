@@ -1,12 +1,15 @@
+
 "use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
 const LOGO_STORAGE_KEY = "team-logo";
+const TEAM_NAME_STORAGE_KEY = "team-name";
 
 export function Logo({ className }: { className?: string }) {
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [teamName, setTeamName] = useState<string>("Sixx");
 
   useEffect(() => {
     // We need to use an effect to read from localStorage,
@@ -15,10 +18,19 @@ export function Logo({ className }: { className?: string }) {
     if (storedLogo) {
       setLogoUrl(storedLogo);
     }
+    const storedTeamName = localStorage.getItem(TEAM_NAME_STORAGE_KEY);
+    if (storedTeamName) {
+        setTeamName(storedTeamName);
+    }
 
-    const handleStorageChange = () => {
-      const updatedLogo = localStorage.getItem(LOGO_STORAGE_KEY);
-      setLogoUrl(updatedLogo);
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === LOGO_STORAGE_KEY) {
+        setLogoUrl(e.newValue);
+      }
+      if (e.key === TEAM_NAME_STORAGE_KEY) {
+        setTeamName(e.newValue || "Sixx");
+      }
     };
 
     window.addEventListener('storage', handleStorageChange);
@@ -29,11 +41,18 @@ export function Logo({ className }: { className?: string }) {
         setLogoUrl(updatedLogo);
     }
     window.addEventListener('logoUpdated', handleLogoUpdate);
+    
+    const handleTeamNameUpdate = () => {
+        const updatedTeamName = localStorage.getItem(TEAM_NAME_STORAGE_KEY);
+        setTeamName(updatedTeamName || "Sixx");
+    }
+    window.addEventListener('teamNameUpdated', handleTeamNameUpdate);
 
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('logoUpdated', handleLogoUpdate);
+      window.removeEventListener('teamNameUpdated', handleTeamNameUpdate);
     };
   }, []);
 
@@ -74,7 +93,7 @@ export function Logo({ className }: { className?: string }) {
         </svg>
       )}
       <span className="font-headline text-xl font-bold text-sidebar-foreground group-data-[collapsible=icon]:hidden">
-        Sixx
+        {teamName}
       </span>
     </div>
   );
