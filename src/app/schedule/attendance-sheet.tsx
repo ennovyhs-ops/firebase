@@ -20,21 +20,44 @@ import {
 } from "@/components/ui/select";
 import { players } from "../roster/data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import type { AttendanceStatus } from "@/lib/types";
+import type { AttendanceStatus, PlayerAttendance } from "@/lib/types";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export function AttendanceSheet({ eventId }: { eventId: string }) {
   const [attendance, setAttendance] = React.useState<
-    Record<string, AttendanceStatus>
+    Record<string, PlayerAttendance>
   >(() =>
     players.reduce((acc, player) => {
-      acc[player.id] = "Pending";
+      // Mock player-indicated status
+      const indicatedStatuses: AttendanceStatus[] = ["Present", "Absent", "Pending"];
+      const randomStatus = indicatedStatuses[Math.floor(Math.random() * 3)];
+      acc[player.id] = {
+        indicated: randomStatus,
+        actual: "Pending" 
+      };
       return acc;
-    }, {} as Record<string, AttendanceStatus>)
+    }, {} as Record<string, PlayerAttendance>)
   );
 
   const handleStatusChange = (playerId: string, status: AttendanceStatus) => {
-    setAttendance((prev) => ({ ...prev, [playerId]: status }));
+    setAttendance((prev) => ({ 
+        ...prev, 
+        [playerId]: {
+            ...prev[playerId],
+            actual: status
+        } 
+    }));
   };
+
+  const getStatusVariant = (status: AttendanceStatus) => {
+    switch (status) {
+        case "Present": return "default";
+        case "Absent": return "destructive";
+        case "Excused": return "secondary";
+        default: return "outline";
+    }
+  }
 
   return (
     <div className="mt-6">
@@ -43,13 +66,15 @@ export function AttendanceSheet({ eventId }: { eventId: string }) {
         <TableHeader>
             <TableRow>
             <TableHead>Player</TableHead>
-            <TableHead className="w-[150px] text-right">Status</TableHead>
+            <TableHead className="w-[120px] text-center hidden sm:table-cell">Indicated</TableHead>
+            <TableHead className="w-[150px] text-right">Actual Status</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
             {players.map((player) => {
             const avatar = PlaceHolderImages.find(p => p.id === player.avatarId);
             const playerName = `${player.firstName} ${player.lastName}`;
+            const playerAttendance = attendance[player.id];
             return (
                 <TableRow key={player.id}>
                 <TableCell>
@@ -61,20 +86,26 @@ export function AttendanceSheet({ eventId }: { eventId: string }) {
                     <div className="font-medium">{playerName}</div>
                     </div>
                 </TableCell>
+                <TableCell className="text-center hidden sm:table-cell">
+                    <Badge variant={getStatusVariant(playerAttendance.indicated)} className="w-[70px] justify-center">
+                        {playerAttendance.indicated}
+                    </Badge>
+                </TableCell>
                 <TableCell className="text-right">
                     <Select
-                    value={attendance[player.id]}
+                    value={playerAttendance.actual}
                     onValueChange={(value) =>
                         handleStatusChange(player.id, value as AttendanceStatus)
                     }
                     >
-                    <SelectTrigger className="w-[120px]">
+                    <SelectTrigger className="w-[120px] ml-auto">
                         <SelectValue placeholder="Set status" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="Pending">Pending</SelectItem>
                         <SelectItem value="Present">Present</SelectItem>
                         <SelectItem value="Absent">Absent</SelectItem>
+                        <SelectItem value="Excused">Excused</SelectItem>
                     </SelectContent>
                     </Select>
                 </TableCell>

@@ -1,4 +1,5 @@
 
+
 export type Player = {
   id: string;
   firstName: string;
@@ -42,11 +43,16 @@ export type TeamEvent = {
   description?: string;
 };
 
-export type AttendanceStatus = "Present" | "Absent" | "Pending";
+export type AttendanceStatus = "Present" | "Absent" | "Pending" | "Excused";
+
+export type PlayerAttendance = {
+    indicated: AttendanceStatus;
+    actual: AttendanceStatus;
+}
 
 export type AttendanceRecord = {
   eventId: string;
-  playerAttendances: Record<string, AttendanceStatus>;
+  playerAttendances: Record<string, PlayerAttendance>;
 };
 
 export type Conversation = {
