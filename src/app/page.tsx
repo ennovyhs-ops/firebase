@@ -22,7 +22,7 @@ export default function TeamSelectionPage() {
   const { user, isUserLoading } = useAuth();
 
   useEffect(() => {
-    // If a team is already selected, redirect to the dashboard.
+    // This effect now only runs on the client
     const selectedTeamId = localStorage.getItem(SELECTED_TEAM_KEY);
     if (selectedTeamId) {
       router.push('/dashboard');
@@ -35,6 +35,7 @@ export default function TeamSelectionPage() {
 
   const handleTeamSelect = (teamId: string) => {
     localStorage.setItem(SELECTED_TEAM_KEY, teamId);
+    window.dispatchEvent(new Event('teamSelected'));
     router.push('/dashboard');
   };
 

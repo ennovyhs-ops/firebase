@@ -5,19 +5,6 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  SidebarProvider,
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-  SidebarInset,
-  SidebarTrigger,
-  useSidebar,
-} from "@/components/ui/sidebar";
-import {
   LayoutDashboard,
   Users,
   Calendar,
@@ -51,6 +38,8 @@ import {
 import { useAuth, useUser } from "@/firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
 
 const navItems = [
@@ -61,36 +50,63 @@ const navItems = [
   { href: "/performance", icon: BarChart3, label: "Performance" },
 ];
 
-function NavMenu() {
+function MainNav() {
     const pathname = usePathname();
-    const { setOpenMobile, isMobile } = useSidebar();
-
-    const handleLinkClick = () => {
-        if (isMobile) {
-            setOpenMobile(false);
-        }
-    }
-
     return (
-        <SidebarMenu>
+        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
             {navItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === item.href}
-                  tooltip={item.label}
-                  onClick={handleLinkClick}
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                    "transition-colors hover:text-primary",
+                    pathname === item.href ? "text-primary" : "text-muted-foreground"
+                )}
                 >
-                  <Link href={item.href}>
-                    <item.icon />
-                    <span>{item.label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+                {item.label}
+              </Link>
             ))}
-          </SidebarMenu>
+        </nav>
     )
 }
+
+function MobileNav() {
+    const [open, setOpen] = React.useState(false);
+    const pathname = usePathname();
+
+    return (
+        <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+                <Button
+                    variant="ghost"
+                    className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+                >
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Toggle Menu</span>
+                </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="pr-0">
+                <Logo />
+                <div className="flex flex-col space-y-2 mt-6">
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => setOpen(false)}
+                            className={cn(
+                                "py-2 px-4 rounded-l-md transition-colors hover:text-primary",
+                                pathname === item.href ? "bg-accent text-primary" : "text-muted-foreground"
+                            )}
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
+                </div>
+            </SheetContent>
+        </Sheet>
+    )
+}
+
 
 function UserNav() {
   const { user } = useUser();
@@ -151,33 +167,7 @@ function UserNav() {
     )
 }
 
-
-function BottomBar() {
-  const pathname = usePathname();
-  const mobileNavItems = navItems;
-  return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-sm md:hidden">
-      <div className={cn("grid h-16 items-center justify-items-center", `grid-cols-${mobileNavItems.length}`)}>
-        {mobileNavItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "flex flex-col items-center gap-1 rounded-md p-2 text-xs font-medium text-muted-foreground transition-colors hover:text-primary",
-              (pathname === item.href) && "text-primary"
-            )}
-          >
-            <item.icon className="size-5" />
-            <span>{item.label}</span>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function AppShellInternal({ children }: { children: React.ReactNode }) {
-  const { isMobile } = useSidebar();
+export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user, isUserLoading } = useUser();
   const [isClient, setIsClient] = React.useState(false);
@@ -185,10 +175,20 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     setIsClient(true);
-    setTeamSelected(!!localStorage.getItem('selected-team-id'));
+    const checkTeamSelection = () => {
+        setTeamSelected(!!localStorage.getItem('selected-team-id'));
+    };
+
+    checkTeamSelection();
+    window.addEventListener('storage', checkTeamSelection);
+    window.addEventListener('teamSelected', checkTeamSelection);
+
+    return () => {
+        window.removeEventListener('storage', checkTeamSelection);
+        window.removeEventListener('teamSelected', checkTeamSelection);
+    }
   }, []);
 
-  // Don't render sidebar on the team selection page
   if (isClient && pathname === '/' && !teamSelected) {
     return <main>{children}</main>;
   }
@@ -198,7 +198,6 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) {
-    // This can be a dedicated sign-in page component
     return (
         <div className="flex h-screen items-center justify-center">
              <Card className="w-full max-w-md text-center">
@@ -212,69 +211,20 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
   }
   
   return (
-    <>
-      <Sidebar collapsible="icon">
-        <SidebarHeader>
-          <Logo />
-        </SidebarHeader>
-        <SidebarContent>
-          <NavMenu />
-        </SidebarContent>
-        <SidebarFooter>
-           <SidebarMenuItem>
-             <SidebarMenuButton asChild>
-                <Link href="/settings">
-                  <Settings />
-                  <span>Settings</span>
-                </Link>
-             </SidebarMenuButton>
-           </SidebarMenuItem>
-        </SidebarFooter>
-      </Sidebar>
-      <SidebarInset>
-        <header className="sticky top-0 z-40 flex items-center justify-between border-b bg-background p-2 lg:px-4 h-14">
-            <div className="flex items-center gap-2">
-                <SidebarTrigger className="md:hidden" />
-            </div>
-            <div className="flex items-center gap-4">
-                 <UserNav />
+    <div className="flex min-h-screen flex-col">
+        <header className="sticky top-0 z-40 w-full border-b bg-background">
+            <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
+                <div className="flex gap-6 md:gap-10">
+                    <Logo />
+                    <MainNav />
+                </div>
+                 <div className="flex flex-1 items-center justify-end space-x-4">
+                    <MobileNav />
+                    <UserNav />
+                </div>
             </div>
         </header>
-        <main className="pb-16 md:pb-0">{children}</main>
-        {isMobile && <BottomBar />}
-      </SidebarInset>
-    </>
+        <main className="flex-1">{children}</main>
+    </div>
   )
-}
-
-export function AppShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const [isClient, setIsClient] = React.useState(false);
-  const [teamSelected, setTeamSelected] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsClient(true);
-    const handleStorageChange = () => {
-      setTeamSelected(!!localStorage.getItem('selected-team-id'));
-    };
-    window.addEventListener('storage', handleStorageChange);
-    // Also check on mount
-    handleStorageChange(); 
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    }
-  }, []);
-
-
-  // If we are on the root team selection page, don't wrap with SidebarProvider
-  if (isClient && pathname === '/' && !teamSelected) {
-     return <AppShellInternal>{children}</AppShellInternal>;
-  }
-
-  return (
-      <SidebarProvider>
-        <AppShellInternal>{children}</AppShellInternal>
-      </SidebarProvider>
-  );
 }
