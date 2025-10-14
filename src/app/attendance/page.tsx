@@ -94,9 +94,9 @@ function AttendanceSheet({ eventId }: { eventId: string }) {
 }
 
 export default function AttendancePage() {
-  const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
-
   const allEvents = schedule.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const [selectedEventId, setSelectedEventId] = React.useState<string | null>(allEvents[0]?.id || null);
+
   const selectedEvent = allEvents.find(event => event.id === selectedEventId);
 
   return (
