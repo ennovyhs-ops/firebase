@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function RosterPage() {
   const [addPlayerOpen, setAddPlayerOpen] = React.useState(false);
@@ -27,6 +28,7 @@ export default function RosterPage() {
     null
   );
   const [players, setPlayers] = React.useState<Player[]>(initialPlayers);
+  const isMobile = useIsMobile();
 
   const handlePlayerAdd = (player: Player) => {
     setPlayers((prev) => [...prev, player]);
@@ -46,9 +48,9 @@ export default function RosterPage() {
       >
         <Dialog open={addPlayerOpen} onOpenChange={setAddPlayerOpen}>
           <DialogTrigger asChild>
-            <Button>
-              <PlusCircle className="mr-2 size-4" />
-              Add Player
+            <Button size={isMobile ? "icon" : "default"}>
+              <PlusCircle />
+              <span className="sr-only sm:not-sr-only sm:ml-2">Add Player</span>
             </Button>
           </DialogTrigger>
           <AddPlayerForm
