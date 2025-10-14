@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from 'next/navigation'
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
@@ -335,8 +335,8 @@ function CommunicationPageContent() {
 
 export default function CommunicationPage() {
     return (
-        <React.Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
             <CommunicationPageContent />
-        </React.Suspense>
+        </Suspense>
     )
 }
