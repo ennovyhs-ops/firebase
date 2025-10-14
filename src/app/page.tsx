@@ -18,11 +18,11 @@ import {
 import { PageHeader } from "@/components/page-header";
 import { schedule } from './schedule/data';
 import { format, parseISO } from 'date-fns';
-import { players } from "./roster/data";
 import { conversations as initialConversations } from "./communication/data";
+import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
-  const nextEvent = schedule.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0];
+  const upcomingEvents = schedule.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 2);
   const conversations = initialConversations.sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime()).slice(0,3);
 
   return (
@@ -31,7 +31,7 @@ export default function Home() {
         title="Welcome Back, Coach!"
       />
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <Card>
+        <Card className="sm:col-span-2 lg:col-span-1">
            <CardHeader>
             <div className="flex items-center gap-4">
               <div className="bg-accent text-accent-foreground p-3 rounded-full">
@@ -41,27 +41,36 @@ export default function Home() {
             </div>
           </CardHeader>
           <CardContent>
-            {nextEvent ? (
+            {upcomingEvents.length > 0 ? (
               <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-primary">{nextEvent.title} ({nextEvent.type})</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {format(new Date(nextEvent.date), "EEE, MMM d")} @ {nextEvent.startTime}
-                  </p>
-                  <p className="text-sm">{nextEvent.location}</p>
+                <div className="space-y-3">
+                  {upcomingEvents.map((event, index) => (
+                    <div key={event.id}>
+                      {index > 0 && <Separator className="my-3" />}
+                      <div>
+                        <h3 className="font-semibold text-primary leading-tight">{event.title} ({event.type})</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {format(new Date(event.date), "EEE, MMM d")} @ {event.startTime}
+                        </p>
+                        <p className="text-sm">{event.location}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <Button asChild size="sm">
+                <Button asChild size="sm" className="w-full">
                   <Link href="/schedule">
-                    View Schedule <ArrowRight className="ml-2 size-4" />
+                    View Full Schedule <ArrowRight className="ml-2 size-4" />
                   </Link>
                 </Button>
               </div>
             ) : (
-              <p>No upcoming events.</p>
+                <div className="text-center text-muted-foreground py-4">
+                    <p>No upcoming events.</p>
+                </div>
             )}
           </CardContent>
         </Card>
-        <Card className="sm:col-span-2 lg:col-span-1">
+        <Card>
           <CardHeader>
              <div className="flex items-center gap-4">
               <div className="bg-accent text-accent-foreground p-3 rounded-full">
