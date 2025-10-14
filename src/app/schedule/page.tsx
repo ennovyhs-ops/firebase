@@ -18,12 +18,14 @@ import type { TeamEvent } from "@/lib/types";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { AddEventForm } from "./add-event-form";
 import { AttendanceSheet } from "./attendance-sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function SchedulePage() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [open, setOpen] = React.useState(false);
   const [schedule, setSchedule] = React.useState(initialSchedule);
   const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const handleEventAdd = (event: TeamEvent) => {
     setSchedule((prev) => [...prev, event].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()));
@@ -72,6 +74,7 @@ export default function SchedulePage() {
                 selected={date}
                 onSelect={setDate}
                 className="w-full"
+                numberOfMonths={isMobile ? 1 : 2}
                 modifiers={{ event: eventDays }}
                 modifiersClassNames={{ event: "bg-primary/20 rounded-full font-semibold" }}
               />
