@@ -231,11 +231,8 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
       <SidebarInset>
         <header className="flex items-center justify-between border-b p-2 lg:px-4 h-14">
             <div className="flex items-center gap-4">
-                <Logo className="md:hidden"/>
-                 <div className="hidden md:flex items-center gap-4">
-                    <SidebarTrigger />
-                    {isClient && <UserProfile />}
-                </div>
+                <SidebarTrigger />
+                {isClient && <UserProfile />}
             </div>
             <div className="flex items-center gap-4">
                 <Button asChild variant="ghost" size="icon">
