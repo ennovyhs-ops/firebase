@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,11 +23,52 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Send } from "lucide-react";
+import { Send, ArrowLeft } from "lucide-react";
 import { players } from "../roster/data";
+import { conversations, type Conversation } from "./data";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { format, parseISO } from "date-fns";
+
+function ConversationDetails({
+  conversation,
+  onBack,
+}: {
+  conversation: Conversation;
+  onBack: () => void;
+}) {
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" onClick={onBack}>
+                <ArrowLeft />
+            </Button>
+            <div>
+                <CardTitle>{conversation.subject}</CardTitle>
+                <CardDescription>
+                To: {conversation.recipient} on {format(parseISO(conversation.timestamp), "PPP")}
+                </CardDescription>
+            </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <p className="whitespace-pre-wrap">{conversation.body}</p>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function CommunicationPage() {
   const { toast } = useToast();
+  const [selectedConversation, setSelectedConversation] =
+    useState<Conversation | null>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,13 +79,24 @@ export default function CommunicationPage() {
     (e.target as HTMLFormElement).reset();
   };
 
+  if (selectedConversation) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <ConversationDetails
+          conversation={selectedConversation}
+          onBack={() => setSelectedConversation(null)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <PageHeader
         title="Messages"
         description="Send announcements, schedule updates, and messages to your team."
       />
-      <div className="mt-8">
+      <div className="mt-8 grid gap-8 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Compose Message</CardTitle>
@@ -103,6 +156,45 @@ export default function CommunicationPage() {
                 </Button>
               </div>
             </form>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Previous Messages</CardTitle>
+            <CardDescription>Review your past conversations.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Subject</TableHead>
+                  <TableHead className="hidden sm:table-cell">To</TableHead>
+                  <TableHead className="text-right">Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {conversations.map((convo) => (
+                  <TableRow
+                    key={convo.id}
+                    onClick={() => setSelectedConversation(convo)}
+                    className="cursor-pointer"
+                  >
+                    <TableCell>
+                      <div className="font-medium">{convo.subject}</div>
+                      <div className="text-sm text-muted-foreground truncate max-w-[150px] md:max-w-xs">
+                        {convo.body}
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      {convo.recipient}
+                    </TableCell>
+                    <TableCell className="text-right text-xs text-muted-foreground">
+                      {format(parseISO(convo.timestamp), "MMM d")}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       </div>
