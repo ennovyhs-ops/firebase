@@ -27,7 +27,6 @@ import {
   LogOut,
   LogIn,
   ClipboardCheck,
-  User as UserIcon,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -246,14 +245,16 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
       </Sidebar>
       <SidebarInset>
         <header className="sticky top-0 z-10 flex items-center justify-between border-b bg-background p-2 lg:px-4 h-14">
-            <div className="flex items-center gap-4">
-                <Logo className="md:hidden" />
+            <div className="flex items-center gap-2">
                 <SidebarTrigger />
-                <div className="hidden md:block">
+                <div className="md:hidden">
                     <TeamSwitcher />
                 </div>
             </div>
             <div className="flex items-center gap-4">
+                <div className="hidden md:block">
+                    <TeamSwitcher />
+                </div>
                 <UserNav />
             </div>
         </header>
