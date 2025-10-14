@@ -1,7 +1,8 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from 'next/navigation'
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -226,10 +227,24 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
   );
 }
 
-export default function CommunicationPage() {
+function CommunicationPageContent() {
+  const searchParams = useSearchParams()
+  const conversationId = searchParams.get('id');
+
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
+
+  useEffect(() => {
+    if (conversationId) {
+      const convo = conversations.find(c => c.id === conversationId);
+      if (convo) {
+        setSelectedConversation(convo);
+      }
+    } else {
+        setSelectedConversation(null);
+    }
+  }, [conversationId, conversations]);
 
   const handleMessageSend = (message: Conversation) => {
     setConversations(prev => [message, ...prev]);
@@ -316,4 +331,12 @@ export default function CommunicationPage() {
       </div>
     </div>
   );
+}
+
+export default function CommunicationPage() {
+    return (
+        <React.Suspense fallback={<div>Loading...</div>}>
+            <CommunicationPageContent />
+        </React.Suspense>
+    )
 }

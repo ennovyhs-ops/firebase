@@ -17,11 +17,13 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { schedule } from './schedule/data';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { players } from "./roster/data";
+import { conversations } from "./communication/data";
 
 export default function Home() {
   const nextEvent = schedule.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0];
+  const latestConversations = conversations.sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime()).slice(0,3);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -70,7 +72,6 @@ export default function Home() {
               </div>
               <div>
                 <CardTitle>Team Roster</CardTitle>
-                <CardDescription>An overview of your players</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -93,15 +94,24 @@ export default function Home() {
        <div className="mt-6 grid gap-6 sm:grid-cols-1 md:grid-cols-2">
          <Card>
           <CardHeader>
-             <CardTitle>Communication</CardTitle>
-             <CardDescription>Send updates to your team.</CardDescription>
+             <CardTitle>Recent Messages</CardTitle>
           </CardHeader>
           <CardContent>
-             <Button asChild className="w-full">
-                  <Link href="/communication">
-                    <MessageSquare className="mr-2 size-4"/> Send a Message
-                  </Link>
-             </Button>
+            <div className="space-y-4">
+                {latestConversations.map(convo => (
+                    <div key={convo.id} className="text-sm">
+                        <Link href={`/communication?id=${convo.id}`} className="font-medium text-primary hover:underline">
+                            {convo.subject}
+                        </Link>
+                        <p className="text-xs text-muted-foreground">To: {convo.recipient}</p>
+                    </div>
+                ))}
+            </div>
+            <Button asChild variant="secondary" className="w-full mt-4">
+                <Link href="/communication">
+                View All Messages <ArrowRight className="ml-2 size-4" />
+                </Link>
+            </Button>
           </CardContent>
         </Card>
          <Card>
@@ -121,3 +131,4 @@ export default function Home() {
     </div>
   );
 }
+
