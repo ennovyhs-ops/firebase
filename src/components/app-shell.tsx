@@ -42,6 +42,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useAuth, useUser } from "@/firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
@@ -175,13 +181,15 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user, isUserLoading } = useUser();
   const [isClient, setIsClient] = React.useState(false);
+  const [teamSelected, setTeamSelected] = React.useState(false);
 
   React.useEffect(() => {
     setIsClient(true);
+    setTeamSelected(!!localStorage.getItem('selected-team-id'));
   }, []);
 
   // Don't render sidebar on the team selection page
-  if (isClient && pathname === '/' && !localStorage.getItem('selected-team-id')) {
+  if (isClient && pathname === '/' && !teamSelected) {
     return <main>{children}</main>;
   }
   
@@ -242,14 +250,16 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isClient, setIsClient] = React.useState(false);
+  const [teamSelected, setTeamSelected] = React.useState(false);
 
   React.useEffect(() => {
     setIsClient(true);
+    setTeamSelected(!!localStorage.getItem('selected-team-id'));
   }, []);
 
 
   // If we are on the root team selection page, don't wrap with SidebarProvider
-  if (isClient && pathname === '/' && !localStorage.getItem('selected-team-id')) {
+  if (isClient && pathname === '/' && !teamSelected) {
      return <AppShellInternal>{children}</AppShellInternal>;
   }
 
