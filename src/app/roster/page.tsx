@@ -20,7 +20,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function RosterPage() {
   const [addPlayerOpen, setAddPlayerOpen] = React.useState(false);
@@ -28,7 +27,6 @@ export default function RosterPage() {
     null
   );
   const [players, setPlayers] = React.useState<Player[]>(initialPlayers);
-  const isMobile = useIsMobile();
 
   const handlePlayerAdd = (player: Player) => {
     setPlayers((prev) => [...prev, player]);
@@ -66,6 +64,8 @@ export default function RosterPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Player</TableHead>
+                  <TableHead className="hidden lg:table-cell">Email</TableHead>
+                  <TableHead className="hidden md:table-cell">Phone</TableHead>
                   <TableHead className="w-[120px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -97,6 +97,8 @@ export default function RosterPage() {
                            </div>
                         </div>
                       </TableCell>
+                      <TableCell className="hidden lg:table-cell">{player.contact.email}</TableCell>
+                      <TableCell className="hidden md:table-cell">{player.contact.phone}</TableCell>
                       <TableCell className="text-right">
                         <Button
                           variant="outline"
