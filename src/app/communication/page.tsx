@@ -223,7 +223,6 @@ export default function CommunicationPage() {
     <div className="container mx-auto px-4 py-8">
       <PageHeader
         title="Messages"
-        description="Send announcements, schedule updates, and messages to your team."
       >
         <ComposeMessageDialog onMessageSend={handleMessageSend}/>
       </PageHeader>
