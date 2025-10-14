@@ -26,6 +26,7 @@ import {
   Settings,
   LogOut,
   Swords,
+  Replace,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -47,7 +48,7 @@ import { useRouter } from "next/navigation";
 
 
 const navItems = [
-  { href: "/", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/roster", icon: Users, label: "Roster" },
   { href: "/schedule", icon: Calendar, label: "Schedule" },
   { href: "/communication", icon: MessageSquare, label: "Messages" },
@@ -93,10 +94,17 @@ function UserNav() {
   const handleSignOut = async () => {
     if (auth) {
       await signOut(auth);
-      // Redirect to a sign-in page or home page after sign-out
+      // Clear selected team on sign out
+      localStorage.removeItem('selected-team-id');
       router.push('/');
     }
   };
+  
+  const handleSwitchTeam = () => {
+    localStorage.removeItem('selected-team-id');
+    router.push('/');
+  };
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -121,6 +129,10 @@ function UserNav() {
                             <Settings className="mr-2" />
                             <span>Settings</span>
                         </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleSwitchTeam}>
+                        <Replace className="mr-2" />
+                        <span>Switch Team</span>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
@@ -160,6 +172,36 @@ function BottomBar() {
 
 function AppShellInternal({ children }: { children: React.ReactNode }) {
   const { isMobile } = useSidebar();
+  const pathname = usePathname();
+  const { user, isUserLoading } = useUser();
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Don't render sidebar on the team selection page
+  if (isClient && pathname === '/' && !localStorage.getItem('selected-team-id')) {
+    return <main>{children}</main>;
+  }
+  
+  if (isUserLoading || !isClient) {
+    return <div className="flex h-screen items-center justify-center">Loading...</div>
+  }
+
+  if (!user) {
+    // This can be a dedicated sign-in page component
+    return (
+        <div className="flex h-screen items-center justify-center">
+             <Card className="w-full max-w-md text-center">
+                <CardHeader>
+                    <CardTitle className="text-3xl font-bold">Welcome to Sixx</CardTitle>
+                    <CardDescription>Please sign in to manage your teams.</CardDescription>
+                </CardHeader>
+             </Card>
+        </div>
+    )
+  }
   
   return (
     <>
@@ -198,6 +240,19 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+
+  // If we are on the root team selection page, don't wrap with SidebarProvider
+  if (isClient && pathname === '/' && !localStorage.getItem('selected-team-id')) {
+     return <AppShellInternal>{children}</AppShellInternal>;
+  }
+
   return (
       <SidebarProvider>
         <AppShellInternal>{children}</AppShellInternal>
