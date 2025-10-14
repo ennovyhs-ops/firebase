@@ -58,7 +58,7 @@ export function Combobox({ options, placeholder, searchPlaceholder, emptyPlaceho
                   key={option.value}
                   value={option.value}
                   onSelect={(currentValue) => {
-                    const realValue = options.find(opt => opt.value.toLowerCase() === currentValue)?.value || ""
+                    const realValue = options.find(opt => opt.value === currentValue)?.value || ""
                     onValueChange(realValue === value ? "" : realValue)
                     setOpen(false)
                   }}
