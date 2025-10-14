@@ -46,3 +46,13 @@ export type AttendanceRecord = {
   eventId: string;
   playerAttendances: Record<string, AttendanceStatus>;
 };
+
+export type Conversation = {
+  id: string;
+  subject: string;
+  sender: string;
+  recipient: string;
+  timestamp: string;
+  body: string;
+  replies?: Conversation[];
+};

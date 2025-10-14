@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/table";
 import { format, formatISO, parseISO } from "date-fns";
 import { Combobox } from "@/components/ui/combobox";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 function ConversationDetails({
   conversation,
@@ -45,9 +46,13 @@ function ConversationDetails({
   conversation: Conversation;
   onBack: () => void;
 }) {
+  const allMessages = [conversation, ...(conversation.replies || [])].sort(
+    (a, b) => parseISO(a.timestamp).getTime() - parseISO(b.timestamp).getTime()
+  );
+
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="border-b">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={onBack}>
             <ArrowLeft />
@@ -55,14 +60,30 @@ function ConversationDetails({
           <div>
             <CardTitle>{conversation.subject}</CardTitle>
             <CardDescription>
-              To: {conversation.recipient} on{" "}
-              {format(parseISO(conversation.timestamp), "PPP")}
+              To: {conversation.recipient}
             </CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <p className="whitespace-pre-wrap">{conversation.body}</p>
+      <CardContent className="p-0">
+        <div className="space-y-6 p-6">
+          {allMessages.map((message, index) => (
+            <div key={index} className="flex items-start gap-4">
+              <Avatar>
+                <AvatarFallback>{message.sender.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                    <p className="font-semibold">{message.sender}</p>
+                    <p className="text-xs text-muted-foreground">
+                        {format(parseISO(message.timestamp), "PPP p")}
+                    </p>
+                </div>
+                <p className="mt-1 whitespace-pre-wrap text-sm">{message.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );

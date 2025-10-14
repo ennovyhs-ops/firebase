@@ -1,5 +1,5 @@
 
-import { addDays, formatISO } from "date-fns";
+import { addDays, formatISO, subMinutes } from "date-fns";
 
 export type Conversation = {
   id: string;
@@ -8,6 +8,7 @@ export type Conversation = {
   recipient: string;
   timestamp: string;
   body: string;
+  replies?: Conversation[];
 };
 
 const today = new Date();
@@ -36,6 +37,16 @@ export const conversations: Conversation[] = [
     recipient: "Alex Johnson",
     timestamp: formatISO(addDays(today, -5)),
     body: "Hey Alex,\n\nGreat work in practice yesterday. I noticed a small adjustment we can make to your shooting form that I think will really help with consistency. Let's work on it for 10 minutes before next practice.\n\nCoach",
+    replies: [
+        {
+            id: "reply1",
+            subject: "Re: Your shooting form",
+            sender: "Alex Johnson",
+            recipient: "Coach Steve",
+            timestamp: formatISO(subMinutes(addDays(today, -5), -30)),
+            body: "Thanks, Coach! That sounds great. I'll be there early."
+        }
+    ]
   },
     {
     id: "msg4",
