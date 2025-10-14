@@ -243,7 +243,6 @@ export function PlayerDetails({
                 Delete Player
             </Button>
             <div className="flex gap-2">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
                 <Button type="submit">Save Changes</Button>
             </div>
         </DialogFooter>
