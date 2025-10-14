@@ -168,7 +168,13 @@ function BottomBar() {
 
 function AppShellInternal({ children }: { children: React.ReactNode }) {
   const { isMobile } = useSidebar();
-  const { user } = useUser();
+  const { user, isUserLoading } = useUser();
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
 
   return (
     <>
@@ -208,7 +214,7 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
                 </div>
                  <div className="hidden md:flex items-center gap-4">
                     <SidebarTrigger />
-                    <UserProfile />
+                    {isClient && <UserProfile />}
                 </div>
             </div>
             <div className="flex items-center gap-4">
@@ -218,7 +224,7 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
                   </Link>
                 </Button>
                 <div className="md:hidden">
-                  <UserProfile />
+                  {isClient && <UserProfile />}
                 </div>
             </div>
         </header>
