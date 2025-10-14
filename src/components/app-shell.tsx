@@ -25,11 +25,15 @@ import {
   ClipboardCheck,
   BarChart3,
   Settings,
+  LogOut,
+  LogIn,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "./ui/button";
+import { useAuth, useUser } from "@/firebase";
+import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 
 const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -71,9 +75,53 @@ function NavMenu() {
     )
 }
 
+function AuthButton() {
+  const auth = useAuth();
+  const { user, isUserLoading } = useUser();
+
+  const handleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error("Error signing in with Google", error);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error signing out", error);
+    }
+  };
+  
+  if (isUserLoading) {
+    return null;
+  }
+
+  if (user) {
+    return (
+      <Button variant="ghost" className="w-full justify-start" onClick={handleSignOut}>
+        <LogOut />
+        <span>Sign Out</span>
+      </Button>
+    )
+  }
+
+  return (
+    <Button variant="ghost" className="w-full justify-start" onClick={handleSignIn}>
+      <LogIn />
+      <span>Sign in with Google</span>
+    </Button>
+  )
+}
+
 function AppShellInternal({ children }: { children: React.ReactNode }) {
   const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
   const { isMobile, setOpenMobile } = useSidebar();
+  const { user, isUserLoading } = useUser();
+
 
   const handleLinkClick = () => {
     if (isMobile) {
@@ -91,23 +139,24 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
           <NavMenu />
         </SidebarContent>
         <SidebarFooter>
-          <div className="flex items-center gap-3">
-            <Avatar className="size-10">
-              <AvatarImage src={coachImage?.imageUrl} alt="Coach" data-ai-hint={coachImage?.imageHint} />
-              <AvatarFallback>CS</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-              <span className="text-sm font-semibold text-sidebar-foreground">
-                Coach Steve
-              </span>
-              <Link href="/settings" className="text-xs text-sidebar-foreground/70 hover:underline" onClick={handleLinkClick}>
-                Team Settings
-              </Link>
-              <span className="text-xs text-sidebar-foreground/50">
-                Administrator
-              </span>
+          { !isUserLoading && user ? (
+            <div className="flex items-center gap-3">
+              <Avatar className="size-10">
+                <AvatarImage src={user.photoURL ?? undefined} alt={user.displayName ?? "User"} />
+                <AvatarFallback>{user.displayName?.charAt(0) ?? 'U'}</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                <span className="text-sm font-semibold text-sidebar-foreground">
+                  {user.displayName}
+                </span>
+                <button onClick={async () => await signOut(useAuth())} className="text-xs text-sidebar-foreground/70 hover:underline text-left">
+                  Sign Out
+                </button>
+              </div>
             </div>
-          </div>
+          ) : !isUserLoading ? (
+             <AuthButton />
+          ) : null}
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
@@ -120,8 +169,8 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
                   </Link>
                 </Button>
                  <Avatar className="size-9">
-                    <AvatarImage src={coachImage?.imageUrl} alt="Coach" data-ai-hint={coachImage?.imageHint} />
-                    <AvatarFallback>CS</AvatarFallback>
+                    <AvatarImage src={user?.photoURL ?? coachImage?.imageUrl} alt={user?.displayName ?? "Coach"} data-ai-hint={coachImage?.imageHint} />
+                    <AvatarFallback>{user?.displayName?.charAt(0) ?? 'CS'}</AvatarFallback>
                 </Avatar>
             </div>
         </header>

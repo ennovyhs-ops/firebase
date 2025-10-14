@@ -1,7 +1,9 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import { AppShell } from '@/components/app-shell';
 import { Toaster } from "@/components/ui/toaster"
+import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
   title: 'Sixx: Sports Management Hub',
@@ -21,9 +23,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <AppShell>
-          {children}
-        </AppShell>
+        <FirebaseClientProvider>
+          <AppShell>
+            {children}
+          </AppShell>
+        </FirebaseClientProvider>
         <Toaster />
       </body>
     </html>
