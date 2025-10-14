@@ -27,6 +27,7 @@ import {
   LogOut,
   LogIn,
   ClipboardCheck,
+  User as UserIcon,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -37,6 +38,15 @@ import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { TeamSwitcher } from "./team-switcher";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -80,7 +90,6 @@ function NavMenu() {
 
 function AuthButton() {
   const auth = useAuth();
-  const { user, isUserLoading } = useUser();
 
   const handleSignIn = async () => {
     const provider = new GoogleAuthProvider();
@@ -91,27 +100,6 @@ function AuthButton() {
     }
   };
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Error signing out", error);
-    }
-  };
-  
-  if (isUserLoading) {
-    return null;
-  }
-
-  if (user) {
-    return (
-      <Button variant="ghost" className="w-full justify-start" onClick={handleSignOut}>
-        <LogOut />
-        <span>Sign Out</span>
-      </Button>
-    )
-  }
-
   return (
     <Button variant="ghost" className="w-full justify-start" onClick={handleSignIn}>
       <LogIn />
@@ -120,61 +108,85 @@ function AuthButton() {
   )
 }
 
-function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
+function UserNav() {
     const { user, isUserLoading } = useUser();
     const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
-
+    const auth = useAuth();
+    
+    const handleSignOut = async () => {
+        try {
+          await signOut(auth);
+        } catch (error) {
+          console.error("Error signing out", error);
+        }
+      };
+    
     if (isUserLoading) {
-        return (
-             <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
-                <Avatar className="size-9" />
-                {!collapsed && (
-                    <div className="flex flex-col">
-                         <div className="h-4 w-16 bg-muted-foreground/20 rounded-md" />
-                         <div className="h-3 w-10 bg-muted-foreground/20 rounded-md mt-1" />
-                    </div>
-                )}
-            </div>
-        )
+        return <Avatar className="size-9" />
+    }
+
+    const getDisplayName = () => {
+        if (user) return user.displayName || "Johnny";
+        return "Johnny";
+    }
+
+    const getDisplayEmail = () => {
+        if (user) return user.email || "coach@example.com";
+        return "coach@example.com";
     }
     
-    if (!user) return (
-      <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
-          <Avatar className="size-9">
-              <AvatarImage src={coachImage?.imageUrl} alt={"Johnny"} data-ai-hint={coachImage?.imageHint} />
-              <AvatarFallback>J</AvatarFallback>
-          </Avatar>
-          {!collapsed && (
-              <div className="flex flex-col">
-                  <span className="text-sm font-semibold text-foreground truncate">
-                      Johnny
-                  </span>
-                  <span className="text-xs text-muted-foreground">Coach</span>
-              </div>
-          )}
-      </div>
-    );
+    const getPhotoUrl = () => {
+        if (user) return user.photoURL || coachImage?.imageUrl;
+        return coachImage?.imageUrl;
+    }
     
-    const displayName = user.displayName || "Johnny";
-    const photoURL = user.photoURL || coachImage?.imageUrl;
-    const fallback = displayName.charAt(0) || 'U';
+    const getFallback = () => {
+        if (user) return user.displayName?.charAt(0) || 'J';
+        return 'J';
+    }
+
 
     return (
-        <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
-            <Avatar className="size-9">
-                <AvatarImage src={photoURL ?? undefined} alt={displayName ?? "User"} data-ai-hint={coachImage?.imageHint} />
-                <AvatarFallback>{fallback}</AvatarFallback>
-            </Avatar>
-            {!collapsed && (
-                <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-foreground truncate">
-                        {displayName}
-                    </span>
-                    <span className="text-xs text-muted-foreground">Coach</span>
-                </div>
-            )}
-        </div>
-    );
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative size-9 rounded-full">
+                    <Avatar className="size-9">
+                        <AvatarImage src={getPhotoUrl() ?? undefined} alt={getDisplayName()} />
+                        <AvatarFallback>{getFallback()}</AvatarFallback>
+                    </Avatar>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{getDisplayName()}</p>
+                        <p className="text-xs leading-none text-muted-foreground">{getDisplayEmail()}</p>
+                    </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                    <DropdownMenuItem asChild>
+                        <Link href="/settings">
+                            <Settings className="mr-2" />
+                            <span>Settings</span>
+                        </Link>
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                {user ? (
+                     <DropdownMenuItem onClick={handleSignOut}>
+                        <LogOut className="mr-2" />
+                        <span>Sign out</span>
+                    </DropdownMenuItem>
+                ) : (
+                    <DropdownMenuItem onClick={() => auth && signInWithPopup(auth, new GoogleAuthProvider())}>
+                        <LogIn className="mr-2" />
+                        <span>Sign in</span>
+                    </DropdownMenuItem>
+                )}
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
 }
 
 
@@ -217,42 +229,32 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
           <NavMenu />
         </SidebarContent>
         <SidebarFooter>
-          { user ? (
-            <div className="flex items-center gap-3">
-              <Avatar className="size-10">
-                <AvatarImage src={user.photoURL ?? undefined} alt={user.displayName ?? "User"} />
-                <AvatarFallback>{user.displayName?.charAt(0) ?? 'U'}</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                <span className="text-sm font-semibold text-sidebar-foreground">
-                  {user.displayName}
-                </span>
-                <button onClick={async () => await signOut(useAuth())} className="text-xs text-sidebar-foreground/70 hover:underline text-left">
-                  Sign Out
-                </button>
-              </div>
-            </div>
-          ) : (
-             <AuthButton />
-          )}
+           <SidebarMenuItem>
+             <SidebarMenuButton asChild>
+                <Link href="/settings">
+                  <Settings />
+                  <span>Settings</span>
+                </Link>
+             </SidebarMenuButton>
+           </SidebarMenuItem>
+          { !user ? (
+            <SidebarMenuItem>
+                <AuthButton />
+            </SidebarMenuItem>
+          ) : null}
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <header className="sticky top-0 z-10 flex items-center justify-between border-b bg-background p-2 lg:px-4 h-14">
             <div className="flex items-center gap-4">
-                <Logo />
+                <Logo className="md:hidden" />
                 <SidebarTrigger />
                 <div className="hidden md:block">
                     <TeamSwitcher />
                 </div>
             </div>
             <div className="flex items-center gap-4">
-                <Button asChild variant="ghost" size="icon">
-                  <Link href="/settings">
-                    <Settings className="size-5" />
-                  </Link>
-                </Button>
-                <UserProfile />
+                <UserNav />
             </div>
         </header>
         <main className="pb-16 md:pb-0">{children}</main>
