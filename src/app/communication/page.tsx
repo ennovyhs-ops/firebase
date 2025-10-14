@@ -26,7 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Send, ArrowLeft, MessageSquarePlus } from "lucide-react";
 import { players } from "../roster/data";
-import { conversations, type Conversation } from "./data";
+import { conversations as initialConversations, type Conversation } from "./data";
 import {
   Table,
   TableBody,
@@ -35,7 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { format, parseISO } from "date-fns";
+import { format, formatISO, parseISO } from "date-fns";
 import { Combobox } from "@/components/ui/combobox";
 
 function ConversationDetails({
@@ -68,14 +68,15 @@ function ConversationDetails({
   );
 }
 
-function ComposeMessageDialog() {
+function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conversation) => void; }) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
+  const [recipient, setRecipient] = useState("");
 
   const recipientOptions = [
-    { value: "all", label: "Entire Team (Players & Parents)" },
-    { value: "players", label: "Players Only" },
-    { value: "parents", label: "Parents Only" },
+    { value: "Entire Team", label: "Entire Team (Players & Parents)" },
+    { value: "Players Only", label: "Players Only" },
+    { value: "Parents Only", label: "Parents Only" },
     ...players.map((player) => ({
       value: player.id,
       label: `${player.firstName} ${player.lastName} (#${player.number})`,
@@ -84,11 +85,38 @@ function ComposeMessageDialog() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const subject = formData.get("subject") as string;
+    const body = formData.get("message") as string;
+    
+    if (!recipient || !subject || !body) {
+         toast({
+            variant: "destructive",
+            title: "Missing fields",
+            description: "Please fill out all fields before sending.",
+        });
+        return;
+    }
+
+    const recipientLabel = recipientOptions.find(opt => opt.value === recipient)?.label || recipient;
+    
+    const newMessage: Conversation = {
+        id: `msg${Date.now()}`,
+        subject: subject,
+        sender: 'Coach Steve',
+        recipient: recipientLabel,
+        timestamp: formatISO(new Date()),
+        body: body,
+    }
+
+    onMessageSend(newMessage);
+
     toast({
       title: "Message Sent!",
-      description: "Your message has been successfully queued for delivery.",
+      description: "Your message has been successfully sent.",
     });
     (e.target as HTMLFormElement).reset();
+    setRecipient("");
     setOpen(false);
   };
 
@@ -115,6 +143,8 @@ function ComposeMessageDialog() {
               placeholder="Select recipients..."
               searchPlaceholder="Search recipients..."
               emptyPlaceholder="No recipients found."
+              value={recipient}
+              onValueChange={setRecipient}
             />
           </div>
           <div className="grid gap-2">
@@ -151,6 +181,11 @@ function ComposeMessageDialog() {
 export default function CommunicationPage() {
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
+  const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
+
+  const handleMessageSend = (message: Conversation) => {
+    setConversations(prev => [message, ...prev]);
+  }
 
   if (selectedConversation) {
     return (
@@ -169,7 +204,7 @@ export default function CommunicationPage() {
         title="Messages"
         description="Send announcements, schedule updates, and messages to your team."
       >
-        <ComposeMessageDialog />
+        <ComposeMessageDialog onMessageSend={handleMessageSend}/>
       </PageHeader>
       <div className="mt-8 space-y-6">
         <Card>

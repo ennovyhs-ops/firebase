@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -23,12 +24,13 @@ type ComboboxProps = {
     options: { label: string; value: string }[],
     placeholder: string,
     searchPlaceholder: string,
-    emptyPlaceholder: string
+    emptyPlaceholder: string,
+    value: string,
+    onValueChange: (value: string) => void,
 }
 
-export function Combobox({ options, placeholder, searchPlaceholder, emptyPlaceholder }: ComboboxProps) {
+export function Combobox({ options, placeholder, searchPlaceholder, emptyPlaceholder, value, onValueChange }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -56,7 +58,8 @@ export function Combobox({ options, placeholder, searchPlaceholder, emptyPlaceho
                   key={option.value}
                   value={option.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
+                    const realValue = options.find(opt => opt.value.toLowerCase() === currentValue)?.value || ""
+                    onValueChange(realValue === value ? "" : realValue)
                     setOpen(false)
                   }}
                 >
