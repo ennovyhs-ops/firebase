@@ -24,7 +24,6 @@ import {
   MessageSquare,
   BarChart3,
   Settings,
-  ClipboardCheck,
   LogOut,
   Swords,
 } from "lucide-react";
@@ -51,7 +50,6 @@ const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/roster", icon: Users, label: "Roster" },
   { href: "/schedule", icon: Calendar, label: "Schedule" },
-  { href: "/attendance", icon: ClipboardCheck, label: "Attendance" },
   { href: "/communication", icon: MessageSquare, label: "Messages" },
   { href: "/performance", icon: BarChart3, label: "Performance" },
 ];
