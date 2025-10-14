@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format, parseISO } from "date-fns";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 function ConversationDetails({
   conversation,
@@ -96,68 +97,77 @@ export default function CommunicationPage() {
         title="Messages"
         description="Send announcements, schedule updates, and messages to your team."
       />
-      <div className="mt-8 grid gap-8 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Compose Message</CardTitle>
-            <CardDescription>
-              Select your recipients and write your message below.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid gap-2">
-                <Label htmlFor="recipients">Recipients</Label>
-                <Select name="recipients" defaultValue="all">
-                  <SelectTrigger id="recipients">
-                    <SelectValue placeholder="Select recipients" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="all">
-                        Entire Team (Players & Parents)
-                      </SelectItem>
-                      <SelectItem value="players">Players Only</SelectItem>
-                      <SelectItem value="parents">Parents Only</SelectItem>
-                    </SelectGroup>
-                    <SelectGroup>
-                      {players.map((player) => (
-                        <SelectItem key={player.id} value={player.id}>
-                          {player.firstName} {player.lastName}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Input
-                  id="subject"
-                  name="subject"
-                  placeholder="e.g., Practice Canceled"
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="message">Message</Label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  placeholder="Type your message here..."
-                  className="min-h-[150px]"
-                  required
-                />
-              </div>
-              <div className="flex justify-end">
-                <Button type="submit">
-                  <Send className="mr-2 size-4" />
-                  Send Message
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+      <div className="mt-8 space-y-8">
+        <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="compose-message">
+                <Card>
+                    <AccordionTrigger className="p-6 w-full">
+                        <div className="text-left">
+                            <h3 className="text-lg font-medium">Compose Message</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Click to expand and send a new message.
+                            </p>
+                        </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                        <CardContent>
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="grid gap-2">
+                                <Label htmlFor="recipients">Recipients</Label>
+                                <Select name="recipients" defaultValue="all">
+                                <SelectTrigger id="recipients">
+                                    <SelectValue placeholder="Select recipients" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                    <SelectItem value="all">
+                                        Entire Team (Players & Parents)
+                                    </SelectItem>
+                                    <SelectItem value="players">Players Only</SelectItem>
+                                    <SelectItem value="parents">Parents Only</SelectItem>
+                                    </SelectGroup>
+                                    <SelectGroup>
+                                    {players.map((player) => (
+                                        <SelectItem key={player.id} value={player.id}>
+                                        {player.firstName} {player.lastName}
+                                        </SelectItem>
+                                    ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="subject">Subject</Label>
+                                <Input
+                                id="subject"
+                                name="subject"
+                                placeholder="e.g., Practice Canceled"
+                                required
+                                />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="message">Message</Label>
+                                <Textarea
+                                id="message"
+                                name="message"
+                                placeholder="Type your message here..."
+                                className="min-h-[150px]"
+                                required
+                                />
+                            </div>
+                            <div className="flex justify-end">
+                                <Button type="submit">
+                                <Send className="mr-2 size-4" />
+                                Send Message
+                                </Button>
+                            </div>
+                            </form>
+                        </CardContent>
+                    </AccordionContent>
+                </Card>
+            </AccordionItem>
+        </Accordion>
+
         <Card>
           <CardHeader>
             <CardTitle>Previous Messages</CardTitle>
