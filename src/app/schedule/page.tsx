@@ -63,8 +63,8 @@ export default function SchedulePage() {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button>
-              <PlusCircle className="mr-2 size-4" />
-              Create Event
+              <PlusCircle className="mr-2" />
+              <span className="hidden sm:inline">Create Event</span>
             </Button>
           </DialogTrigger>
           <AddEventForm onEventAdd={handleEventAdd} setOpen={setOpen} selectedDate={date} />
