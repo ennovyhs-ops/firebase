@@ -129,7 +129,7 @@ export default function CommunicationPage() {
                                     <SelectGroup>
                                     {players.map((player) => (
                                         <SelectItem key={player.id} value={player.id}>
-                                        {player.firstName} {player.lastName}
+                                        {player.firstName} {player.lastName} (#{player.number})
                                         </SelectItem>
                                     ))}
                                     </SelectGroup>
