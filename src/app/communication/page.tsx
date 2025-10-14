@@ -1,3 +1,4 @@
+
 "use client";
 
 import { PageHeader } from "@/components/page-header";
@@ -14,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -21,6 +23,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Send } from "lucide-react";
+import { players } from "../roster/data";
 
 export default function CommunicationPage() {
   const { toast } = useToast();
@@ -57,15 +60,31 @@ export default function CommunicationPage() {
                     <SelectValue placeholder="Select recipients" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Entire Team (Players & Parents)</SelectItem>
-                    <SelectItem value="players">Players Only</SelectItem>
-                    <SelectItem value="parents">Parents Only</SelectItem>
+                    <SelectGroup>
+                      <SelectItem value="all">
+                        Entire Team (Players & Parents)
+                      </SelectItem>
+                      <SelectItem value="players">Players Only</SelectItem>
+                      <SelectItem value="parents">Parents Only</SelectItem>
+                    </SelectGroup>
+                    <SelectGroup>
+                      {players.map((player) => (
+                        <SelectItem key={player.id} value={player.id}>
+                          {player.firstName} {player.lastName}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="subject">Subject</Label>
-                <Input id="subject" name="subject" placeholder="e.g., Practice Canceled" required />
+                <Input
+                  id="subject"
+                  name="subject"
+                  placeholder="e.g., Practice Canceled"
+                  required
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="message">Message</Label>
