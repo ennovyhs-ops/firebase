@@ -12,13 +12,14 @@ import {
 } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { schedule as initialSchedule } from "./data";
-import { PlusCircle, Pin } from "lucide-react";
+import { PlusCircle, Pin, ChevronDown } from "lucide-react";
 import { format, isSameDay, parseISO } from "date-fns";
 import type { TeamEvent } from "@/lib/types";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { AddEventForm } from "./add-event-form";
 import { AttendanceSheet } from "./attendance-sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 export default function SchedulePage() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
@@ -33,6 +34,10 @@ export default function SchedulePage() {
         setDate(new Date(event.date));
     }
   };
+
+  const handleEventSelect = (eventId: string) => {
+    setSelectedEventId(prevId => prevId === eventId ? null : eventId);
+  }
   
   React.useEffect(() => {
     // When the selected day changes, clear the selected event
@@ -94,24 +99,35 @@ export default function SchedulePage() {
             <CardContent>
               {eventsOnSelectedDay.length > 0 ? (
                 <ul className="space-y-4">
-                  {eventsOnSelectedDay.map((event: TeamEvent) => (
-                    <li key={event.id} className="rounded-lg border p-4 cursor-pointer hover:bg-accent" onClick={() => setSelectedEventId(event.id)}>
-                      <p className="font-semibold text-primary">{event.title}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {event.startTime} - {event.endTime}
-                      </p>
-                      <div className="flex items-center gap-2 text-sm mt-1">
-                        <Pin className="size-3" />
-                        <span>{event.location}</span>
-                      </div>
-                      {event.description && (
-                        <p className="text-sm mt-2">{event.description}</p>
-                      )}
-                      {selectedEventId === event.id && selectedEvent && (
-                          <AttendanceSheet eventId={selectedEvent.id} />
+                  {eventsOnSelectedDay.map((event: TeamEvent) => {
+                    const isSelected = selectedEventId === event.id;
+                    return (
+                    <li key={event.id} className="rounded-lg border">
+                        <div className="p-4 cursor-pointer hover:bg-accent" onClick={() => handleEventSelect(event.id)}>
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <p className="font-semibold text-primary">{event.title}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        {event.startTime} - {event.endTime}
+                                    </p>
+                                    <div className="flex items-center gap-2 text-sm mt-1">
+                                        <Pin className="size-3" />
+                                        <span>{event.location}</span>
+                                    </div>
+                                </div>
+                                <ChevronDown className={cn("size-5 text-muted-foreground transition-transform", isSelected && "rotate-180")} />
+                            </div>
+                            {event.description && (
+                                <p className="text-sm mt-2">{event.description}</p>
+                            )}
+                        </div>
+                      {isSelected && selectedEvent && (
+                          <div className="border-t">
+                            <AttendanceSheet eventId={selectedEvent.id} />
+                          </div>
                       )}
                     </li>
-                  ))}
+                  )})}
                 </ul>
               ) : (
                 <div className="flex h-[200px] items-center justify-center rounded-lg border-2 border-dashed">
