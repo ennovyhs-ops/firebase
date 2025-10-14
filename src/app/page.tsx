@@ -97,23 +97,23 @@ export default function Home() {
             </Button>
           </CardContent>
         </Card>
-         <Card>
+         <Card className="flex flex-col">
           <CardHeader>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex items-center gap-4">
                 <div className="bg-accent text-accent-foreground p-3 rounded-full">
                     <BarChart3 className="size-6" />
                 </div>
-                <div className="flex-1">
-                    <CardTitle>Performance Analysis</CardTitle>
-                    <CardDescription>Get AI-powered insights from your team's game and player data.</CardDescription>
-                </div>
-                <Button asChild>
-                    <Link href="/performance">
-                        Analyze Performance <ArrowRight className="ml-2 size-4" />
-                    </Link>
-                </Button>
+                <CardTitle>Performance Analysis</CardTitle>
             </div>
           </CardHeader>
+        <CardContent className="flex-grow flex flex-col justify-between">
+            <CardDescription>Get AI-powered insights from your team's game and player data.</CardDescription>
+            <Button asChild className="w-full mt-4">
+                <Link href="/performance">
+                    Analyze Performance <ArrowRight className="ml-2 size-4" />
+                </Link>
+            </Button>
+        </CardContent>
         </Card>
       </div>
     </div>
