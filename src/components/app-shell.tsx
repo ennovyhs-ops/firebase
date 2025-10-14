@@ -122,18 +122,21 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
     const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
 
     if (isUserLoading) return null; // Or a skeleton loader
-    if (!user) return null;
+    
+    const displayName = user?.displayName || "Johnny";
+    const photoURL = user?.photoURL || coachImage?.imageUrl;
+    const fallback = displayName.charAt(0) || 'U';
 
     return (
         <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
             <Avatar className="size-9">
-                <AvatarImage src={user.photoURL ?? coachImage?.imageUrl} alt={user.displayName ?? "Coach"} data-ai-hint={coachImage?.imageHint} />
-                <AvatarFallback>{user.displayName?.charAt(0) ?? 'U'}</AvatarFallback>
+                <AvatarImage src={photoURL ?? undefined} alt={displayName ?? "User"} data-ai-hint={coachImage?.imageHint} />
+                <AvatarFallback>{fallback}</AvatarFallback>
             </Avatar>
             {!collapsed && (
                 <div className="flex flex-col">
                     <span className="text-sm font-semibold text-foreground truncate">
-                        {user.displayName}
+                        {displayName}
                     </span>
                     <span className="text-xs text-muted-foreground">Coach</span>
                 </div>
