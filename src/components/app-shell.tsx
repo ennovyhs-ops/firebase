@@ -25,6 +25,8 @@ import {
   BarChart3,
   Settings,
   ClipboardCheck,
+  LogOut,
+  Swords,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -40,9 +42,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth, useUser } from "@/firebase";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
+
 
 const navItems = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/roster", icon: Users, label: "Roster" },
   { href: "/schedule", icon: Calendar, label: "Schedule" },
   { href: "/attendance", icon: ClipboardCheck, label: "Attendance" },
@@ -66,11 +72,11 @@ function NavMenu() {
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname === item.href || (item.href === '/dashboard' && pathname === '/')}
+                  isActive={pathname === item.href}
                   tooltip={item.label}
                   onClick={handleLinkClick}
                 >
-                  <Link href={item.href === '/dashboard' ? '/' : item.href}>
+                  <Link href={item.href}>
                     <item.icon />
                     <span>{item.label}</span>
                   </Link>
@@ -82,21 +88,32 @@ function NavMenu() {
 }
 
 function UserNav() {
+  const { user } = useUser();
+  const auth = useAuth();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    if (auth) {
+      await signOut(auth);
+      // Redirect to a sign-in page or home page after sign-out
+      router.push('/');
+    }
+  };
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative size-9 rounded-full">
                     <Avatar className="size-9">
-                        <AvatarImage src="https://picsum.photos/seed/coach/40/40" alt="Johnny" />
-                        <AvatarFallback>J</AvatarFallback>
+                        <AvatarImage src={user?.photoURL || "https://picsum.photos/seed/coach/40/40"} alt={user?.displayName || "Coach"} />
+                        <AvatarFallback>{user?.displayName?.charAt(0) || 'C'}</AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">Johnny</p>
-                        <p className="text-xs leading-none text-muted-foreground">coach@example.com</p>
+                        <p className="text-sm font-medium leading-none">{user?.displayName || "Coach"}</p>
+                        <p className="text-xs leading-none text-muted-foreground">{user?.email || "coach@example.com"}</p>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -108,6 +125,11 @@ function UserNav() {
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                 <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2" />
+                    <span>Sign Out</span>
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )
@@ -124,10 +146,10 @@ function BottomBar() {
         {mobileNavItems.map((item) => (
           <Link
             key={item.href}
-            href={item.href === '/dashboard' ? '/' : item.href}
+            href={item.href}
             className={cn(
               "flex flex-col items-center gap-1 rounded-md p-2 text-xs font-medium text-muted-foreground transition-colors hover:text-primary",
-              (pathname === item.href || (item.href === '/dashboard' && pathname === '/')) && "text-primary"
+              (pathname === item.href) && "text-primary"
             )}
           >
             <item.icon className="size-5" />
@@ -165,10 +187,10 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
       <SidebarInset>
         <header className="sticky top-0 z-40 flex items-center justify-between border-b bg-background p-2 lg:px-4 h-14">
             <div className="flex items-center gap-2">
-                <SidebarTrigger />
+                <SidebarTrigger className="md:hidden" />
             </div>
             <div className="flex items-center gap-4">
-                <UserNav />
+                 <UserNav />
             </div>
         </header>
         <main className="pb-16 md:pb-0">{children}</main>
@@ -180,8 +202,8 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
-      <AppShellInternal>{children}</AppShellInternal>
-    </SidebarProvider>
+      <SidebarProvider>
+        <AppShellInternal>{children}</AppShellInternal>
+      </SidebarProvider>
   );
 }
