@@ -139,15 +139,6 @@ export default function RosterPage() {
                             >
                             View Details
                             </Button>
-                             <Button
-                                variant="ghost"
-                                size="icon"
-                                className="text-destructive hover:text-destructive"
-                                onClick={() => setPlayerToDelete(player)}
-                                >
-                                <Trash2 className="size-4" />
-                                <span className="sr-only">Delete Player</span>
-                            </Button>
                         </div>
                       </TableCell>
                     </TableRow>
