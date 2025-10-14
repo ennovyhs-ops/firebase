@@ -177,9 +177,9 @@ export default function CommunicationPage() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-[100px]">Date</TableHead>
                   <TableHead>Subject</TableHead>
                   <TableHead className="hidden sm:table-cell">To</TableHead>
-                  <TableHead className="text-right">Date</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -189,6 +189,9 @@ export default function CommunicationPage() {
                     onClick={() => setSelectedConversation(convo)}
                     className="cursor-pointer"
                   >
+                     <TableCell className="text-xs text-muted-foreground py-2">
+                      {format(parseISO(convo.timestamp), "MMM d")}
+                    </TableCell>
                     <TableCell className="py-2">
                       <div className="font-medium">{convo.subject}</div>
                       <div className="text-xs text-muted-foreground truncate max-w-[150px] md:max-w-xs">
@@ -197,9 +200,6 @@ export default function CommunicationPage() {
                     </TableCell>
                     <TableCell className="hidden sm:table-cell py-2">
                       {convo.recipient}
-                    </TableCell>
-                    <TableCell className="text-right text-xs text-muted-foreground py-2">
-                      {format(parseISO(convo.timestamp), "MMM d")}
                     </TableCell>
                   </TableRow>
                 ))}
