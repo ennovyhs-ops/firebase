@@ -97,11 +97,11 @@ export default function CommunicationPage() {
         title="Messages"
         description="Send announcements, schedule updates, and messages to your team."
       />
-      <div className="mt-8 space-y-8">
+      <div className="mt-8 space-y-6">
         <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="compose-message">
                 <Card>
-                    <AccordionTrigger className="p-6 w-full">
+                    <AccordionTrigger className="px-6 py-4 w-full">
                         <div className="text-left">
                             <h3 className="text-lg font-medium">Compose Message</h3>
                             <p className="text-sm text-muted-foreground">
@@ -111,7 +111,7 @@ export default function CommunicationPage() {
                     </AccordionTrigger>
                     <AccordionContent>
                         <CardContent>
-                            <form onSubmit={handleSubmit} className="space-y-6">
+                            <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid gap-2">
                                 <Label htmlFor="recipients">Recipients</Label>
                                 <Select name="recipients" defaultValue="all">
@@ -173,7 +173,7 @@ export default function CommunicationPage() {
             <CardTitle>Previous Messages</CardTitle>
             <CardDescription>Review your past conversations.</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -189,16 +189,16 @@ export default function CommunicationPage() {
                     onClick={() => setSelectedConversation(convo)}
                     className="cursor-pointer"
                   >
-                    <TableCell>
+                    <TableCell className="py-2">
                       <div className="font-medium">{convo.subject}</div>
-                      <div className="text-sm text-muted-foreground truncate max-w-[150px] md:max-w-xs">
+                      <div className="text-xs text-muted-foreground truncate max-w-[150px] md:max-w-xs">
                         {convo.body}
                       </div>
                     </TableCell>
-                    <TableCell className="hidden sm:table-cell">
+                    <TableCell className="hidden sm:table-cell py-2">
                       {convo.recipient}
                     </TableCell>
-                    <TableCell className="text-right text-xs text-muted-foreground">
+                    <TableCell className="text-right text-xs text-muted-foreground py-2">
                       {format(parseISO(convo.timestamp), "MMM d")}
                     </TableCell>
                   </TableRow>
