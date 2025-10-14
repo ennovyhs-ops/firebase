@@ -2,7 +2,7 @@
 "use client";
 import * as React from "react";
 import { PageHeader } from "@/components/page-header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { players as initialPlayers } from "./data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -12,6 +12,14 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { AddPlayerForm } from "./add-player-form";
 import type { Player } from "@/lib/types";
 import { PlayerDetails } from "./player-details";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function RosterPage() {
   const [addPlayerOpen, setAddPlayerOpen] = React.useState(false);
@@ -49,47 +57,58 @@ export default function RosterPage() {
           />
         </Dialog>
       </PageHeader>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {players.map((player) => {
-          const avatar = PlaceHolderImages.find(
-            (p) => p.id === player.avatarId
-          );
-          const avatarSrc = player.avatarUrl || avatar?.imageUrl;
-          
-          return (
-            <Card key={player.id} className="flex flex-col">
-              <CardHeader className="flex-row items-center gap-4 space-y-0 pb-4">
-                  <Avatar className="size-12">
-                    <AvatarImage
-                      src={avatarSrc}
-                      data-ai-hint={avatar?.imageHint}
-                    />
-                    <AvatarFallback>
-                      {player.name.split(' ').map(n => n[0]).join('')}
-                    </AvatarFallback>
-                  </Avatar>
-                   <div>
-                    <CardTitle className="text-lg">
-                      {player.name}
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                        #{player.number || "N/A"} | {player.position || "N/A"}
-                    </p>
-                  </div>
-              </CardHeader>
-              <CardContent className="flex-grow flex items-end justify-end p-4 pt-0">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedPlayer(player)}
-                  className="w-full"
-                >
-                  View Details
-                </Button>
-              </CardContent>
-            </Card>
-          );
-        })}
+      <div className="mt-8">
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Player</TableHead>
+                  <TableHead className="hidden sm:table-cell">Position</TableHead>
+                  <TableHead className="hidden md:table-cell w-[100px]">Jersey</TableHead>
+                  <TableHead className="w-[120px]"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {players.map((player) => {
+                  const avatar = PlaceHolderImages.find(
+                    (p) => p.id === player.avatarId
+                  );
+                  const avatarSrc = player.avatarUrl || avatar?.imageUrl;
+                  return (
+                    <TableRow key={player.id}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <Avatar className="size-10">
+                            <AvatarImage
+                              src={avatarSrc}
+                              data-ai-hint={avatar?.imageHint}
+                            />
+                            <AvatarFallback>
+                              {player.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                           <span className="font-medium">{player.name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">{player.position || 'N/A'}</TableCell>
+                      <TableCell className="hidden md:table-cell text-center">#{player.number || 'N/A'}</TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedPlayer(player)}
+                        >
+                          View Details
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       </div>
       <Dialog
         open={!!selectedPlayer}
