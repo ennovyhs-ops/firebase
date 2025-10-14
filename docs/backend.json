@@ -1,0 +1,489 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a user profile within the Sixx: Sports Management Hub.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user profile."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The user's first name."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The user's last name."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "The user's phone number."
+        },
+        "profilePhoto": {
+          "type": "string",
+          "description": "URL to the user's profile photo.",
+          "format": "uri"
+        },
+        "isPlayer": {
+          "type": "boolean",
+          "description": "Indicates whether the user is a player or a parent/guardian."
+        }
+      },
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email",
+        "isPlayer"
+      ]
+    },
+    "PlayerProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PlayerProfile",
+      "type": "object",
+      "description": "Represents a player's profile, extending the user profile with sports-specific information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the player profile."
+        },
+        "userProfileId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:1 PlayerProfile)"
+        },
+        "emergencyContactName": {
+          "type": "string",
+          "description": "Name of the emergency contact."
+        },
+        "emergencyContactPhone": {
+          "type": "string",
+          "description": "Phone number of the emergency contact."
+        },
+        "medicalInformation": {
+          "type": "string",
+          "description": "Important medical information about the player."
+        },
+        "skillAssessments": {
+          "type": "string",
+          "description": "Summary of the player's skill assessments."
+        },
+        "teamId": {
+          "type": "string",
+          "description": "Reference to Team. (Relationship: Team 1:N PlayerProfile)"
+        }
+      },
+      "required": [
+        "id",
+        "userProfileId",
+        "emergencyContactName",
+        "emergencyContactPhone",
+        "teamId"
+      ]
+    },
+    "Team": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Team",
+      "type": "object",
+      "description": "Represents a sports team.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the team."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the team."
+        },
+        "sport": {
+          "type": "string",
+          "description": "The sport the team plays."
+        },
+        "coachId": {
+          "type": "string",
+          "description": "Reference to UserProfile (Coach). (Relationship: UserProfile 1:N Team)"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "sport",
+        "coachId"
+      ]
+    },
+    "ScheduleEvent": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ScheduleEvent",
+      "type": "object",
+      "description": "Represents a scheduled event for a team (practice, game, etc.).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the schedule event."
+        },
+        "teamId": {
+          "type": "string",
+          "description": "Reference to Team. (Relationship: Team 1:N ScheduleEvent)"
+        },
+        "eventType": {
+          "type": "string",
+          "description": "Type of event (practice, game, meeting)."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "The start time of the event.",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "The end time of the event.",
+          "format": "date-time"
+        },
+        "location": {
+          "type": "string",
+          "description": "The location of the event."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the event."
+        },
+        "googleCalendarEventId": {
+          "type": "string",
+          "description": "The id of the event in google calendar"
+        }
+      },
+      "required": [
+        "id",
+        "teamId",
+        "eventType",
+        "startTime",
+        "endTime",
+        "location"
+      ]
+    },
+    "Attendance": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Attendance",
+      "type": "object",
+      "description": "Represents a player's attendance at a specific schedule event.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the attendance record."
+        },
+        "scheduleEventId": {
+          "type": "string",
+          "description": "Reference to ScheduleEvent. (Relationship: ScheduleEvent 1:N Attendance)"
+        },
+        "playerProfileId": {
+          "type": "string",
+          "description": "Reference to PlayerProfile. (Relationship: PlayerProfile 1:N Attendance)"
+        },
+        "attendanceStatus": {
+          "type": "string",
+          "description": "The attendance status (present, absent, excused)."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Any notes regarding the player's attendance."
+        }
+      },
+      "required": [
+        "id",
+        "scheduleEventId",
+        "playerProfileId",
+        "attendanceStatus"
+      ]
+    },
+    "Communication": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Communication",
+      "type": "object",
+      "description": "Represents a communication sent to players and/or parents.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the communication."
+        },
+        "teamId": {
+          "type": "string",
+          "description": "Reference to Team. (Relationship: Team 1:N Communication)"
+        },
+        "senderId": {
+          "type": "string",
+          "description": "Reference to UserProfile (Sender). (Relationship: UserProfile 1:N Communication)"
+        },
+        "subject": {
+          "type": "string",
+          "description": "The subject of the communication."
+        },
+        "message": {
+          "type": "string",
+          "description": "The body of the communication."
+        },
+        "sentTime": {
+          "type": "string",
+          "description": "The time the communication was sent.",
+          "format": "date-time"
+        },
+        "recipientIds": {
+          "type": "array",
+          "description": "References to UserProfiles (Recipients).",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "teamId",
+        "senderId",
+        "subject",
+        "message",
+        "sentTime"
+      ]
+    },
+    "ConsentForm": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ConsentForm",
+      "type": "object",
+      "description": "Represents a consent form that parents/guardians must complete for their players.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the consent form."
+        },
+        "teamId": {
+          "type": "string",
+          "description": "Reference to Team. (Relationship: Team 1:N ConsentForm)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the consent form."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the consent form."
+        },
+        "formUrl": {
+          "type": "string",
+          "description": "URL to the consent form document.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "teamId",
+        "name",
+        "description",
+        "formUrl"
+      ]
+    },
+    "PlayerConsent": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PlayerConsent",
+      "type": "object",
+      "description": "Represents a player's consent for a specific consent form.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the player consent record."
+        },
+        "playerProfileId": {
+          "type": "string",
+          "description": "Reference to PlayerProfile. (Relationship: PlayerProfile 1:N PlayerConsent)"
+        },
+        "consentFormId": {
+          "type": "string",
+          "description": "Reference to ConsentForm. (Relationship: ConsentForm 1:N PlayerConsent)"
+        },
+        "consentDate": {
+          "type": "string",
+          "description": "The date the consent was given.",
+          "format": "date-time"
+        },
+        "consentStatus": {
+          "type": "string",
+          "description": "Status of the consent (granted, denied)."
+        }
+      },
+      "required": [
+        "id",
+        "playerProfileId",
+        "consentFormId",
+        "consentDate",
+        "consentStatus"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "userProfiles/{userId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores user profile information. Path-based ownership: only the user with the matching {userId} can read/write.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "playerProfiles/{playerProfileId}",
+        "definition": {
+          "entityName": "PlayerProfile",
+          "schema": {
+            "$ref": "#/backend/entities/PlayerProfile"
+          },
+          "description": "Stores player-specific profile information. Accessible to the player and team coaches.",
+          "params": [
+            {
+              "name": "playerProfileId",
+              "description": "The unique identifier of the player profile."
+            }
+          ]
+        }
+      },
+      {
+        "path": "teams/{teamId}",
+        "definition": {
+          "entityName": "Team",
+          "schema": {
+            "$ref": "#/backend/entities/Team"
+          },
+          "description": "Stores team information. Accessible to team coaches.",
+          "params": [
+            {
+              "name": "teamId",
+              "description": "The unique identifier of the team."
+            }
+          ]
+        }
+      },
+      {
+        "path": "teams/{teamId}/scheduleEvents/{scheduleEventId}",
+        "definition": {
+          "entityName": "ScheduleEvent",
+          "schema": {
+            "$ref": "#/backend/entities/ScheduleEvent"
+          },
+          "description": "Stores schedule events for a team. Includes denormalized 'teamId' for authorization independence.",
+          "params": [
+            {
+              "name": "teamId",
+              "description": "The unique identifier of the team."
+            },
+            {
+              "name": "scheduleEventId",
+              "description": "The unique identifier of the schedule event."
+            }
+          ]
+        }
+      },
+      {
+        "path": "teams/{teamId}/scheduleEvents/{scheduleEventId}/attendances/{attendanceId}",
+        "definition": {
+          "entityName": "Attendance",
+          "schema": {
+            "$ref": "#/backend/entities/Attendance"
+          },
+          "description": "Stores attendance records for a schedule event. Includes denormalized 'teamId' and 'scheduleEventId' for authorization independence.",
+          "params": [
+            {
+              "name": "teamId",
+              "description": "The unique identifier of the team."
+            },
+            {
+              "name": "scheduleEventId",
+              "description": "The unique identifier of the schedule event."
+            },
+            {
+              "name": "attendanceId",
+              "description": "The unique identifier of the attendance record."
+            }
+          ]
+        }
+      },
+      {
+        "path": "teams/{teamId}/communications/{communicationId}",
+        "definition": {
+          "entityName": "Communication",
+          "schema": {
+            "$ref": "#/backend/entities/Communication"
+          },
+          "description": "Stores communications sent to team members. Includes denormalized 'teamId' for authorization independence.",
+          "params": [
+            {
+              "name": "teamId",
+              "description": "The unique identifier of the team."
+            },
+            {
+              "name": "communicationId",
+              "description": "The unique identifier of the communication."
+            }
+          ]
+        }
+      },
+      {
+        "path": "teams/{teamId}/consentForms/{consentFormId}",
+        "definition": {
+          "entityName": "ConsentForm",
+          "schema": {
+            "$ref": "#/backend/entities/ConsentForm"
+          },
+          "description": "Stores consent forms for a team. Includes denormalized 'teamId' for authorization independence.",
+          "params": [
+            {
+              "name": "teamId",
+              "description": "The unique identifier of the team."
+            },
+            {
+              "name": "consentFormId",
+              "description": "The unique identifier of the consent form."
+            }
+          ]
+        }
+      },
+      {
+        "path": "playerProfiles/{playerProfileId}/playerConsents/{playerConsentId}",
+        "definition": {
+          "entityName": "PlayerConsent",
+          "schema": {
+            "$ref": "#/backend/entities/PlayerConsent"
+          },
+          "description": "Stores player consents for specific forms.  Path-based ownership via playerProfileId.",
+          "params": [
+            {
+              "name": "playerProfileId",
+              "description": "The unique identifier of the player profile."
+            },
+            {
+              "name": "playerConsentId",
+              "description": "The unique identifier of the player consent record."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to support the Sixx: Sports Management Hub application, focusing on roster management, communication, scheduling, attendance, and performance analysis. It prioritizes authorization independence and simplifies security rules. \n\n**Authorization Independence:** The design emphasizes authorization independence by denormalizing relevant team and user information where necessary. For example, access to `ScheduleEvent` documents requires knowing the associated `teamId`. Since events are potentially created and managed collaboratively, instead of relying on `get()` calls to verify team membership, the relevant authorization data (team membership/roles) would be denormalized within the event document itself (if a membership map was added to the `Team` entity to allow for roles). The UserProfile is separated from the PlayerProfile to ensure that user data is distinct from sports-related data, enhancing data integrity. For team-related data like `ScheduleEvent`, `Communication`, and `ConsentForm`, access is controlled at the team level.\n\n**QAPs (Rules are not Filters):** The structure ensures secure `list` operations by structurally segregating data based on access requirements. Path-based ownership is used for user-specific data (e.g., `userProfiles/{userId}`), while collaborative data is organized under team-specific collections (e.g., `teams/{teamId}/scheduleEvents`). This segregation allows for simple and efficient security rules that do not require filtering based on document content.\n\n**Google Calendar Integration:** The `ScheduleEvent` includes a `googleCalendarEventId` field to link events with their corresponding Google Calendar entries. This allows for synchronization between the application's schedule and users' Google Calendars. The application must manage the logic to create, update, and delete events in Google Calendar when `ScheduleEvent` documents are created, updated, or deleted.\n"
+  }
+}

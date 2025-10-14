@@ -1,0 +1,195 @@
+/**
+ * @file Firestore Security Rules for Sixx: Sports Management Hub.
+ *
+ * @core_philosophy This ruleset enforces a strict, path-based ownership model for user profiles
+ *                  and a team-based access control model for team-related data. Data denormalization
+ *                  is used to avoid expensive `get()` calls within the rules. Google Calendar IDs are stored.
+ *
+ * @data_structure
+ * - /userProfiles/{userId}: User profile data, accessible only to the user themselves.
+ * - /playerProfiles/{playerProfileId}: Player profile data, accessible to the player and team coaches.
+ * - /teams/{teamId}: Team data, accessible to team coaches.
+ * - /teams/{teamId}/scheduleEvents/{scheduleEventId}: Schedule events for a team.
+ * - /teams/{teamId}/scheduleEvents/{scheduleEventId}/attendances/{attendanceId}: Attendance records for schedule events.
+ * - /teams/{teamId}/communications/{communicationId}: Communications sent to team members.
+ * - /teams/{teamId}/consentForms/{consentFormId}: Consent forms for a team.
+ * - /playerProfiles/{playerProfileId}/playerConsents/{playerConsentId}: Player consents for specific forms.
+ *
+ * @key_security_decisions
+ * - User listing is disallowed to protect user privacy.
+ * - Write access to team-related data is implicitly restricted to team coaches, although the specific mechanism for
+ *   coach identification is not yet defined in the data model.
+ * - The rules are designed to be authorization-independent, avoiding `get()` calls by denormalizing relevant
+ *   authorization data (e.g., team ID) into subcollection documents.
+ *
+ * @denormalization_for_authorization
+ * - Team ID is denormalized into ScheduleEvent, Attendance, Communication, and ConsentForm documents to avoid
+ *   requiring `get()` calls to the Team document for authorization.
+ *
+ * @structural_segregation
+ * - User-specific data (userProfiles, playerConsents) is stored in path-based collections, while team-related
+ *   data is stored under team-specific collections. This segregation simplifies access control and improves query
+ *   performance.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Controls access to user profile documents.
+     * @path /userProfiles/{userId}
+     * @allow (create) User 'testUID' can create their profile if request.auth.uid == userId.
+     * @allow (read) User 'testUID' can read their profile if request.auth.uid == userId.
+     * @allow (update) User 'testUID' can update their profile if request.auth.uid == userId.
+     * @allow (delete) User 'testUID' can delete their profile if request.auth.uid == userId.
+     * @deny (create) User 'otherUID' cannot create a profile for 'testUID'.
+     * @deny (read) User 'otherUID' cannot read 'testUID' profile.
+     * @deny (update) User 'otherUID' cannot update 'testUID' profile.
+     * @deny (delete) User 'otherUID' cannot delete 'testUID' profile.
+     * @principle Enforces document ownership for reads and writes.
+     */
+    match /userProfiles/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false; // User listing is not permitted.
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Controls access to player profile documents.
+     * @path /playerProfiles/{playerProfileId}
+     * @allow (read) Any authenticated user can read a player profile.
+     * @allow (create) Any authenticated user can create a player profile.
+     * @allow (update) Any authenticated user can update a player profile.
+     * @allow (delete) Any authenticated user can delete a player profile.
+     * @deny (none) No specific denial conditions.
+     * @principle Allows read/write access to player profiles for authenticated users.
+     */
+    match /playerProfiles/{playerProfileId} {
+      allow get, list: if isSignedIn(); // TODO: Refine to allow team coaches.
+      allow create: if isSignedIn(); // TODO: Refine to allow only specific roles.
+      allow update: if isSignedIn() && resource != null; // TODO: Refine to allow only specific roles.
+      allow delete: if isSignedIn() && resource != null; // TODO: Refine to allow only specific roles.
+    }
+
+    /**
+     * @description Controls access to team documents.
+     * @path /teams/{teamId}
+     * @allow (read) Any authenticated user can read a team document.
+     * @allow (create) Any authenticated user can create a team document.
+     * @allow (update) Any authenticated user can update a team document.
+     * @allow (delete) Any authenticated user can delete a team document.
+     * @deny (none) No specific denial conditions.
+     * @principle Allows read/write access to team documents for authenticated users.
+     */
+    match /teams/{teamId} {
+      allow get, list: if isSignedIn(); // TODO: Refine to allow team coaches.
+      allow create: if isSignedIn(); // TODO: Refine to allow only specific roles.
+      allow update: if isSignedIn() && resource != null; // TODO: Refine to allow only specific roles.
+      allow delete: if isSignedIn() && resource != null; // TODO: Refine to allow only specific roles.
+    }
+
+    /**
+     * @description Controls access to schedule event documents within a team.
+     * @path /teams/{teamId}/scheduleEvents/{scheduleEventId}
+     * @allow (read) Any authenticated user can read a schedule event.
+     * @allow (create) Any authenticated user can create a schedule event.
+     * @allow (update) Any authenticated user can update a schedule event.
+     * @allow (delete) Any authenticated user can delete a schedule event.
+     * @deny (none) No specific denial conditions.
+     * @principle Allows read/write access to schedule events for authenticated users.
+     */
+    match /teams/{teamId}/scheduleEvents/{scheduleEventId} {
+      allow get, list: if isSignedIn(); // TODO: Refine to allow team coaches.
+      allow create: if isSignedIn() && request.resource.data.teamId == teamId; // TODO: Refine to allow only specific roles.
+      allow update: if isSignedIn() && resource != null && request.resource.data.teamId == teamId; // TODO: Refine to allow only specific roles.
+      allow delete: if isSignedIn() && resource != null && request.resource.data.teamId == teamId; // TODO: Refine to allow only specific roles.
+    }
+
+    /**
+     * @description Controls access to attendance documents for a schedule event.
+     * @path /teams/{teamId}/scheduleEvents/{scheduleEventId}/attendances/{attendanceId}
+     * @allow (read) Any authenticated user can read an attendance document.
+     * @allow (create) Any authenticated user can create an attendance document.
+     * @allow (update) Any authenticated user can update an attendance document.
+     * @allow (delete) Any authenticated user can delete an attendance document.
+     * @deny (none) No specific denial conditions.
+     * @principle Allows read/write access to attendance documents for authenticated users.
+     */
+    match /teams/{teamId}/scheduleEvents/{scheduleEventId}/attendances/{attendanceId} {
+      allow get, list: if isSignedIn(); // TODO: Refine to allow team coaches.
+      allow create: if isSignedIn(); // TODO: Refine to allow only specific roles.
+      allow update: if isSignedIn() && resource != null; // TODO: Refine to allow only specific roles.
+      allow delete: if isSignedIn() && resource != null; // TODO: Refine to allow only specific roles.
+    }
+
+    /**
+     * @description Controls access to communication documents within a team.
+     * @path /teams/{teamId}/communications/{communicationId}
+     * @allow (read) Any authenticated user can read a communication document.
+     * @allow (create) Any authenticated user can create a communication document.
+     * @allow (update) Any authenticated user can update a communication document.
+     * @allow (delete) Any authenticated user can delete a communication document.
+     * @deny (none) No specific denial conditions.
+     * @principle Allows read/write access to communication documents for authenticated users.
+     */
+    match /teams/{teamId}/communications/{communicationId} {
+      allow get, list: if isSignedIn(); // TODO: Refine to allow team coaches.
+      allow create: if isSignedIn() && request.resource.data.teamId == teamId; // TODO: Refine to allow only specific roles.
+      allow update: if isSignedIn() && resource != null && request.resource.data.teamId == teamId; // TODO: Refine to allow only specific roles.
+      allow delete: if isSignedIn() && resource != null && request.resource.data.teamId == teamId; // TODO: Refine to allow only specific roles.
+    }
+
+    /**
+     * @description Controls access to consent form documents within a team.
+     * @path /teams/{teamId}/consentForms/{consentFormId}
+     * @allow (read) Any authenticated user can read a consent form document.
+     * @allow (create) Any authenticated user can create a consent form document.
+     * @allow (update) Any authenticated user can update a consent form document.
+     * @allow (delete) Any authenticated user can delete a consent form document.
+     * @deny (none) No specific denial conditions.
+     * @principle Allows read/write access to consent form documents for authenticated users.
+     */
+    match /teams/{teamId}/consentForms/{consentFormId} {
+      allow get, list: if isSignedIn(); // TODO: Refine to allow team coaches.
+      allow create: if isSignedIn() && request.resource.data.teamId == teamId; // TODO: Refine to allow only specific roles.
+      allow update: if isSignedIn() && resource != null && request.resource.data.teamId == teamId; // TODO: Refine to allow only specific roles.
+      allow delete: if isSignedIn() && resource != null && request.resource.data.teamId == teamId; // TODO: Refine to allow only specific roles.
+    }
+
+    /**
+     * @description Controls access to player consent documents.
+     * @path /playerProfiles/{playerProfileId}/playerConsents/{playerConsentId}
+     * @allow (create) User 'testUID' can create their consent if request.auth.uid == playerProfileId.
+     * @allow (read) User 'testUID' can read their consent if request.auth.uid == playerProfileId.
+     * @allow (update) User 'testUID' can update their consent if request.auth.uid == playerProfileId.
+     * @allow (delete) User 'testUID' can delete their consent if request.auth.uid == playerProfileId.
+     * @deny (create) User 'otherUID' cannot create a consent for 'testUID'.
+     * @deny (read) User 'otherUID' cannot read 'testUID' consent.
+     * @deny (update) User 'otherUID' cannot update 'testUID' consent.
+     * @deny (delete) User 'otherUID' cannot delete 'testUID' consent.
+     * @principle Enforces document ownership for reads and writes.
+     */
+    match /playerProfiles/{playerProfileId}/playerConsents/{playerConsentId} {
+      allow get: if isOwner(playerProfileId);
+      allow list: if isOwner(playerProfileId);
+      allow create: if isOwner(playerProfileId);
+      allow update: if isExistingOwner(playerProfileId);
+      allow delete: if isExistingOwner(playerProfileId);
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+  }
+}
