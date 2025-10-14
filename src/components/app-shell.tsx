@@ -36,7 +36,6 @@ import { useAuth, useUser } from "@/firebase";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import { TeamSwitcher } from "./team-switcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -87,90 +86,26 @@ function NavMenu() {
     )
 }
 
-function AuthButton() {
-  const auth = useAuth();
-
-  const handleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Error signing in with Google", error);
-    }
-  };
-
-  return (
-    <Button variant="ghost" className="w-full justify-start" onClick={handleSignIn}>
-      <LogIn />
-      <span>Sign in with Google</span>
-    </Button>
-  )
-}
-
 function UserNav() {
-    const { user, isUserLoading } = useUser();
-    const auth = useAuth();
-    const router = useRouter();
-    
-    const handleSignOut = async () => {
-        try {
-          await signOut(auth);
-          router.push('/');
-        } catch (error) {
-          console.error("Error signing out", error);
-        }
-      };
-    
-    if (isUserLoading) {
-        return <Avatar className="size-9" />
-    }
-
-    const getDisplayName = () => {
-        if (user) return user.displayName || "Johnny";
-        return "Johnny";
-    }
-
-    const getDisplayEmail = () => {
-        if (user) return user.email || "coach@example.com";
-        return "coach@example.com";
-    }
-    
-    const getPhotoUrl = () => {
-        if (user) return user.photoURL;
-        return undefined;
-    }
-    
-    const getFallback = () => {
-        if (user) return user.displayName?.charAt(0) || 'J';
-        return 'J';
-    }
-
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative size-9 rounded-full">
                     <Avatar className="size-9">
-                        <AvatarImage src={getPhotoUrl() ?? undefined} alt={getDisplayName()} />
-                        <AvatarFallback>{getFallback()}</AvatarFallback>
+                        <AvatarImage src="https://picsum.photos/seed/coach/40/40" alt="Johnny" />
+                        <AvatarFallback>J</AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{getDisplayName()}</p>
-                        <p className="text-xs leading-none text-muted-foreground">{getDisplayEmail()}</p>
+                        <p className="text-sm font-medium leading-none">Johnny</p>
+                        <p className="text-xs leading-none text-muted-foreground">coach@example.com</p>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem asChild>
-                        <Link href="/">
-                            <SwitchCamera className="mr-2" />
-                            <span>Switch Team</span>
-                        </Link>
-                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <Link href="/settings">
                             <Settings className="mr-2" />
@@ -178,18 +113,6 @@ function UserNav() {
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                {user ? (
-                     <DropdownMenuItem onClick={handleSignOut}>
-                        <LogOut className="mr-2" />
-                        <span>Sign out</span>
-                    </DropdownMenuItem>
-                ) : (
-                    <DropdownMenuItem onClick={() => auth && signInWithPopup(auth, new GoogleAuthProvider())}>
-                        <LogIn className="mr-2" />
-                        <span>Sign in</span>
-                    </DropdownMenuItem>
-                )}
             </DropdownMenuContent>
         </DropdownMenu>
     )
@@ -223,22 +146,7 @@ function BottomBar() {
 
 function AppShellInternal({ children }: { children: React.ReactNode }) {
   const { isMobile } = useSidebar();
-  const { user } = useUser();
-  const pathname = usePathname();
-
-  const showSidebar = user && pathname !== '/';
-
-  if (!showSidebar) {
-    return (
-        <>
-        <header className="sticky top-0 z-40 flex items-center justify-end border-b bg-background p-2 lg:px-4 h-14">
-            <UserNav />
-        </header>
-        <main>{children}</main>
-        </>
-    )
-  }
-
+  
   return (
     <>
       <Sidebar collapsible="icon">
@@ -257,25 +165,14 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
                 </Link>
              </SidebarMenuButton>
            </SidebarMenuItem>
-          { !user ? (
-            <SidebarMenuItem>
-                <AuthButton />
-            </SidebarMenuItem>
-          ) : null}
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <header className="sticky top-0 z-40 flex items-center justify-between border-b bg-background p-2 lg:px-4 h-14">
             <div className="flex items-center gap-2">
                 <SidebarTrigger />
-                <div className="md:hidden">
-                    <TeamSwitcher />
-                </div>
             </div>
             <div className="flex items-center gap-4">
-                <div className="hidden md:block">
-                    <TeamSwitcher />
-                </div>
                 <UserNav />
             </div>
         </header>
