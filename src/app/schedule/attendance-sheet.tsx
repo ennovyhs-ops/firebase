@@ -18,13 +18,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { players } from "../roster/data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import type { AttendanceStatus, PlayerAttendance } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { usePlayers } from "@/context/players-context";
 
 export function AttendanceSheet({ eventId }: { eventId: string }) {
+  const { players } = usePlayers();
   const [attendance, setAttendance] = React.useState<
     Record<string, PlayerAttendance>
   >(() =>
@@ -39,6 +40,27 @@ export function AttendanceSheet({ eventId }: { eventId: string }) {
       return acc;
     }, {} as Record<string, PlayerAttendance>)
   );
+
+  React.useEffect(() => {
+    // Update attendance state if players list changes
+    setAttendance(currentAttendance => {
+        const newAttendance: Record<string, PlayerAttendance> = {};
+        players.forEach(player => {
+            if (currentAttendance[player.id]) {
+                newAttendance[player.id] = currentAttendance[player.id];
+            } else {
+                 const indicatedStatuses: AttendanceStatus[] = ["Present", "Absent", "Pending"];
+                 const randomStatus = indicatedStatuses[Math.floor(Math.random() * 3)];
+                 newAttendance[player.id] = {
+                    indicated: randomStatus,
+                    actual: randomStatus,
+                };
+            }
+        });
+        return newAttendance;
+    });
+  }, [players]);
+
 
   const handleStatusChange = (playerId: string, status: AttendanceStatus) => {
     setAttendance((prev) => ({ 

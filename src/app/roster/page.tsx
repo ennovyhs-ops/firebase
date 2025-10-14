@@ -4,7 +4,6 @@ import * as React from "react";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { players as allPlayers } from "./data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
@@ -30,6 +29,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import dynamic from "next/dynamic";
+import { usePlayers } from "@/context/players-context";
 
 const AddPlayerForm = dynamic(() => import("./add-player-form").then(mod => mod.AddPlayerForm));
 const PlayerDetails = dynamic(() => import("./player-details").then(mod => mod.PlayerDetails));
@@ -37,15 +37,15 @@ const PlayerDetails = dynamic(() => import("./player-details").then(mod => mod.P
 
 export default function RosterPage() {
   const { toast } = useToast();
+  const { players, addPlayer, updatePlayer, deletePlayer } = usePlayers();
   const [addPlayerOpen, setAddPlayerOpen] = React.useState(false);
   const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(
     null
   );
   const [playerToDelete, setPlayerToDelete] = React.useState<Player | null>(null);
-  const [players, setPlayers] = React.useState<Player[]>(allPlayers);
 
   const handlePlayerAdd = (player: Player) => {
-    setPlayers((prev) => [...prev, player]);
+    addPlayer(player);
     toast({
       title: "Player Added",
       description: `${player.firstName} ${player.lastName} has been added to the roster.`,
@@ -53,9 +53,7 @@ export default function RosterPage() {
   };
 
   const handlePlayerUpdate = (updatedPlayer: Player) => {
-    setPlayers((prev) =>
-      prev.map((p) => (p.id === updatedPlayer.id ? updatedPlayer : p))
-    );
+    updatePlayer(updatedPlayer);
     setSelectedPlayer(updatedPlayer);
      toast({
       title: "Player Updated",
@@ -64,7 +62,7 @@ export default function RosterPage() {
   };
 
   const handlePlayerDelete = (player: Player) => {
-    setPlayers((prev) => prev.filter((p) => p.id !== player.id));
+    deletePlayer(player.id);
     toast({
       title: "Player Deleted",
       description: `${player.firstName} ${player.lastName} has been removed from the roster.`,
