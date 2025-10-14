@@ -10,6 +10,7 @@ export type Player = {
   position: string;
   avatarId: string;
   avatarUrl?: string;
+  teamId: string;
   contact: {
     email: string;
     phone: string;
@@ -41,6 +42,7 @@ export type TeamEvent = {
   endTime: string;
   location: string;
   description?: string;
+  teamId: string;
 };
 
 export type AttendanceStatus = "Present" | "Absent" | "Pending" | "Excused";
@@ -63,4 +65,6 @@ export type Conversation = {
   timestamp: string;
   body: string;
   replies?: Conversation[];
+  teamId: string;
 };
+

@@ -26,6 +26,7 @@ import {
   Settings,
   LogOut,
   LogIn,
+  ClipboardCheck,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -41,6 +42,7 @@ const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/roster", icon: Users, label: "Roster" },
   { href: "/schedule", icon: Calendar, label: "Schedule" },
+  { href: "/attendance", icon: ClipboardCheck, label: "Attendance" },
   { href: "/communication", icon: MessageSquare, label: "Messages" },
   { href: "/performance", icon: BarChart3, label: "Performance" },
 ];
@@ -183,10 +185,12 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
 
 function BottomBar() {
   const pathname = usePathname();
+  // Filter out attendance for mobile view
+  const mobileNavItems = navItems.filter(item => item.href !== '/attendance');
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-sm md:hidden">
-      <div className="grid h-16 grid-cols-5 items-center justify-items-center">
-        {navItems.map((item) => (
+      <div className={cn("grid h-16 items-center justify-items-center", `grid-cols-${mobileNavItems.length}`)}>
+        {mobileNavItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
@@ -207,12 +211,6 @@ function BottomBar() {
 function AppShellInternal({ children }: { children: React.ReactNode }) {
   const { isMobile } = useSidebar();
   const { user } = useUser();
-  const [isClient, setIsClient] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
-
 
   return (
     <>
@@ -248,7 +246,12 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
         <header className="flex items-center justify-between border-b p-2 lg:px-4 h-14">
             <div className="flex items-center gap-4">
                 <SidebarTrigger />
-                <TeamSwitcher />
+                <div className="md:hidden">
+                    <Logo />
+                </div>
+                <div className="hidden md:block">
+                    <TeamSwitcher />
+                </div>
             </div>
             <div className="flex items-center gap-4">
                 <Button asChild variant="ghost" size="icon">
@@ -256,9 +259,7 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
                     <Settings className="size-5" />
                   </Link>
                 </Button>
-                <div className="hidden md:block">
-                  {isClient && <UserProfile />}
-                </div>
+                <UserProfile />
             </div>
         </header>
         <main className="pb-16 md:pb-0">{children}</main>

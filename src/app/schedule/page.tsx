@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
-import { schedule as initialSchedule } from "./data";
+import { schedule as allSchedule } from "./data";
 import { PlusCircle, Pin, ChevronDown } from "lucide-react";
 import { format, isSameDay, parseISO } from "date-fns";
 import type { TeamEvent } from "@/lib/types";
@@ -20,13 +20,19 @@ import { AddEventForm } from "./add-event-form";
 import { AttendanceSheet } from "./attendance-sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { useTeam } from "@/context/team-context";
 
 export default function SchedulePage() {
+  const { selectedTeam } = useTeam();
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [open, setOpen] = React.useState(false);
-  const [schedule, setSchedule] = React.useState(initialSchedule);
+  const [schedule, setSchedule] = React.useState(allSchedule);
   const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
   const isMobile = useIsMobile();
+
+  const teamSchedule = React.useMemo(() => {
+    return schedule.filter(event => event.teamId === selectedTeam);
+  }, [schedule, selectedTeam]);
 
   const handleEventAdd = (event: TeamEvent) => {
     setSchedule((prev) => [...prev, event].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()));
@@ -42,18 +48,18 @@ export default function SchedulePage() {
   React.useEffect(() => {
     // When the selected day changes, clear the selected event
     setSelectedEventId(null);
-  }, [date]);
+  }, [date, selectedTeam]);
 
   const eventsOnSelectedDay = React.useMemo(() => {
     if (!date) return [];
-    return schedule.filter((event) => isSameDay(parseISO(event.date), date));
-  }, [date, schedule]);
+    return teamSchedule.filter((event) => isSameDay(parseISO(event.date), date));
+  }, [date, teamSchedule]);
 
   const eventDays = React.useMemo(() => {
-      return schedule.map((event) => parseISO(event.date));
-  }, [schedule]);
+      return teamSchedule.map((event) => parseISO(event.date));
+  }, [teamSchedule]);
 
-  const selectedEvent = schedule.find(e => e.id === selectedEventId);
+  const selectedEvent = teamSchedule.find(e => e.id === selectedEventId);
 
   return (
     <div className="container mx-auto px-4 py-8">

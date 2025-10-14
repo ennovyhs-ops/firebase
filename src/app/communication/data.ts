@@ -1,15 +1,6 @@
 
 import { addDays, formatISO, subMinutes } from "date-fns";
-
-export type Conversation = {
-  id: string;
-  subject: string;
-  sender: string;
-  recipient: string;
-  timestamp: string;
-  body: string;
-  replies?: Conversation[];
-};
+import type { Conversation } from "@/lib/types";
 
 const today = new Date();
 
@@ -21,6 +12,7 @@ export const conversations: Conversation[] = [
     recipient: "Entire Team",
     timestamp: formatISO(addDays(today, -1)),
     body: "Hi team,\n\nUnfortunately, due to the weather, we'll have to cancel practice today. Stay safe and we'll see you at Thursday's session.\n\nBest,\nCoach Steve",
+    teamId: "team-1",
   },
   {
     id: "msg2",
@@ -29,6 +21,7 @@ export const conversations: Conversation[] = [
     recipient: "Entire Team",
     timestamp: formatISO(addDays(today, -3)),
     body: "Team,\n\nReminder about our game this Saturday against the Eagles. Please arrive at the City Arena by 9:00 AM sharp. Wear your blue jerseys.\n\nLet's get that win!\n\nCoach Steve",
+    teamId: "team-1",
   },
   {
     id: "msg3",
@@ -44,16 +37,37 @@ export const conversations: Conversation[] = [
             sender: "Alex Johnson",
             recipient: "Coach Steve",
             timestamp: formatISO(subMinutes(addDays(today, -5), -30)),
-            body: "Thanks, Coach! That sounds great. I'll be there early."
+            body: "Thanks, Coach! That sounds great. I'll be there early.",
+            teamId: "team-1",
         }
-    ]
+    ],
+    teamId: "team-1",
   },
-    {
+  {
     id: "msg4",
     subject: "Fundraising Event Next Month",
     sender: "Coach Steve",
     recipient: "Parents Only",
     timestamp: formatISO(addDays(today, -8)),
     body: "Dear Parents,\n\nWe're planning a team fundraising event next month to help cover tournament fees. We'll be hosting a car wash on the 15th. More details to follow, but please save the date if you're able to help out.\n\nThanks,\nCoach Steve",
+    teamId: "team-2",
   },
+  {
+    id: "msg5",
+    subject: "Welcome to the Tigers!",
+    sender: "Coach Steve",
+    recipient: "Entire Team",
+    timestamp: formatISO(addDays(today, -2)),
+    body: "Welcome to the Tigers! Our first practice is this Wednesday. Looking forward to a great season.",
+    teamId: "team-2",
+  },
+  {
+    id: "msg6",
+    subject: "Soccer Tryouts Schedule",
+    sender: "Coach Steve",
+    recipient: "Entire Team",
+    timestamp: formatISO(addDays(today, -4)),
+    body: "Hi everyone, a reminder that tryouts for the new season are next week. Please check the website for your assigned time slot.",
+    teamId: "team-3",
+  }
 ];

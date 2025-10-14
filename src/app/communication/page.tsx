@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useMemo } from "react";
 import { useSearchParams } from 'next/navigation'
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Send, ArrowLeft, MessageSquarePlus, Reply } from "lucide-react";
-import { players } from "../roster/data";
+import { players as allPlayers } from "../roster/data";
 import { conversations as initialConversations, type Conversation } from "./data";
 import {
   Table,
@@ -40,6 +40,7 @@ import {
 import { format, formatISO, parseISO } from "date-fns";
 import { MultiSelectCombobox } from "@/components/ui/multi-select-combobox";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useTeam } from "@/context/team-context";
 
 function ConversationDetails({
   conversation,
@@ -121,16 +122,20 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [recipients, setRecipients] = useState<string[]>([]);
+  const { selectedTeam } = useTeam();
 
-  const recipientOptions = [
-    { value: "entire-team", label: "Entire Team (Players & Parents)" },
-    { value: "players-only", label: "Players Only" },
-    { value: "parents-only", label: "Parents Only" },
-    ...players.map((player) => ({
-      value: player.id,
-      label: `${player.firstName} ${player.lastName} (#${player.number})`,
-    })),
-  ];
+  const recipientOptions = useMemo(() => {
+    const teamPlayers = allPlayers.filter(p => p.teamId === selectedTeam);
+    return [
+        { value: "entire-team", label: "Entire Team (Players & Parents)" },
+        { value: "players-only", label: "Players Only" },
+        { value: "parents-only", label: "Parents Only" },
+        ...teamPlayers.map((player) => ({
+        value: player.id,
+        label: `${player.firstName} ${player.lastName} (#${player.number})`,
+        })),
+    ];
+  }, [selectedTeam]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -156,6 +161,7 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
         recipient: recipientLabels.join(', '),
         timestamp: formatISO(new Date()),
         body: body,
+        teamId: selectedTeam || "",
     }
 
     onMessageSend(newMessage);
@@ -228,23 +234,32 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
 }
 
 function CommunicationPageContent() {
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const conversationId = searchParams.get('id');
+  const { selectedTeam } = useTeam();
 
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
 
+  const teamConversations = useMemo(() => {
+      return conversations.filter(c => c.teamId === selectedTeam).sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime());
+  }, [conversations, selectedTeam]);
+
   useEffect(() => {
     if (conversationId) {
-      const convo = conversations.find(c => c.id === conversationId);
+      const convo = teamConversations.find(c => c.id === conversationId);
       if (convo) {
         setSelectedConversation(convo);
       }
     } else {
         setSelectedConversation(null);
     }
-  }, [conversationId, conversations]);
+  }, [conversationId, teamConversations]);
+  
+  useEffect(() => {
+    setSelectedConversation(null);
+  }, [selectedTeam])
 
   const handleMessageSend = (message: Conversation) => {
     setConversations(prev => [message, ...prev]);
@@ -258,11 +273,13 @@ function CommunicationPageContent() {
         recipient: selectedConversation?.sender || '',
         timestamp: formatISO(new Date()),
         body: replyBody,
+        teamId: selectedTeam || "",
     };
 
     const updatedConversations = conversations.map(convo => {
         if (convo.id === conversationId) {
-            const updatedConvo = { ...convo, replies: [...(convo.replies || []), newReply] };
+            const updatedReplies = [...(convo.replies || []), newReply];
+            const updatedConvo = { ...convo, replies: updatedReplies };
             setSelectedConversation(updatedConvo);
             return updatedConvo;
         }
@@ -304,7 +321,7 @@ function CommunicationPageContent() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {conversations.map((convo) => (
+                {teamConversations.map((convo) => (
                   <TableRow
                     key={convo.id}
                     onClick={() => setSelectedConversation(convo)}

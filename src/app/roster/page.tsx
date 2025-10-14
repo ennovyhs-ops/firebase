@@ -4,7 +4,7 @@ import * as React from "react";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { players as initialPlayers } from "./data";
+import { players as allPlayers } from "./data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Trash2 } from "lucide-react";
@@ -31,15 +31,21 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useTeam } from "@/context/team-context";
 
 export default function RosterPage() {
   const { toast } = useToast();
+  const { selectedTeam } = useTeam();
   const [addPlayerOpen, setAddPlayerOpen] = React.useState(false);
   const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(
     null
   );
   const [playerToDelete, setPlayerToDelete] = React.useState<Player | null>(null);
-  const [players, setPlayers] = React.useState<Player[]>(initialPlayers);
+  const [players, setPlayers] = React.useState<Player[]>(allPlayers);
+
+  const teamPlayers = React.useMemo(() => {
+    return players.filter(p => p.teamId === selectedTeam);
+  }, [players, selectedTeam]);
 
   const handlePlayerAdd = (player: Player) => {
     setPlayers((prev) => [...prev, player]);
@@ -99,7 +105,7 @@ export default function RosterPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {players.map((player) => {
+                {teamPlayers.map((player) => {
                   const avatar = PlaceHolderImages.find(
                     (p) => p.id === player.avatarId
                   );

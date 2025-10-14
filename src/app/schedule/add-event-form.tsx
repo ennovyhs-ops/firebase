@@ -30,6 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import type { TeamEvent } from "@/lib/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTeam } from "@/context/team-context";
 
 type AddEventFormProps = {
   onEventAdd: (event: TeamEvent) => void;
@@ -39,6 +40,7 @@ type AddEventFormProps = {
 
 export function AddEventForm({ onEventAdd, setOpen, selectedDate }: AddEventFormProps) {
   const [date, setDate] = React.useState<Date | undefined>(selectedDate);
+  const { selectedTeam } = useTeam();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,6 +54,7 @@ export function AddEventForm({ onEventAdd, setOpen, selectedDate }: AddEventForm
       endTime: formData.get("endTime") as string,
       location: formData.get("location") as string,
       description: formData.get("description") as string,
+      teamId: selectedTeam || "",
     };
     onEventAdd(newEvent);
     setOpen(false);

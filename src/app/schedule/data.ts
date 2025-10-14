@@ -12,6 +12,7 @@ export const schedule: TeamEvent[] = [
     startTime: "09:00 AM",
     endTime: "11:00 AM",
     location: "Main Gym",
+    teamId: "team-1",
   },
   {
     id: "evt2",
@@ -22,6 +23,7 @@ export const schedule: TeamEvent[] = [
     endTime: "09:00 PM",
     location: "City Arena",
     description: "Championship qualifier match. All players must arrive by 6:00 PM.",
+    teamId: "team-1",
   },
   {
     id: "evt3",
@@ -31,6 +33,7 @@ export const schedule: TeamEvent[] = [
     startTime: "06:00 PM",
     endTime: "08:00 PM",
     location: "Main Gym",
+    teamId: "team-2",
   },
   {
     id: "evt4",
@@ -41,6 +44,7 @@ export const schedule: TeamEvent[] = [
     endTime: "09:30 PM",
     location: "Luigi's Italian Restaurant",
     description: "Celebrating our recent win. Families are welcome.",
+    teamId: "team-2",
   },
   {
     id: "evt5",
@@ -50,6 +54,7 @@ export const schedule: TeamEvent[] = [
     startTime: "09:00 AM",
     endTime: "11:00 AM",
     location: "Main Gym",
+    teamId: "team-3",
   },
    {
     id: "evt6",
@@ -60,5 +65,6 @@ export const schedule: TeamEvent[] = [
     endTime: "07:00 PM",
     location: "Northwood High School",
     description: "Bus leaves from Main Gym at 3:00 PM sharp.",
+    teamId: "team-3",
   },
 ];
