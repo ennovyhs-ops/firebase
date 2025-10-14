@@ -8,11 +8,19 @@ import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/page-header';
 import { ArrowRight, Users } from 'lucide-react';
 import { useUser } from '@/firebase';
+import { useEffect } from 'react';
 
 export default function SelectTeamPage() {
   const router = useRouter();
   const { user, isUserLoading } = useUser();
-  const { teams, setSelectedTeam } = useTeam();
+  const { teams, selectedTeam, setSelectedTeam } = useTeam();
+
+  useEffect(() => {
+    // If a team is already selected, redirect to the dashboard
+    if (user && selectedTeam) {
+      router.push('/dashboard');
+    }
+  }, [user, selectedTeam, router]);
 
   const handleTeamSelection = (teamId: string) => {
     setSelectedTeam(teamId);
@@ -29,6 +37,12 @@ export default function SelectTeamPage() {
             <PageHeader title="Welcome to Sixx" description="Please sign in to manage your teams." />
         </div>
      )
+  }
+  
+  // If a team is already selected, we will be redirected, so we can show a loading state
+  // or null to prevent a flash of the team selection page.
+  if (selectedTeam) {
+    return <div>Loading team dashboard...</div>;
   }
 
   return (
