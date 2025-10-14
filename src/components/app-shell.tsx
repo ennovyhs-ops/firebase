@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   SidebarProvider,
   Sidebar,
@@ -27,6 +27,7 @@ import {
   LogOut,
   LogIn,
   ClipboardCheck,
+  SwitchCamera,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -109,10 +110,12 @@ function AuthButton() {
 function UserNav() {
     const { user, isUserLoading } = useUser();
     const auth = useAuth();
+    const router = useRouter();
     
     const handleSignOut = async () => {
         try {
           await signOut(auth);
+          router.push('/');
         } catch (error) {
           console.error("Error signing out", error);
         }
@@ -162,6 +165,12 @@ function UserNav() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
+                    <DropdownMenuItem asChild>
+                        <Link href="/">
+                            <SwitchCamera className="mr-2" />
+                            <span>Switch Team</span>
+                        </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <Link href="/settings">
                             <Settings className="mr-2" />
