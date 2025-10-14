@@ -88,7 +88,12 @@ export default function RosterPage() {
                               {player.name.split(' ').map(n => n[0]).join('')}
                             </AvatarFallback>
                           </Avatar>
-                           <span className="font-medium">{player.name}</span>
+                           <div>
+                            <span className="font-medium">{player.name}</span>
+                            <div className="text-sm text-muted-foreground">
+                                #{player.number || 'N/A'} | {player.position || 'N/A'}
+                            </div>
+                           </div>
                         </div>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">{player.position || 'N/A'}</TableCell>
