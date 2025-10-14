@@ -27,9 +27,10 @@ type ComboboxProps = {
     emptyPlaceholder: string,
     value: string,
     onValueChange: (value: string) => void,
+    disabled?: (value: string) => boolean;
 }
 
-export function Combobox({ options, placeholder, searchPlaceholder, emptyPlaceholder, value, onValueChange }: ComboboxProps) {
+export function Combobox({ options, placeholder, searchPlaceholder, emptyPlaceholder, value, onValueChange, disabled }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -50,15 +51,16 @@ export function Combobox({ options, placeholder, searchPlaceholder, emptyPlaceho
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
         <Command>
           <CommandInput placeholder={searchPlaceholder} />
-          <CommandEmpty>{emptyPlaceholder}</CommandEmpty>
           <CommandList>
+            <CommandEmpty>{emptyPlaceholder}</CommandEmpty>
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem
                   key={option.value}
                   value={option.value}
+                  disabled={disabled?.(option.value)}
                   onSelect={(currentValue) => {
-                    const realValue = options.find(opt => opt.value === currentValue)?.value || ""
+                    const realValue = options.find(opt => opt.value.toLowerCase() === currentValue.toLowerCase())?.value || ""
                     onValueChange(realValue === value ? "" : realValue)
                     setOpen(false)
                   }}

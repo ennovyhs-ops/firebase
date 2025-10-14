@@ -36,7 +36,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format, formatISO, parseISO } from "date-fns";
-import { Combobox } from "@/components/ui/combobox";
+import { MultiSelectCombobox } from "@/components/ui/multi-select-combobox";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 function ConversationDetails({
@@ -92,12 +92,12 @@ function ConversationDetails({
 function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conversation) => void; }) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  const [recipient, setRecipient] = useState("");
+  const [recipients, setRecipients] = useState<string[]>([]);
 
   const recipientOptions = [
-    { value: "Entire Team", label: "Entire Team (Players & Parents)" },
-    { value: "Players Only", label: "Players Only" },
-    { value: "Parents Only", label: "Parents Only" },
+    { value: "entire-team", label: "Entire Team (Players & Parents)" },
+    { value: "players-only", label: "Players Only" },
+    { value: "parents-only", label: "Parents Only" },
     ...players.map((player) => ({
       value: player.id,
       label: `${player.firstName} ${player.lastName} (#${player.number})`,
@@ -110,22 +110,22 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
     const subject = formData.get("subject") as string;
     const body = formData.get("message") as string;
     
-    if (!recipient || !subject || !body) {
+    if (recipients.length === 0 || !subject || !body) {
          toast({
             variant: "destructive",
             title: "Missing fields",
-            description: "Please fill out all fields before sending.",
+            description: "Please select recipients and fill out all fields before sending.",
         });
         return;
     }
 
-    const recipientLabel = recipientOptions.find(opt => opt.value === recipient)?.label || recipient;
+    const recipientLabels = recipients.map(r => recipientOptions.find(opt => opt.value === r)?.label || r);
     
     const newMessage: Conversation = {
         id: `msg${Date.now()}`,
         subject: subject,
         sender: 'Coach Steve',
-        recipient: recipientLabel,
+        recipient: recipientLabels.join(', '),
         timestamp: formatISO(new Date()),
         body: body,
     }
@@ -137,7 +137,7 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
       description: "Your message has been successfully sent.",
     });
     (e.target as HTMLFormElement).reset();
-    setRecipient("");
+    setRecipients([]);
     setOpen(false);
   };
 
@@ -159,13 +159,13 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
         <form onSubmit={handleSubmit} className="space-y-4 pt-4">
           <div className="grid gap-2">
             <Label htmlFor="recipients">Recipients</Label>
-            <Combobox
-              options={recipientOptions}
-              placeholder="Select recipients..."
-              searchPlaceholder="Search recipients..."
-              emptyPlaceholder="No recipients found."
-              value={recipient}
-              onValueChange={setRecipient}
+             <MultiSelectCombobox
+                options={recipientOptions}
+                placeholder="Select recipients..."
+                searchPlaceholder="Search recipients..."
+                emptyPlaceholder="No recipients found."
+                value={recipients}
+                onValueChange={setRecipients}
             />
           </div>
           <div className="grid gap-2">
