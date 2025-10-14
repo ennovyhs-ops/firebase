@@ -61,29 +61,6 @@ export default function Home() {
             )}
           </CardContent>
         </Card>
-        <Card>
-           <CardHeader>
-            <div className="flex items-center gap-4">
-              <div className="bg-accent text-accent-foreground p-3 rounded-full">
-                <Users className="size-6" />
-              </div>
-              <CardTitle>Team Roster</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-             <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                    <p className="text-4xl font-bold">{players.length}</p>
-                    <p className="font-semibold text-primary">Players</p>
-                </div>
-                 <Button asChild variant="secondary" className="w-full">
-                  <Link href="/roster">
-                    Manage Roster <ArrowRight className="ml-2 size-4" />
-                  </Link>
-                </Button>
-            </div>
-          </CardContent>
-        </Card>
         <Card className="sm:col-span-2 lg:col-span-1">
           <CardHeader>
              <div className="flex items-center gap-4">
