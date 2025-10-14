@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PageHeader } from '@/components/page-header';
 import { useAuth } from '@/firebase';
-import Link from 'next/link';
 
 // Mock data for teams
 const teams = [

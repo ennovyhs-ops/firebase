@@ -44,9 +44,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Card,
-  CardDescription,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
 import { useAuth, useUser } from "@/firebase";
 import { signOut } from "firebase/auth";
@@ -254,7 +254,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     setIsClient(true);
-    setTeamSelected(!!localStorage.getItem('selected-team-id'));
+    const handleStorageChange = () => {
+      setTeamSelected(!!localStorage.getItem('selected-team-id'));
+    };
+    window.addEventListener('storage', handleStorageChange);
+    // Also check on mount
+    handleStorageChange(); 
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    }
   }, []);
 
 
