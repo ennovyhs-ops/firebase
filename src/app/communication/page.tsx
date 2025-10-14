@@ -10,6 +10,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
 import {
   Dialog,
@@ -24,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Send, ArrowLeft, MessageSquarePlus } from "lucide-react";
+import { Send, ArrowLeft, MessageSquarePlus, Reply } from "lucide-react";
 import { players } from "../roster/data";
 import { conversations as initialConversations, type Conversation } from "./data";
 import {
@@ -42,13 +43,23 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 function ConversationDetails({
   conversation,
   onBack,
+  onReply,
 }: {
   conversation: Conversation;
   onBack: () => void;
+  onReply: (conversationId: string, replyBody: string) => void;
 }) {
+  const [replyBody, setReplyBody] = useState("");
   const allMessages = [conversation, ...(conversation.replies || [])].sort(
     (a, b) => parseISO(a.timestamp).getTime() - parseISO(b.timestamp).getTime()
   );
+
+  const handleReplySubmit = () => {
+    if (replyBody.trim()) {
+      onReply(conversation.id, replyBody);
+      setReplyBody("");
+    }
+  };
 
   return (
     <Card>
@@ -85,6 +96,22 @@ function ConversationDetails({
           ))}
         </div>
       </CardContent>
+      <CardFooter className="flex-col items-start gap-4 border-t p-6">
+        <div className="w-full space-y-2">
+            <Label htmlFor="reply-message" className="font-semibold">Your Reply</Label>
+            <Textarea
+                id="reply-message"
+                placeholder="Type your reply here..."
+                value={replyBody}
+                onChange={(e) => setReplyBody(e.target.value)}
+                className="min-h-[100px]"
+            />
+        </div>
+        <Button onClick={handleReplySubmit}>
+            <Reply className="mr-2" />
+            Send Reply
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
@@ -208,12 +235,36 @@ export default function CommunicationPage() {
     setConversations(prev => [message, ...prev]);
   }
 
+  const handleReply = (conversationId: string, replyBody: string) => {
+    const newReply: Conversation = {
+        id: `reply${Date.now()}`,
+        subject: `Re: ${selectedConversation?.subject}`,
+        sender: 'Coach Steve', // Assuming the coach is always the one replying from this UI
+        recipient: selectedConversation?.sender || '',
+        timestamp: formatISO(new Date()),
+        body: replyBody,
+    };
+
+    const updatedConversations = conversations.map(convo => {
+        if (convo.id === conversationId) {
+            const updatedConvo = { ...convo, replies: [...(convo.replies || []), newReply] };
+            setSelectedConversation(updatedConvo);
+            return updatedConvo;
+        }
+        return convo;
+    });
+
+    setConversations(updatedConversations);
+  };
+
+
   if (selectedConversation) {
     return (
       <div className="container mx-auto px-4 py-8">
         <ConversationDetails
           conversation={selectedConversation}
           onBack={() => setSelectedConversation(null)}
+          onReply={handleReply}
         />
       </div>
     );
