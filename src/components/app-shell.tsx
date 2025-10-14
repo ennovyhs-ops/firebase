@@ -30,7 +30,6 @@ import {
 } from "lucide-react";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "./ui/button";
 import { useAuth, useUser } from "@/firebase";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
@@ -48,7 +47,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const navItems = [
-  { href: "/", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/roster", icon: Users, label: "Roster" },
   { href: "/schedule", icon: Calendar, label: "Schedule" },
   { href: "/attendance", icon: ClipboardCheck, label: "Attendance" },
@@ -109,7 +108,6 @@ function AuthButton() {
 
 function UserNav() {
     const { user, isUserLoading } = useUser();
-    const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
     const auth = useAuth();
     
     const handleSignOut = async () => {
@@ -135,8 +133,8 @@ function UserNav() {
     }
     
     const getPhotoUrl = () => {
-        if (user) return user.photoURL || coachImage?.imageUrl;
-        return coachImage?.imageUrl;
+        if (user) return user.photoURL;
+        return undefined;
     }
     
     const getFallback = () => {
@@ -217,6 +215,20 @@ function BottomBar() {
 function AppShellInternal({ children }: { children: React.ReactNode }) {
   const { isMobile } = useSidebar();
   const { user } = useUser();
+  const pathname = usePathname();
+
+  const showSidebar = user && pathname !== '/';
+
+  if (!showSidebar) {
+    return (
+        <>
+        <header className="sticky top-0 z-40 flex items-center justify-end border-b bg-background p-2 lg:px-4 h-14">
+            <UserNav />
+        </header>
+        <main>{children}</main>
+        </>
+    )
+  }
 
   return (
     <>
@@ -244,7 +256,7 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="sticky top-0 z-10 flex items-center justify-between border-b bg-background p-2 lg:px-4 h-14">
+        <header className="sticky top-0 z-40 flex items-center justify-between border-b bg-background p-2 lg:px-4 h-14">
             <div className="flex items-center gap-2">
                 <SidebarTrigger />
                 <div className="md:hidden">

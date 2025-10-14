@@ -1,8 +1,9 @@
 
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { teams as initialTeams, type Team } from '@/app/teams/data';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface TeamContextType {
   teams: Team[];
@@ -15,7 +16,9 @@ const TeamContext = createContext<TeamContextType | undefined>(undefined);
 
 export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [teams, setTeams] = useState<Team[]>(initialTeams);
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(initialTeams[0]?.id || null);
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const addTeam = (team: { name: string; sport: string }) => {
     const newTeam: Team = {
@@ -25,7 +28,14 @@ export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
     setTeams(prev => [...prev, newTeam]);
     setSelectedTeam(newTeam.id);
+    router.push('/dashboard');
   };
+
+  useEffect(() => {
+    if (pathname === '/') {
+        setSelectedTeam(null);
+    }
+  }, [pathname]);
 
   return (
     <TeamContext.Provider value={{ teams, selectedTeam, setSelectedTeam, addTeam }}>
