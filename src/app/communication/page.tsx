@@ -27,7 +27,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Send, ArrowLeft, MessageSquarePlus, Reply } from "lucide-react";
-import { players as allPlayers } from "../roster/data";
 import { conversations as initialConversations, type Conversation } from "./data";
 import {
   Table,
@@ -40,6 +39,7 @@ import {
 import { format, formatISO, parseISO } from "date-fns";
 import { MultiSelectCombobox } from "@/components/ui/multi-select-combobox";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { usePlayers } from "@/context/players-context";
 
 function ConversationDetails({
   conversation,
@@ -119,6 +119,7 @@ function ConversationDetails({
 
 function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conversation) => void; }) {
   const { toast } = useToast();
+  const { players } = usePlayers();
   const [open, setOpen] = useState(false);
   const [recipients, setRecipients] = useState<string[]>([]);
 
@@ -127,12 +128,12 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
         { value: "entire-team", label: "Entire Team (Players & Parents)" },
         { value: "players-only", label: "Players Only" },
         { value: "parents-only", label: "Parents Only" },
-        ...allPlayers.map((player) => ({
+        ...players.map((player) => ({
         value: player.id,
         label: `${player.firstName} ${player.lastName} (#${player.number})`,
         })),
     ];
-  }, []);
+  }, [players]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
