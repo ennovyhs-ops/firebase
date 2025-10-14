@@ -146,7 +146,7 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
 function BottomBar() {
   const pathname = usePathname();
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-10 border-t bg-background/95 backdrop-blur-sm md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-sm md:hidden">
       <div className="grid h-16 grid-cols-5 items-center justify-items-center">
         {navItems.map((item) => (
           <Link
@@ -223,7 +223,7 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
             </div>
         </header>
         <main className="pb-16 md:pb-0">{children}</main>
-        {!isMobile && <BottomBar />}
+        {isMobile && <BottomBar />}
       </SidebarInset>
     </>
   )
