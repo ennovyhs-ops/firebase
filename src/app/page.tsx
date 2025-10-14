@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -28,9 +29,9 @@ export default function Home() {
       <PageHeader
         title="Welcome Back, Coach!"
       />
-      <div className="mt-8 grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader>
+      <div className="mt-8 grid gap-6 md:grid-cols-12">
+        <Card className="md:col-span-7">
+           <CardHeader>
             <div className="flex items-center gap-4">
               <div className="bg-accent text-accent-foreground p-3 rounded-full">
                 <CalendarDays className="size-6" />
@@ -62,8 +63,8 @@ export default function Home() {
             )}
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
+        <Card className="md:col-span-5">
+           <CardHeader>
             <div className="flex items-center gap-4">
               <div className="bg-accent text-accent-foreground p-3 rounded-full">
                 <Users className="size-6" />
@@ -88,6 +89,9 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+       <div className="mt-6 grid gap-6 sm:grid-cols-1 md:grid-cols-3">
          <Card>
           <CardHeader>
              <CardTitle>Communication</CardTitle>
