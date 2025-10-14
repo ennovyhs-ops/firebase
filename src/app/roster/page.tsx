@@ -56,7 +56,6 @@ export default function RosterPage() {
     <div className="container mx-auto px-4 py-8">
       <PageHeader
         title="Team Roster"
-        description={`Manage your ${players.length} players.`}
       >
         <Dialog open={addPlayerOpen} onOpenChange={setAddPlayerOpen}>
           <DialogTrigger asChild>
