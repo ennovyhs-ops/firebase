@@ -121,10 +121,29 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
     const { user, isUserLoading } = useUser();
     const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
 
-    if (isUserLoading) return null; 
+    if (isUserLoading && !user) { // Show placeholder when loading and no user
+        return (
+             <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
+                <Avatar className="size-9">
+                    <AvatarImage src={coachImage?.imageUrl} alt={"Johnny"} data-ai-hint={coachImage?.imageHint} />
+                    <AvatarFallback>J</AvatarFallback>
+                </Avatar>
+                {!collapsed && (
+                    <div className="flex flex-col">
+                        <span className="text-sm font-semibold text-foreground truncate">
+                            Johnny
+                        </span>
+                        <span className="text-xs text-muted-foreground">Coach</span>
+                    </div>
+                )}
+            </div>
+        )
+    }
     
-    const displayName = user?.displayName || "Johnny";
-    const photoURL = user?.photoURL || coachImage?.imageUrl;
+    if (!user) return null; // Don't render if not loading and no user
+    
+    const displayName = user.displayName || "Johnny";
+    const photoURL = user.photoURL || coachImage?.imageUrl;
     const fallback = displayName.charAt(0) || 'U';
 
     return (
@@ -212,9 +231,7 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
       <SidebarInset>
         <header className="flex items-center justify-between border-b p-2 lg:px-4 h-14">
             <div className="flex items-center gap-4">
-                <div className="md:hidden">
-                    <Logo />
-                </div>
+                <Logo className="md:hidden"/>
                  <div className="hidden md:flex items-center gap-4">
                     <SidebarTrigger />
                     {isClient && <UserProfile />}
