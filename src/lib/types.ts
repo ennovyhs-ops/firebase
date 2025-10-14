@@ -1,7 +1,6 @@
 export type Player = {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   birthMonth: number;
   birthYear: number;
   number: number;

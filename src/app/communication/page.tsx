@@ -127,7 +127,7 @@ function ComposeMessageDialog({ onMessageSend }: { onMessageSend: (message: Conv
     { value: "parents-only", label: "Parents Only" },
     ...players.map((player) => ({
       value: player.id,
-      label: `${player.firstName} ${player.lastName} (#${player.number})`,
+      label: `${player.name} (#${player.number})`,
     })),
   ];
 

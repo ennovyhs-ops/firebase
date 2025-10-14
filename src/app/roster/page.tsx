@@ -13,25 +13,12 @@ import { AddPlayerForm } from "./add-player-form";
 import type { Player } from "@/lib/types";
 import { PlayerDetails } from "./player-details";
 
-const PLAYER_STORAGE_KEY = "roster-players";
-
 export default function RosterPage() {
   const [addPlayerOpen, setAddPlayerOpen] = React.useState(false);
   const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(
     null
   );
   const [players, setPlayers] = React.useState<Player[]>(initialPlayers);
-
-  React.useEffect(() => {
-    const storedPlayers = localStorage.getItem(PLAYER_STORAGE_KEY);
-    if (storedPlayers) {
-      setPlayers(JSON.parse(storedPlayers));
-    }
-  }, []);
-
-  React.useEffect(() => {
-    localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(players));
-  }, [players]);
 
   const handlePlayerAdd = (player: Player) => {
     setPlayers((prev) => [...prev, player]);
@@ -78,13 +65,12 @@ export default function RosterPage() {
                       data-ai-hint={avatar?.imageHint}
                     />
                     <AvatarFallback>
-                      {player.firstName.charAt(0)}
-                      {player.lastName.charAt(0)}
+                      {player.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
                    <div>
                     <CardTitle className="text-lg">
-                      {player.firstName} {player.lastName}
+                      {player.name}
                     </CardTitle>
                     <p className="text-sm text-muted-foreground">
                         #{player.number || "N/A"} | {player.position || "N/A"}

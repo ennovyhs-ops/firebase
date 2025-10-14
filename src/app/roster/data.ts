@@ -3,8 +3,7 @@ import type { Player } from '@/lib/types';
 export const players: Player[] = [
   {
     id: 'p1',
-    firstName: 'Alex',
-    lastName: 'Johnson',
+    name: 'Alex Johnson',
     birthMonth: 5,
     birthYear: 2002,
     number: 23,
@@ -17,8 +16,7 @@ export const players: Player[] = [
   },
   {
     id: 'p2',
-    firstName: 'Maria',
-    lastName: 'Garcia',
+    name: 'Maria Garcia',
     birthMonth: 8,
     birthYear: 2001,
     number: 10,
@@ -31,8 +29,7 @@ export const players: Player[] = [
   },
     {
     id: 'p3',
-    firstName: 'James',
-    lastName: 'Smith',
+    name: 'James Smith',
     birthMonth: 11,
     birthYear: 2000,
     number: 34,
@@ -45,8 +42,7 @@ export const players: Player[] = [
   },
   {
     id: 'p4',
-    firstName: 'Chen',
-    lastName: 'Wang',
+    name: 'Chen Wang',
     birthMonth: 2,
     birthYear: 2003,
     number: 8,
@@ -59,8 +55,7 @@ export const players: Player[] = [
   },
   {
     id: 'p5',
-    firstName: 'Emily',
-    lastName: 'Davis',
+    name: 'Emily Davis',
     birthMonth: 9,
     birthYear: 2002,
     number: 15,
@@ -73,8 +68,7 @@ export const players: Player[] = [
   },
   {
     id: 'p6',
-    firstName: 'David',
-    lastName: 'Wilson',
+    name: 'David Wilson',
     birthMonth: 7,
     birthYear: 2001,
     number: 5,
@@ -87,8 +81,7 @@ export const players: Player[] = [
   },
   {
     id: 'p7',
-    firstName: 'Olivia',
-    lastName: 'Brown',
+    name: 'Olivia Brown',
     birthMonth: 1,
     birthYear: 2000,
     number: 42,
@@ -101,8 +94,7 @@ export const players: Player[] = [
   },
   {
     id: 'p8',
-    firstName: 'Liam',
-    lastName: 'Miller',
+    name: 'Liam Miller',
     birthMonth: 4,
     birthYear: 2003,
     number: 1,
@@ -115,8 +107,7 @@ export const players: Player[] = [
   },
     {
     id: 'p9',
-    firstName: 'Sophia',
-    lastName: 'Rodriguez',
+    name: 'Sophia Rodriguez',
     birthMonth: 12,
     birthYear: 2001,
     number: 22,
@@ -129,8 +120,7 @@ export const players: Player[] = [
   },
   {
     id: 'p10',
-    firstName: 'Michael',
-    lastName: 'Jones',
+    name: 'Michael Jones',
     birthMonth: 3,
     birthYear: 1999,
     number: 30,
@@ -143,8 +133,7 @@ export const players: Player[] = [
   },
   {
     id: 'p11',
-    firstName: 'Isabella',
-    lastName: 'Martinez',
+    name: 'Isabella Martinez',
     birthMonth: 6,
     birthYear: 2002,
     number: 11,
@@ -157,8 +146,7 @@ export const players: Player[] = [
   },
   {
     id: 'p12',
-    firstName: 'William',
-    lastName: 'Taylor',
+    name: 'William Taylor',
     birthMonth: 10,
     birthYear: 2000,
     number: 55,
