@@ -4,6 +4,7 @@ import './globals.css';
 import { AppShell } from '@/components/app-shell';
 import { Toaster } from "@/components/ui/toaster"
 import { FirebaseClientProvider } from '@/firebase';
+import { TeamProvider } from '@/context/team-context';
 
 export const metadata: Metadata = {
   title: 'Sixx: Sports Management Hub',
@@ -24,9 +25,11 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <FirebaseClientProvider>
-          <AppShell>
-            {children}
-          </AppShell>
+          <TeamProvider>
+            <AppShell>
+              {children}
+            </AppShell>
+          </TeamProvider>
         </FirebaseClientProvider>
         <Toaster />
       </body>

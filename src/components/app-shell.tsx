@@ -35,6 +35,7 @@ import { useAuth, useUser } from "@/firebase";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { TeamSwitcher } from "./team-switcher";
 
 const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -140,7 +141,22 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
         )
     }
     
-    if (!user) return null; // Don't render if not loading and no user
+    if (!user) return (
+      <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
+          <Avatar className="size-9">
+              <AvatarImage src={coachImage?.imageUrl} alt={"Johnny"} data-ai-hint={coachImage?.imageHint} />
+              <AvatarFallback>J</AvatarFallback>
+          </Avatar>
+          {!collapsed && (
+              <div className="flex flex-col">
+                  <span className="text-sm font-semibold text-foreground truncate">
+                      Johnny
+                  </span>
+                  <span className="text-xs text-muted-foreground">Coach</span>
+              </div>
+          )}
+      </div>
+    );
     
     const displayName = user.displayName || "Johnny";
     const photoURL = user.photoURL || coachImage?.imageUrl;
@@ -190,7 +206,7 @@ function BottomBar() {
 
 function AppShellInternal({ children }: { children: React.ReactNode }) {
   const { isMobile } = useSidebar();
-  const { user, isUserLoading } = useUser();
+  const { user } = useUser();
   const [isClient, setIsClient] = React.useState(false);
 
   React.useEffect(() => {
@@ -232,7 +248,7 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
         <header className="flex items-center justify-between border-b p-2 lg:px-4 h-14">
             <div className="flex items-center gap-4">
                 <SidebarTrigger />
-                {isClient && <UserProfile />}
+                <TeamSwitcher />
             </div>
             <div className="flex items-center gap-4">
                 <Button asChild variant="ghost" size="icon">
@@ -240,7 +256,7 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
                     <Settings className="size-5" />
                   </Link>
                 </Button>
-                <div className="md:hidden">
+                <div className="hidden md:block">
                   {isClient && <UserProfile />}
                 </div>
             </div>
