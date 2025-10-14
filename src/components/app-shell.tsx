@@ -138,8 +138,7 @@ function UserNav() {
 
 function BottomBar() {
   const pathname = usePathname();
-  // Filter out attendance for mobile view
-  const mobileNavItems = navItems.filter(item => item.href !== '/attendance');
+  const mobileNavItems = navItems;
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-sm md:hidden">
       <div className={cn("grid h-16 items-center justify-items-center", `grid-cols-${mobileNavItems.length}`)}>
