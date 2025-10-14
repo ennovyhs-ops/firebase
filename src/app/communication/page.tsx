@@ -178,8 +178,8 @@ export default function CommunicationPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[100px]">Date</TableHead>
-                  <TableHead>Subject</TableHead>
                   <TableHead className="hidden sm:table-cell">To</TableHead>
+                  <TableHead>Subject</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -192,14 +192,14 @@ export default function CommunicationPage() {
                      <TableCell className="text-xs text-muted-foreground py-2">
                       {format(parseISO(convo.timestamp), "MMM d")}
                     </TableCell>
+                    <TableCell className="hidden sm:table-cell py-2">
+                      {convo.recipient}
+                    </TableCell>
                     <TableCell className="py-2">
                       <div className="font-medium">{convo.subject}</div>
                       <div className="text-xs text-muted-foreground truncate max-w-[150px] md:max-w-xs">
                         {convo.body}
                       </div>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell py-2">
-                      {convo.recipient}
                     </TableCell>
                   </TableRow>
                 ))}
