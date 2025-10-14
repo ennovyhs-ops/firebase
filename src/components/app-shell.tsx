@@ -121,7 +121,7 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
     const { user, isUserLoading } = useUser();
     const coachImage = PlaceHolderImages.find(p => p.id === 'coach');
 
-    if (isUserLoading && !user) return null; 
+    if (isUserLoading) return null; 
     
     const displayName = user?.displayName || "Johnny";
     const photoURL = user?.photoURL || coachImage?.imageUrl;
@@ -216,8 +216,8 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
                     <Logo />
                 </div>
                  <div className="hidden md:flex items-center gap-4">
-                    {isClient && <UserProfile />}
                     <SidebarTrigger />
+                    {isClient && <UserProfile />}
                 </div>
             </div>
             <div className="flex items-center gap-4">
