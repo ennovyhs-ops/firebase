@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -13,14 +12,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Send, ArrowLeft } from "lucide-react";
@@ -36,6 +27,7 @@ import {
 } from "@/components/ui/table";
 import { format, parseISO } from "date-fns";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Combobox } from "@/components/ui/combobox";
 
 function ConversationDetails({
   conversation,
@@ -71,6 +63,16 @@ export default function CommunicationPage() {
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
 
+  const recipientOptions = [
+    { value: "all", label: "Entire Team (Players & Parents)" },
+    { value: "players", label: "Players Only" },
+    { value: "parents", label: "Parents Only" },
+    ...players.map(player => ({
+      value: player.id,
+      label: `${player.firstName} ${player.lastName} (#${player.number})`,
+    }))
+  ]
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     toast({
@@ -98,43 +100,28 @@ export default function CommunicationPage() {
         description="Send announcements, schedule updates, and messages to your team."
       />
       <div className="mt-8 space-y-6">
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="w-full" defaultValue="compose-message">
             <AccordionItem value="compose-message">
                 <Card>
-                    <AccordionTrigger className="px-6 py-4 w-full">
+                    <AccordionTrigger className="px-6 w-full">
                         <div className="text-left">
                             <h3 className="text-lg font-medium">Compose Message</h3>
                             <p className="text-sm text-muted-foreground">
-                                Click to expand and send a new message.
+                                Click to expand or collapse.
                             </p>
                         </div>
                     </AccordionTrigger>
                     <AccordionContent>
                         <CardContent>
-                            <form onSubmit={handleSubmit} className="space-y-4">
+                            <form onSubmit={handleSubmit} className="space-y-4 pt-4">
                             <div className="grid gap-2">
                                 <Label htmlFor="recipients">Recipients</Label>
-                                <Select name="recipients" defaultValue="all">
-                                <SelectTrigger id="recipients">
-                                    <SelectValue placeholder="Select recipients" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                    <SelectItem value="all">
-                                        Entire Team (Players & Parents)
-                                    </SelectItem>
-                                    <SelectItem value="players">Players Only</SelectItem>
-                                    <SelectItem value="parents">Parents Only</SelectItem>
-                                    </SelectGroup>
-                                    <SelectGroup>
-                                    {players.map((player) => (
-                                        <SelectItem key={player.id} value={player.id}>
-                                        {player.firstName} {player.lastName} (#{player.number})
-                                        </SelectItem>
-                                    ))}
-                                    </SelectGroup>
-                                </SelectContent>
-                                </Select>
+                                <Combobox
+                                  options={recipientOptions}
+                                  placeholder="Select recipients..."
+                                  searchPlaceholder="Search recipients..."
+                                  emptyPlaceholder="No recipients found."
+                                />
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="subject">Subject</Label>
