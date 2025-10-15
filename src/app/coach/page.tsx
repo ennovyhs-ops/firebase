@@ -64,10 +64,6 @@ export default function CoachDashboard() {
     const [isEditPlayerOpen, setIsEditPlayerOpen] = useState(false);
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
-    const handleSwitchTeam = () => {
-        setSelectedTeam(null);
-    };
-
     const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -225,10 +221,6 @@ export default function CoachDashboard() {
                         <Button variant="outline" size="sm" onClick={() => setActiveTab('send')}>
                             <Send className="mr-2 h-4 w-4" />
                             New Message
-                        </Button>
-                         <Button variant="ghost" size="sm" onClick={handleSwitchTeam}>
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Switch Team
                         </Button>
                     </div>
                 </header>
