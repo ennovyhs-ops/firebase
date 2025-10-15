@@ -9,9 +9,10 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useAppContext } from '@/context/app-context';
-import type { Message, ScheduleEvent } from '@/lib/types';
-import { Home, Users, MessageSquare, Calendar, Send } from 'lucide-react';
+import type { Message, ScheduleEvent, Player } from '@/lib/types';
+import { Home, Users, MessageSquare, Calendar, Send, UserPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 
 
 type Tab = 'dashboard' | 'players' | 'messages' | 'schedule' | 'send';
@@ -66,9 +67,10 @@ function ScheduleItem({ type, date, time, location, details }: Omit<ScheduleEven
 
 
 export default function CoachDashboard() {
-    const { currentUser, setCurrentUser, players, messages, setMessages, schedule, setSchedule } = useAppContext();
+    const { currentUser, setCurrentUser, players, setPlayers, messages, setMessages, schedule, setSchedule } = useAppContext();
     const [activeTab, setActiveTab] = useState<Tab>('dashboard');
     const [showAddEventForm, setShowAddEventForm] = useState(false);
+    const [isAddPlayerOpen, setIsAddPlayerOpen] = useState(false);
 
     const handleLogout = () => {
         setCurrentUser(null);
@@ -116,6 +118,28 @@ export default function CoachDashboard() {
         alert('Event added successfully!');
     }
 
+    const handleAddPlayer = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const newPlayer: Player = {
+            name: formData.get("name") as string,
+            position: formData.get("position") as string,
+            number: formData.get("number") as string,
+            parent: formData.get("parent") as string,
+            email: formData.get("email") as string,
+        };
+
+        if (!newPlayer.name || !newPlayer.position || !newPlayer.number || !newPlayer.parent || !newPlayer.email) {
+            alert('Please fill in all fields for the new player.');
+            return;
+        }
+
+        setPlayers([...players, newPlayer]);
+        setIsAddPlayerOpen(false); // Close dialog on submit
+        e.currentTarget.reset();
+        alert('Player added successfully!');
+    };
+
     const tabs: { id: Tab; label: string, icon: React.ElementType }[] = [
         { id: 'dashboard', label: 'Dashboard', icon: Home },
         { id: 'players', label: 'Players', icon: Users },
@@ -161,7 +185,52 @@ export default function CoachDashboard() {
                 </div>
 
                 <div className={activeTab === 'players' ? 'block' : 'hidden'}>
-                    <h2 className="text-xl font-bold mb-4">Team Roster</h2>
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-bold">Team Roster</h2>
+                        <Dialog open={isAddPlayerOpen} onOpenChange={setIsAddPlayerOpen}>
+                            <DialogTrigger asChild>
+                                <Button size="sm">
+                                    <UserPlus className="mr-2 h-4 w-4" />
+                                    Add Player
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Add New Player</DialogTitle>
+                                </DialogHeader>
+                                <form onSubmit={handleAddPlayer} className="space-y-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="name">Player Name</Label>
+                                        <Input id="name" name="name" placeholder="e.g., Jane Doe" required />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="position">Position</Label>
+                                            <Input id="position" name="position" placeholder="e.g., Forward" required />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="number">Jersey Number</Label>
+                                            <Input id="number" name="number" type="text" placeholder="e.g., 23" required />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="parent">Parent/Guardian</Label>
+                                        <Input id="parent" name="parent" placeholder="e.g., John Doe" required />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="email">Parent's Email</Label>
+                                        <Input id="email" name="email" type="email" placeholder="e.g., john.doe@example.com" required />
+                                    </div>
+                                    <DialogFooter>
+                                        <DialogClose asChild>
+                                            <Button type="button" variant="secondary">Cancel</Button>
+                                        </DialogClose>
+                                        <Button type="submit">Add Player</Button>
+                                    </DialogFooter>
+                                </form>
+                            </DialogContent>
+                        </Dialog>
+                    </div>
                     <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {players.map((p, i) => <PlayerCard key={i} {...p} />)}
                     </div>

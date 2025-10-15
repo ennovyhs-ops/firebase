@@ -12,6 +12,7 @@ interface AppContextType {
   setCurrentAccountType: (type: AccountType) => void;
   users: Record<string, User>;
   players: Player[];
+  setPlayers: (players: Player[]) => void;
   messages: string[];
   setMessages: (messages: string[]) => void;
   schedule: ScheduleEvent[];
@@ -37,6 +38,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setCurrentAccountType,
         users,
         players,
+        setPlayers,
         messages,
         setMessages,
         schedule,
