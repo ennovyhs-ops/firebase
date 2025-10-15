@@ -12,8 +12,8 @@ interface AppContextType {
   setCurrentAccountType: (type: AccountType) => void;
   users: Record<string, User>;
   players: Player[];
-  messages: Message[];
-  setMessages: (messages: Message[]) => void;
+  messages: string[];
+  setMessages: (messages: string[]) => void;
   schedule: ScheduleEvent[];
   setSchedule: (schedule: ScheduleEvent[]) => void;
 }

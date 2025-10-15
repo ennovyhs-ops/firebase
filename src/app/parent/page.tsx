@@ -10,18 +10,11 @@ import type { Message, ScheduleEvent } from '@/lib/types';
 type Tab = 'schedule' | 'messages' | 'child';
 
 
-function MessageCard({ from, time, subject, body }: Message) {
+function MessageCard({ message }: { message: string }) {
     return (
         <Card className="mb-3 bg-white shadow-md">
-            <CardHeader>
-                <div className="flex justify-between items-center">
-                    <CardTitle className="text-base">{subject}</CardTitle>
-                    <p className="text-xs text-muted-foreground">{time}</p>
-                </div>
-                <CardDescription>From: {from}</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <p className="text-sm">{body}</p>
+            <CardContent className="p-4">
+                <p className="text-sm">{message}</p>
             </CardContent>
         </Card>
     );
@@ -57,7 +50,7 @@ export default function ParentDashboard() {
         setCurrentUser(null);
     };
 
-    const relevantMessages = messages.filter(msg => msg.to === 'all' || msg.to === 'parents');
+    const relevantMessages = messages.filter(msg => msg.toLowerCase().includes('all') || msg.toLowerCase().includes('parents'));
     const child = players.find(p => p.parent === currentUser?.name);
 
     const tabs: { id: Tab; label: string }[] = [
@@ -100,7 +93,7 @@ export default function ParentDashboard() {
             <div className={activeTab === 'messages' ? 'block' : 'hidden'}>
                 <h2 className="text-xl font-bold mb-4">Team Messages</h2>
                 <div>
-                    {relevantMessages.map((msg, i) => <MessageCard key={i} {...msg} />)}
+                    {relevantMessages.map((msg, i) => <MessageCard key={i} message={msg} />)}
                     {relevantMessages.length === 0 && <p className="text-muted-foreground text-center py-8">No messages.</p>}
                 </div>
             </div>

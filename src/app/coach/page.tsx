@@ -33,18 +33,11 @@ function PlayerCard({ name, position, number, parent, email }: { name: string, p
     );
 }
 
-function MessageCard({ from, time, subject, body }: Message) {
+function MessageCard({ message, id }: { message: string, id: number }) {
     return (
         <Card className="mb-3 bg-white shadow-md">
-            <CardHeader>
-                <div className="flex justify-between items-center">
-                    <CardTitle className="text-base">{subject}</CardTitle>
-                    <p className="text-xs text-muted-foreground">{time}</p>
-                </div>
-                <CardDescription>From: {from}</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <p className="text-sm">{body}</p>
+            <CardContent className="p-4">
+                <p className="text-sm">{message}</p>
             </CardContent>
         </Card>
     );
@@ -93,13 +86,7 @@ export default function CoachDashboard() {
             return;
         }
 
-        const newMessage: Message = {
-            from: currentUser?.name || 'Coach',
-            to,
-            subject,
-            body,
-            time: 'Just now'
-        };
+        const newMessage = `From ${currentUser?.name || 'Coach'} (Just now) - To: ${to} - Subject: ${subject}`;
 
         setMessages([newMessage, ...messages]);
         alert('Message sent!');
@@ -164,13 +151,9 @@ export default function CoachDashboard() {
                     <div>
                         {messages.slice(0, 3).map((msg, i) => (
                             <Card key={i} className="mb-4">
-                                <CardHeader>
-                                    <div className="flex justify-between">
-                                        <CardTitle className="text-md">Message Sent: {msg.subject}</CardTitle>
-                                        <p className="text-xs text-muted-foreground">{msg.time}</p>
-                                    </div>
-                                    <CardDescription>Sent to: {msg.to}</CardDescription>
-                                </CardHeader>
+                                <CardContent className="p-4">
+                                    <p className="text-sm">{msg}</p>
+                                </CardContent>
                             </Card>
                         ))}
                         {messages.length === 0 && <p className="text-muted-foreground text-center py-8">No recent activity.</p>}
@@ -187,7 +170,7 @@ export default function CoachDashboard() {
                 <div className={activeTab === 'messages' ? 'block' : 'hidden'}>
                     <h2 className="text-xl font-bold mb-4">All Messages</h2>
                     <div>
-                        {messages.map((msg, i) => <MessageCard key={i} {...msg} />)}
+                        {messages.map((msg, i) => <MessageCard key={i} message={msg} id={i} />)}
                         {messages.length === 0 && <p className="text-muted-foreground text-center py-8">No messages.</p>}
                     </div>
                 </div>
@@ -313,5 +296,4 @@ export default function CoachDashboard() {
             </div>
         </div>
     );
-
-    
+}
