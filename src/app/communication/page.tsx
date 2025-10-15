@@ -19,7 +19,7 @@ export default function CommunicationPage() {
   const [filterGroup, setFilterGroup] = useState("all");
 
   const filteredAndSortedConversations = useMemo(() => {
-    let conversations = allConversations.filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()));
+    let conversations = [...allConversations].filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()));
 
     // Filter by group
     if (filterGroup !== "all") {

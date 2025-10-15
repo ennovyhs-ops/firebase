@@ -36,7 +36,7 @@ export function DashboardClient() {
 
   const conversations = React.useMemo(() => {
      // Ensure timestamps are valid before sorting
-    const validConversations = allConversations.filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()));
+    const validConversations = [...allConversations].filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()));
     return validConversations.sort((a,b) => parseISO(b.timestamp!).getTime() - parseISO(a.timestamp!).getTime()).slice(0,3);
   }, []);
 
