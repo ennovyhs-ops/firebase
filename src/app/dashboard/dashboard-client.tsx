@@ -26,11 +26,15 @@ import { Separator } from "@/components/ui/separator";
 export function DashboardClient() {
 
   const upcomingEvents = React.useMemo(() => {
-    return allSchedule.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 2);
+    // Ensure dates are valid before sorting
+    const validEvents = allSchedule.filter(e => !isNaN(new Date(e.date).getTime()));
+    return validEvents.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 2);
   }, []);
 
   const conversations = React.useMemo(() => {
-    return allConversations.sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime()).slice(0,3);
+     // Ensure timestamps are valid before sorting
+    const validConversations = allConversations.filter(c => !isNaN(parseISO(c.timestamp).getTime()));
+    return validConversations.sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime()).slice(0,3);
   }, []);
 
 
@@ -66,7 +70,7 @@ export function DashboardClient() {
                     </div>
                   ))}
                 </div>
-                <Button asChild size="sm" className="w-full">
+                <Button asChild size="sm" className="w-full mt-4">
                   <Link href="/schedule">
                     View Full Schedule <ArrowRight className="ml-2 size-4" />
                   </Link>
