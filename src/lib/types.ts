@@ -1,66 +1,34 @@
 
+export type AccountType = 'coach' | 'player' | 'parent';
 
-export type Player = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  birthMonth: number;
-  birthYear: number;
-  number: number;
-  position: string;
-  avatarId: string;
-  avatarUrl?: string;
-  contact: {
-    email: string;
-    phone: string;
-  };
-  emergencyContact: {
+export type User = {
+    username: string;
+    password?: string;
     name: string;
-    phone: string;
-    relation: string;
-    email?: string;
-  };
-  medicalInfo: {
-    allergies: string;
-    conditions: string;
-  };
-  skillAssessments: {
-    shooting: number;
-    dribbling: number;
-    passing: number;
-    defense: number;
-  };
-};
-
-export type TeamEvent = {
-  id: string;
-  type: "Practice" | "Game" | "Event";
-  title: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  location: string;
-  description?: string;
-};
-
-export type AttendanceStatus = "Present" | "Absent" | "Pending" | "Excused";
-
-export type PlayerAttendance = {
-    indicated: AttendanceStatus;
-    actual: AttendanceStatus;
+    child?: string;
 }
 
-export type AttendanceRecord = {
-  eventId: string;
-  playerAttendances: Record<string, PlayerAttendance>;
+export type Player = {
+    name: string;
+    position: string;
+    number: string;
+    parent: string;
+    email: string;
 };
 
-export type Conversation = {
-  id: string;
-  subject: string;
-  sender: string;
-  recipient: string;
-  timestamp: string;
-  body: string;
-  replies?: Conversation[];
+export type Message = {
+    from: string;
+    to: 'all' | 'players' | 'parents' | string;
+    subject: string;
+    body: string;
+    time: string;
+};
+
+export type ScheduleEvent = {
+    id: string;
+    type: 'Practice' | 'Game' | 'Meeting' | 'Other';
+    date: string;
+    time: string;
+    location: string;
+    details: string;
 };
