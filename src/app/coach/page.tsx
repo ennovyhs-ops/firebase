@@ -11,9 +11,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useAppContext } from '@/context/app-context';
 import type { Message, ScheduleEvent, Player } from '@/lib/types';
-import { Home, Users, MessageSquare, Calendar, Send, UserPlus, ArrowLeft, Settings, Upload } from 'lucide-react';
+import { Home, Users, MessageSquare, Calendar, Send, UserPlus, ArrowLeft, Settings, Upload, Mail, Phone, User as UserIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -58,6 +58,8 @@ export default function CoachDashboard() {
     const [showAddEventForm, setShowAddEventForm] = useState(false);
     const [isAddPlayerOpen, setIsAddPlayerOpen] = useState(false);
     const [logoPreview, setLogoPreview] = useState<string | null>(selectedTeam?.logo || null);
+    const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+    const [isPlayerDetailOpen, setIsPlayerDetailOpen] = useState(false);
 
 
     const handleSwitchTeam = () => {
@@ -152,6 +154,11 @@ export default function CoachDashboard() {
     const handleLogout = () => {
         setSelectedTeam(null);
         setCurrentUser(null);
+    };
+
+    const handlePlayerRowClick = (player: Player) => {
+        setSelectedPlayer(player);
+        setIsPlayerDetailOpen(true);
     };
 
     const tabs: { id: Tab; label: string, icon: React.ElementType }[] = [
@@ -269,7 +276,7 @@ export default function CoachDashboard() {
                                 </TableHeader>
                                 <TableBody>
                                     {players.map((player, index) => (
-                                        <TableRow key={index}>
+                                        <TableRow key={index} onClick={() => handlePlayerRowClick(player)} className="cursor-pointer">
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     <Avatar>
@@ -422,6 +429,45 @@ export default function CoachDashboard() {
                 </div>
             </div>
             
+            {/* Player Detail Dialog */}
+            <Dialog open={isPlayerDetailOpen} onOpenChange={setIsPlayerDetailOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    {selectedPlayer && (
+                        <>
+                            <DialogHeader>
+                                <div className="flex flex-col items-center pt-8">
+                                    <Avatar className="w-24 h-24 mb-4">
+                                        {selectedPlayer.photo && <AvatarImage src={selectedPlayer.photo} alt={selectedPlayer.name} />}
+                                        <AvatarFallback className="text-3xl">{selectedPlayer.name.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <DialogTitle className="text-2xl">{selectedPlayer.name}</DialogTitle>
+                                    <DialogDescription>#{selectedPlayer.number} • {selectedPlayer.position}</DialogDescription>
+                                </div>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4 px-4">
+                                <h3 className="text-lg font-semibold border-b pb-2">Contact Information</h3>
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-3">
+                                        <UserIcon className="w-5 h-5 text-muted-foreground" />
+                                        <div>
+                                            <p className="text-sm text-muted-foreground">Parent/Guardian</p>
+                                            <p className="font-medium">{selectedPlayer.parent}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <Mail className="w-5 h-5 text-muted-foreground" />
+                                        <div>
+                                            <p className="text-sm text-muted-foreground">Parent's Email</p>
+                                            <p className="font-medium">{selectedPlayer.email}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </DialogContent>
+            </Dialog>
+
             <div className="fixed bottom-0 left-0 right-0 bg-background border-t shadow-t-lg md:hidden">
                 <div className="flex justify-around">
                     {tabs.map(tab => (
@@ -459,7 +505,5 @@ export default function CoachDashboard() {
         </div>
     );
 }
-
-    
 
     
