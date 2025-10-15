@@ -2,8 +2,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import type { User, AccountType, Player, Message, ScheduleEvent } from '@/lib/types';
-import { users as initialUsers, players as initialPlayers, messages as initialMessages, schedule as initialSchedule } from '@/lib/data';
+import type { User, AccountType, Player, Message, ScheduleEvent, Team } from '@/lib/types';
+import { users as initialUsers, players as initialPlayers, messages as initialMessages, schedule as initialSchedule, teams as initialTeams } from '@/lib/data';
 
 interface AppContextType {
   currentUser: User | null;
@@ -12,11 +12,14 @@ interface AppContextType {
   setCurrentAccountType: (type: AccountType) => void;
   users: Record<string, User>;
   players: Player[];
-  setPlayers: (players: Player[]) => void;
+  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
   messages: string[];
-  setMessages: (messages: string[]) => void;
+  setMessages: React.Dispatch<React.SetStateAction<string[]>>;
   schedule: ScheduleEvent[];
-  setSchedule: (schedule: ScheduleEvent[]) => void;
+  setSchedule: React.Dispatch<React.SetStateAction<ScheduleEvent[]>>;
+  teams: Team[];
+  selectedTeam: Team | null;
+  setSelectedTeam: (team: Team | null) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -28,6 +31,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [players, setPlayers] = useState(initialPlayers);
   const [messages, setMessages] = useState(initialMessages);
   const [schedule, setSchedule] = useState(initialSchedule);
+  const [teams, setTeams] = useState(initialTeams);
+  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
 
 
   return (
@@ -42,7 +47,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
         messages,
         setMessages,
         schedule,
-        setSchedule
+        setSchedule,
+        teams,
+        selectedTeam,
+        setSelectedTeam
     }}>
       {children}
     </AppContext.Provider>

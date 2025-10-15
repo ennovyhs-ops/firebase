@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useAppContext } from '@/context/app-context';
 import type { Message, ScheduleEvent, Player } from '@/lib/types';
-import { Home, Users, MessageSquare, Calendar, Send, UserPlus } from 'lucide-react';
+import { Home, Users, MessageSquare, Calendar, Send, UserPlus, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 
@@ -67,13 +67,13 @@ function ScheduleItem({ type, date, time, location, details }: Omit<ScheduleEven
 
 
 export default function CoachDashboard() {
-    const { currentUser, setCurrentUser, players, setPlayers, messages, setMessages, schedule, setSchedule } = useAppContext();
+    const { currentUser, players, setPlayers, messages, setMessages, schedule, setSchedule, selectedTeam, setSelectedTeam } = useAppContext();
     const [activeTab, setActiveTab] = useState<Tab>('dashboard');
     const [showAddEventForm, setShowAddEventForm] = useState(false);
     const [isAddPlayerOpen, setIsAddPlayerOpen] = useState(false);
 
-    const handleLogout = () => {
-        setCurrentUser(null);
+    const handleSwitchTeam = () => {
+        setSelectedTeam(null);
     };
 
     const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
@@ -153,10 +153,13 @@ export default function CoachDashboard() {
             <div className="bg-white rounded-2xl p-4 md:p-8 shadow-2xl">
                 <header className="flex flex-col sm:flex-row justify-between sm:items-center pb-4 mb-6 border-b-2">
                     <div>
-                        <h1 className="text-2xl font-bold text-primary">{currentUser?.name}'s Dashboard</h1>
-                        <p className="text-sm text-muted-foreground">Head Coach</p>
+                        <h1 className="text-2xl font-bold text-primary">{selectedTeam?.name}</h1>
+                        <p className="text-sm text-muted-foreground">{currentUser?.name} - Head Coach</p>
                     </div>
-                    <Button variant="secondary" size="sm" onClick={handleLogout} className="mt-4 sm:mt-0">Logout</Button>
+                    <Button variant="outline" size="sm" onClick={handleSwitchTeam} className="mt-4 sm:mt-0">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Switch Team
+                    </Button>
                 </header>
 
                 <div className={activeTab === 'dashboard' ? 'block' : 'hidden'}>

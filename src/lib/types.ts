@@ -1,4 +1,5 @@
 
+
 export type AccountType = 'coach' | 'player' | 'parent';
 
 export type User = {
@@ -32,3 +33,9 @@ export type ScheduleEvent = {
     location: string;
     details: string;
 };
+
+export type Team = {
+    id: string;
+    name: string;
+    sport: string;
+}

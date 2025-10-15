@@ -7,12 +7,17 @@ import LoginPage from '@/app/login/page';
 import CoachDashboard from '@/app/coach/page';
 import PlayerDashboard from '@/app/player/page';
 import ParentDashboard from '@/app/parent/page';
+import TeamSelectionPage from '@/app/teams/page';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { currentUser, currentAccountType } = useAppContext();
+  const { currentUser, currentAccountType, selectedTeam } = useAppContext();
 
   if (!currentUser) {
     return <LoginPage />;
+  }
+
+  if (currentAccountType === 'coach' && !selectedTeam) {
+    return <TeamSelectionPage />;
   }
 
   return (

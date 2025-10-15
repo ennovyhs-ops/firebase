@@ -1,5 +1,6 @@
 
-import type { User, Player, ScheduleEvent } from './types';
+
+import type { User, Player, ScheduleEvent, Team } from './types';
 
 export const users: Record<string, User> = {
     coach: { username: 'coach', password: 'coach123', name: 'Coach Johnson' },
@@ -19,6 +20,7 @@ export const players: Player[] = [
 ];
 
 export const messages: string[] = [
+    "From Coach Johnson (Just now) - To: all - Subject: Welcome to the Team!",
     "From Coach Johnson (2 hours ago) - Subject: Practice Tomorrow",
     "From Coach Johnson (1 day ago) - Subject: Game This Weekend",
     "From Coach Johnson (2 days ago) - Subject: Parent Meeting"
@@ -30,6 +32,13 @@ export const schedule: ScheduleEvent[] = [
     { id: '3', type: 'Practice', date: '2025-10-20', time: '16:00', location: 'Main Field', details: 'Regular team practice' },
     { id: '4', type: 'Meeting', date: '2025-10-21', time: '18:00', location: 'Clubhouse', details: 'Parent meeting - Tournament discussion' }
 ];
+
+export const teams: Team[] = [
+    { id: 'u12-falcons', name: 'U-12 Falcons', sport: 'Soccer' },
+    { id: 'u14-eagles', name: 'U-14 Eagles', sport: 'Soccer' },
+    { id: 'varsity-hawks', name: 'Varsity Hawks', sport: 'Basketball' }
+];
+
 
 // This is the data that was in communication/data.ts and schedule/data.ts
 // I'm keeping it here to be re-integrated if needed.
