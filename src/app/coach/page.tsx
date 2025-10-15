@@ -1,9 +1,11 @@
+
 "use client";
 
-import React from 'react';
-import { DashboardClient } from '@/app/dashboard/dashboard-client';
+import RosterPage from "../roster/page";
 
 
 export default function CoachDashboard() {
-    return <DashboardClient />;
+    return <RosterPage />;
 }
+
+    
