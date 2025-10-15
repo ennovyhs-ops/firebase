@@ -444,21 +444,35 @@ export default function CoachDashboard() {
                                     <DialogDescription>#{selectedPlayer.number} • {selectedPlayer.position}</DialogDescription>
                                 </div>
                             </DialogHeader>
-                            <div className="grid gap-4 py-4 px-4">
-                                <h3 className="text-lg font-semibold border-b pb-2">Contact Information</h3>
-                                <div className="space-y-4">
-                                    <div className="flex items-center gap-3">
-                                        <UserIcon className="w-5 h-5 text-muted-foreground" />
-                                        <div>
-                                            <p className="text-sm text-muted-foreground">Parent/Guardian</p>
-                                            <p className="font-medium">{selectedPlayer.parent}</p>
+                            <div className="grid gap-6 py-4 px-4">
+                                <div>
+                                    <h3 className="text-lg font-semibold border-b pb-2 mb-4">Player Contact</h3>
+                                    <div className="space-y-4">
+                                         <div className="flex items-center gap-3">
+                                            <Mail className="w-5 h-5 text-muted-foreground" />
+                                            <div>
+                                                <p className="text-sm text-muted-foreground">Email</p>
+                                                <p className="font-medium">{selectedPlayer.email}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        <Mail className="w-5 h-5 text-muted-foreground" />
-                                        <div>
-                                            <p className="text-sm text-muted-foreground">Parent's Email</p>
-                                            <p className="font-medium">{selectedPlayer.email}</p>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-semibold border-b pb-2 mb-4">Parent/Guardian Contact</h3>
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-3">
+                                            <UserIcon className="w-5 h-5 text-muted-foreground" />
+                                            <div>
+                                                <p className="text-sm text-muted-foreground">Name</p>
+                                                <p className="font-medium">{selectedPlayer.parent}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <Mail className="w-5 h-5 text-muted-foreground" />
+                                            <div>
+                                                <p className="text-sm text-muted-foreground">Email</p>
+                                                <p className="font-medium">{selectedPlayer.email}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -505,5 +519,7 @@ export default function CoachDashboard() {
         </div>
     );
 }
+
+    
 
     
