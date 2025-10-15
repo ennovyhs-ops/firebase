@@ -45,20 +45,20 @@ export const conversations: Conversation[] = [
     recipient: "All Players & Parents",
     subject: "Practice Canceled Today (April 29)",
     body: "Hi Team,\n\nDue to the heavy rain and waterlogged fields, we're canceling practice today, April 29th. Please stay safe and dry.\n\nWe'll see you at Wednesday's practice.\n\nThanks,\nCoach",
-    timestamp: "2024-04-29T13:30:00Z"
+    timestamp: "2024-04-29T13:30:00.000Z"
   },
   {
     id: "msg002",
     recipient: "All Players",
     subject: "Skills Clinic This Saturday",
     body: "Hi Players,\n\nReminder that we have a special skills clinic this Saturday from 10 AM to 12 PM at the main field. We'll be focusing on dribbling and shooting drills. Come ready to work hard!\n\nBest,\nCoach",
-    timestamp: "2024-04-28T18:00:00Z"
+    timestamp: "2024-04-28T18:00:00.000Z"
   },
   {
     id: "msg003",
     recipient: "All Parents",
     subject: "Fundraiser Update & Volunteer Request",
     body: "Dear Parents,\n\nThank you to everyone who has participated in our car wash fundraiser! We've raised $500 so far. We still need a few more parent volunteers for this weekend's event. If you're available to help out for an hour or two, please sign up here: [link].\n\nYour support is greatly appreciated!\n\nThanks,\nCoach",
-    timestamp: "2024-04-27T11:45:00Z"
+    timestamp: "2024-04-27T11:45:00.000Z"
   }
 ];
