@@ -11,12 +11,12 @@ export const users: Record<string, User> = {
 };
 
 export const players: Player[] = [
-    { name: 'Alex Martinez', position: 'Forward', number: '10', parent: 'Maria Martinez', email: 'maria@email.com' },
-    { name: 'Sam Chen', position: 'Midfielder', number: '7', parent: 'David Chen', email: 'david@email.com' },
-    { name: 'Jordan Smith', position: 'Defender', number: '5', parent: 'John Smith', email: 'john@email.com' },
-    { name: 'Taylor Brown', position: 'Goalkeeper', number: '1', parent: 'Lisa Brown', email: 'lisa@email.com' },
-    { name: 'Casey Davis', position: 'Forward', number: '11', parent: 'Mike Davis', email: 'mike@email.com' },
-    { name: 'Morgan Lee', position: 'Midfielder', number: '8', parent: 'Sarah Lee', email: 'sarah@email.com' }
+    { name: 'Alex Martinez', position: 'Forward', number: '10', parent: 'Maria Martinez', email: 'maria@email.com', photo: 'https://picsum.photos/seed/p1/200' },
+    { name: 'Sam Chen', position: 'Midfielder', number: '7', parent: 'David Chen', email: 'david@email.com', photo: 'https://picsum.photos/seed/p2/200' },
+    { name: 'Jordan Smith', position: 'Defender', number: '5', parent: 'John Smith', email: 'john@email.com', photo: 'https://picsum.photos/seed/p3/200' },
+    { name: 'Taylor Brown', position: 'Goalkeeper', number: '1', parent: 'Lisa Brown', email: 'lisa@email.com', photo: 'https://picsum.photos/seed/p4/200' },
+    { name: 'Casey Davis', position: 'Forward', number: '11', parent: 'Mike Davis', email: 'mike@email.com', photo: 'https://picsum.photos/seed/p5/200' },
+    { name: 'Morgan Lee', position: 'Midfielder', number: '8', parent: 'Sarah Lee', email: 'sarah@email.com', photo: 'https://picsum.photos/seed/p6/200' }
 ];
 
 export const messages: string[] = [
@@ -66,3 +66,5 @@ export const conversations = [
     timestamp: "2024-04-27T11:45:00Z"
   }
 ];
+
+    

@@ -15,6 +15,7 @@ export type Player = {
     number: string;
     parent: string;
     email: string;
+    photo?: string;
 };
 
 export type Message = {
@@ -40,3 +41,5 @@ export type Team = {
     sport: string;
     logo?: string;
 }
+
+    

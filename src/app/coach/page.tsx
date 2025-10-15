@@ -15,7 +15,7 @@ import { Home, Users, MessageSquare, Calendar, Send, UserPlus, ArrowLeft, Settin
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
 type Tab = 'dashboard' | 'players' | 'messages' | 'schedule' | 'send' | 'settings';
@@ -116,6 +116,7 @@ export default function CoachDashboard() {
             number: formData.get("number") as string,
             parent: formData.get("parent") as string,
             email: formData.get("email") as string,
+            photo: 'https://picsum.photos/seed/new-player/200'
         };
 
         if (!newPlayer.name || !newPlayer.position || !newPlayer.number || !newPlayer.parent || !newPlayer.email) {
@@ -262,10 +263,10 @@ export default function CoachDashboard() {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>Player</TableHead>
-                                        <TableHead>Position</TableHead>
+                                        <TableHead className="hidden md:table-cell">Position</TableHead>
                                         <TableHead className="text-center">#</TableHead>
-                                        <TableHead>Parent/Guardian</TableHead>
-                                        <TableHead>Email</TableHead>
+                                        <TableHead className="hidden md:table-cell">Parent/Guardian</TableHead>
+                                        <TableHead className="hidden md:table-cell">Email</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -274,15 +275,16 @@ export default function CoachDashboard() {
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     <Avatar>
+                                                        {player.photo && <AvatarImage src={player.photo} alt={player.name} />}
                                                         <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
                                                     </Avatar>
                                                     <span className="font-medium">{player.name}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell>{player.position}</TableCell>
+                                            <TableCell className="hidden md:table-cell">{player.position}</TableCell>
                                             <TableCell className="text-center">{player.number}</TableCell>
-                                            <TableCell>{player.parent}</TableCell>
-                                            <TableCell>{player.email}</TableCell>
+                                            <TableCell className="hidden md:table-cell">{player.parent}</TableCell>
+                                            <TableCell className="hidden md:table-cell">{player.email}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -456,3 +458,5 @@ export default function CoachDashboard() {
         </div>
     );
 }
+
+    
