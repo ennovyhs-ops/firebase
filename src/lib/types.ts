@@ -16,6 +16,7 @@ export type Player = {
     number: string;
     parent: string;
     email: string;
+    phone: string;
     photo?: string;
 };
 

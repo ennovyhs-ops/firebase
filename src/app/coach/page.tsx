@@ -121,10 +121,11 @@ export default function CoachDashboard() {
             number: formData.get("number") as string,
             parent: formData.get("parent") as string,
             email: formData.get("email") as string,
+            phone: formData.get("phone") as string,
             photo: 'https://picsum.photos/seed/new-player/200'
         };
 
-        if (!newPlayer.name || !newPlayer.position || !newPlayer.number || !newPlayer.parent || !newPlayer.email) {
+        if (!newPlayer.name || !newPlayer.position || !newPlayer.number || !newPlayer.parent || !newPlayer.email || !newPlayer.phone) {
             alert('Please fill in all fields for the new player.');
             return;
         }
@@ -147,6 +148,7 @@ export default function CoachDashboard() {
             number: formData.get("number") as string,
             parent: formData.get("parent") as string,
             email: formData.get("email") as string,
+            phone: formData.get("phone") as string,
         };
 
         setPlayers(players.map(p => p.id === selectedPlayer.id ? updatedPlayer : p));
@@ -284,6 +286,10 @@ export default function CoachDashboard() {
                                             <Label htmlFor="number">Jersey Number</Label>
                                             <Input id="number" name="number" type="text" placeholder="e.g., 23" required />
                                         </div>
+                                    </div>
+                                     <div className="space-y-2">
+                                        <Label htmlFor="phone">Phone</Label>
+                                        <Input id="phone" name="phone" type="tel" placeholder="e.g., 123-456-7890" required />
                                     </div>
                                     <div className="space-y-2">
                                         <Label htmlFor="parent">Parent/Guardian</Label>
@@ -494,6 +500,13 @@ export default function CoachDashboard() {
                                                 <p className="font-medium">{selectedPlayer.email}</p>
                                             </div>
                                         </div>
+                                        <div className="flex items-center gap-3">
+                                            <Phone className="w-5 h-5 text-muted-foreground" />
+                                            <div>
+                                                <p className="text-sm text-muted-foreground">Phone</p>
+                                                <p className="font-medium">{selectedPlayer.phone}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
@@ -570,6 +583,10 @@ export default function CoachDashboard() {
                                     <Label htmlFor="edit-number">Jersey Number</Label>
                                     <Input id="edit-number" name="number" type="text" defaultValue={selectedPlayer.number} required />
                                 </div>
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="edit-phone">Phone</Label>
+                                <Input id="edit-phone" name="phone" type="tel" defaultValue={selectedPlayer.phone} required />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="edit-parent">Parent/Guardian</Label>
