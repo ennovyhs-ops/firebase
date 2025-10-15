@@ -6,8 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useAppContext } from '@/context/app-context';
 import type { Message, Player, ScheduleEvent } from '@/lib/types';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
-type Tab = 'schedule' | 'messages' | 'team';
+type Tab = 'schedule' | 'messages' | 'team' | 'profile';
 
 function PlayerCard({ name, position, number }: { name: string, position: string, number: string }) {
     return (
@@ -57,19 +60,44 @@ function ScheduleItem({ type, date, time, location, details }: Omit<ScheduleEven
 
 
 export default function PlayerDashboard() {
-    const { currentUser, setCurrentUser, players, messages, schedule } = useAppContext();
+    const { currentUser, setCurrentUser, players, setPlayers, messages, schedule } = useAppContext();
     const [activeTab, setActiveTab] = useState<Tab>('schedule');
+    const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
 
     const handleLogout = () => {
         setCurrentUser(null);
     };
 
+    const handleEditProfile = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const name = formData.get('name') as string;
+        const position = formData.get('position') as string;
+        const number = formData.get('number') as string;
+
+        if (currentUser) {
+            const updatedPlayers = players.map(p => {
+                if (p.name === currentUser.name) {
+                    return { ...p, name, position, number };
+                }
+                return p;
+            });
+            setPlayers(updatedPlayers);
+            setCurrentUser({ ...currentUser, name });
+            setIsEditProfileOpen(false);
+            alert('Profile updated successfully!');
+        }
+    };
+
     const relevantMessages = messages.filter(msg => msg.toLowerCase().includes('all') || msg.toLowerCase().includes('players'));
+    
+    const currentPlayerInfo = players.find(p => p.name === currentUser?.name);
 
     const tabs: { id: Tab; label: string }[] = [
         { id: 'schedule', label: 'Schedule' },
         { id: 'messages', label: 'Messages' },
         { id: 'team', label: 'Team' },
+        { id: 'profile', label: 'My Profile' },
     ];
 
     return (
@@ -117,6 +145,74 @@ export default function PlayerDashboard() {
                     {players.map((p, i) => <PlayerCard key={i} name={p.name} position={p.position} number={p.number} />)}
                 </div>
             </div>
+
+            <div className={activeTab === 'profile' ? 'block' : 'hidden'}>
+                <h2 className="text-xl font-bold mb-4">My Profile</h2>
+                 {currentPlayerInfo ? (
+                    <Card className="max-w-md mx-auto">
+                         <CardHeader>
+                            <CardTitle>Player Information</CardTitle>
+                            <CardDescription>View and edit your profile details.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <div className="flex items-center justify-center">
+                                <div className="w-24 h-24 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-4xl font-bold">
+                                    {currentPlayerInfo.name.charAt(0)}
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Name</Label>
+                                <p className="font-semibold">{currentPlayerInfo.name}</p>
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Position</Label>
+                                <p className="font-semibold">{currentPlayerInfo.position}</p>
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Jersey Number</Label>
+                                <p className="font-semibold">#{currentPlayerInfo.number}</p>
+                            </div>
+                            <Button onClick={() => setIsEditProfileOpen(true)} className="w-full">Edit Profile</Button>
+                        </CardContent>
+                    </Card>
+                ) : (
+                    <p className="text-muted-foreground text-center py-8">Could not find your player information.</p>
+                )}
+            </div>
+
+            <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Edit Profile</DialogTitle>
+                        <DialogDescription>
+                            Update your profile information. Click save when you're done.
+                        </DialogDescription>
+                    </DialogHeader>
+                    {currentPlayerInfo && (
+                        <form onSubmit={handleEditProfile} className="space-y-4 pt-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="edit-name">Name</Label>
+                                <Input id="edit-name" name="name" defaultValue={currentPlayerInfo.name} required />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="edit-position">Position</Label>
+                                <Input id="edit-position" name="position" defaultValue={currentPlayerInfo.position} required />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="edit-number">Jersey Number</Label>
+                                <Input id="edit-number" name="number" defaultValue={currentPlayerInfo.number} required />
+                            </div>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button type="button" variant="secondary">Cancel</Button>
+                                </DialogClose>
+                                <Button type="submit">Save Changes</Button>
+                            </DialogFooter>
+                        </form>
+                    )}
+                </DialogContent>
+            </Dialog>
+
         </div>
     );
 }
