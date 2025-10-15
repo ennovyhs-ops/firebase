@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,14 +11,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useAppContext } from '@/context/app-context';
 import type { Message, ScheduleEvent, Player } from '@/lib/types';
-import { Home, Users, MessageSquare, Calendar, Send, UserPlus, ArrowLeft } from 'lucide-react';
+import { Home, Users, MessageSquare, Calendar, Send, UserPlus, ArrowLeft, Settings, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 
-type Tab = 'dashboard' | 'players' | 'messages' | 'schedule' | 'send';
+type Tab = 'dashboard' | 'players' | 'messages' | 'schedule' | 'send' | 'settings';
 
 function MessageCard({ message, id }: { message: string, id: number }) {
     return (
@@ -52,10 +53,12 @@ function ScheduleItem({ type, date, time, location, details }: Omit<ScheduleEven
 
 
 export default function CoachDashboard() {
-    const { currentUser, players, setPlayers, messages, setMessages, schedule, setSchedule, selectedTeam, setSelectedTeam } = useAppContext();
+    const { currentUser, players, setPlayers, messages, setMessages, schedule, setSchedule, selectedTeam, setSelectedTeam, teams, setTeams } = useAppContext();
     const [activeTab, setActiveTab] = useState<Tab>('dashboard');
     const [showAddEventForm, setShowAddEventForm] = useState(false);
     const [isAddPlayerOpen, setIsAddPlayerOpen] = useState(false);
+    const [logoPreview, setLogoPreview] = useState<string | null>(selectedTeam?.logo || null);
+
 
     const handleSwitchTeam = () => {
         setSelectedTeam(null);
@@ -125,21 +128,44 @@ export default function CoachDashboard() {
         alert('Player added successfully!');
     };
 
+     const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const newLogoUrl = reader.result as string;
+                setLogoPreview(newLogoUrl);
+                if (selectedTeam) {
+                    const updatedTeams = teams.map(t => 
+                        t.id === selectedTeam.id ? { ...t, logo: newLogoUrl } : t
+                    );
+                    setTeams(updatedTeams);
+                    setSelectedTeam({ ...selectedTeam, logo: newLogoUrl });
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const tabs: { id: Tab; label: string, icon: React.ElementType }[] = [
         { id: 'dashboard', label: 'Dashboard', icon: Home },
         { id: 'players', label: 'Players', icon: Users },
         { id: 'messages', label: 'Messages', icon: MessageSquare },
         { id: 'schedule', label: 'Schedule', icon: Calendar },
         { id: 'send', label: 'Send', icon: Send },
+        { id: 'settings', label: 'Settings', icon: Settings },
     ];
     
     return (
         <div className="pb-24">
             <div className="bg-white rounded-2xl p-4 md:p-8 shadow-2xl">
                 <header className="flex flex-col sm:flex-row justify-between sm:items-center pb-4 mb-6 border-b-2">
-                    <div>
-                        <h1 className="text-2xl font-bold text-primary">{selectedTeam?.name}</h1>
-                        <p className="text-sm text-muted-foreground">{currentUser?.name} - Head Coach</p>
+                    <div className="flex items-center gap-4">
+                        {selectedTeam?.logo && <Image src={selectedTeam.logo} alt="Team Logo" width={48} height={48} className="rounded-full" />}
+                        <div>
+                            <h1 className="text-2xl font-bold text-primary">{selectedTeam?.name}</h1>
+                            <p className="text-sm text-muted-foreground">{currentUser?.name} - Head Coach</p>
+                        </div>
                     </div>
                     <Button variant="outline" size="sm" onClick={handleSwitchTeam} className="mt-4 sm:mt-0">
                         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -342,6 +368,30 @@ export default function CoachDashboard() {
                                 </div>
                                 <Button type="submit" className="w-full">Send Message</Button>
                             </form>
+                        </CardContent>
+                    </Card>
+                </div>
+                 <div className={activeTab === 'settings' ? 'block' : 'hidden'}>
+                    <h2 className="text-xl font-bold mb-4">Team Settings</h2>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Team Logo</CardTitle>
+                            <CardDescription>Upload a logo for your team. This will be displayed across the app.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex flex-col items-center gap-6">
+                           {logoPreview ? (
+                                <Image src={logoPreview} alt="Team Logo Preview" width={128} height={128} className="rounded-full" />
+                            ) : (
+                                <div className="w-32 h-32 bg-muted rounded-full flex items-center justify-center">
+                                    <Users className="w-16 h-16 text-muted-foreground" />
+                                </div>
+                            )}
+                             <Input id="logo-upload" type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
+                            <Button asChild>
+                               <label htmlFor="logo-upload" className="cursor-pointer">
+                                    <Upload className="mr-2 h-4 w-4" /> Upload Logo
+                               </label>
+                            </Button>
                         </CardContent>
                     </Card>
                 </div>

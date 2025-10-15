@@ -38,4 +38,5 @@ export type Team = {
     id: string;
     name: string;
     sport: string;
+    logo?: string;
 }

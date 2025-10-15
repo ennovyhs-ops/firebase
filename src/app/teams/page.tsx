@@ -2,8 +2,9 @@
 "use client";
 
 import React from 'react';
+import Image from 'next/image';
 import { useAppContext } from '@/context/app-context';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, ChevronRight } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -41,9 +42,13 @@ export default function TeamSelectionPage() {
                                     <TableRow key={team.id}>
                                         <TableCell>
                                             <div className="flex items-center gap-3">
-                                                <div className="bg-primary text-primary-foreground p-2 rounded-lg">
-                                                    <Users className="h-5 w-5" />
-                                                </div>
+                                                {team.logo ? (
+                                                     <Image src={team.logo} alt={`${team.name} logo`} width={40} height={40} className="rounded-full" />
+                                                ) : (
+                                                    <div className="bg-primary text-primary-foreground p-2 rounded-lg">
+                                                        <Users className="h-5 w-5" />
+                                                    </div>
+                                                )}
                                                 <span className="font-medium">{team.name}</span>
                                             </div>
                                         </TableCell>

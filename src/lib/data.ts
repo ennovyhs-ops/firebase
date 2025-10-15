@@ -34,9 +34,9 @@ export const schedule: ScheduleEvent[] = [
 ];
 
 export const teams: Team[] = [
-    { id: 'u12-falcons', name: 'U-12 Falcons', sport: 'Soccer' },
-    { id: 'u14-eagles', name: 'U-14 Eagles', sport: 'Soccer' },
-    { id: 'varsity-hawks', name: 'Varsity Hawks', sport: 'Basketball' }
+    { id: 'u12-falcons', name: 'U-12 Falcons', sport: 'Soccer', logo: 'https://picsum.photos/seed/falcons/200' },
+    { id: 'u14-eagles', name: 'U-14 Eagles', sport: 'Soccer', logo: 'https://picsum.photos/seed/eagles/200' },
+    { id: 'varsity-hawks', name: 'Varsity Hawks', sport: 'Basketball', logo: 'https://picsum.photos/seed/hawks/200' }
 ];
 
 

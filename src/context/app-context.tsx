@@ -18,6 +18,7 @@ interface AppContextType {
   schedule: ScheduleEvent[];
   setSchedule: React.Dispatch<React.SetStateAction<ScheduleEvent[]>>;
   teams: Team[];
+  setTeams: React.Dispatch<React.SetStateAction<Team[]>>;
   selectedTeam: Team | null;
   setSelectedTeam: (team: Team | null) => void;
 }
@@ -49,6 +50,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         schedule,
         setSchedule,
         teams,
+        setTeams,
         selectedTeam,
         setSelectedTeam
     }}>
