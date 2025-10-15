@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useAppContext } from '@/context/app-context';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, ChevronRight } from 'lucide-react';
+import { Users, ChevronRight, LogOut } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 export default function TeamSelectionPage() {
@@ -20,12 +20,9 @@ export default function TeamSelectionPage() {
     return (
         <div className="flex min-h-screen items-center justify-center p-4">
             <div className="w-full max-w-2xl">
-                 <header className="flex flex-col sm:flex-row justify-between sm:items-center pb-4 mb-6">
-                    <div>
-                        <h1 className="text-2xl font-bold text-primary">Welcome, {currentUser?.name}</h1>
-                        <p className="text-sm text-muted-foreground">Please select a team to manage.</p>
-                    </div>
-                    <Button variant="secondary" size="sm" onClick={handleLogout} className="mt-4 sm:mt-0">Logout</Button>
+                 <header className="text-center pb-4 mb-6">
+                    <h1 className="text-2xl font-bold text-primary">Welcome, {currentUser?.name}</h1>
+                    <p className="text-sm text-muted-foreground">Please select a team to manage.</p>
                 </header>
                 <Card>
                     <CardContent className="p-0">
@@ -71,6 +68,12 @@ export default function TeamSelectionPage() {
                         </CardContent>
                     </Card>
                 )}
+                 <div className="text-center mt-8">
+                    <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-foreground">
+                        <LogOut className="mr-2 h-4 w-4"/>
+                        Logout
+                    </Button>
+                </div>
             </div>
         </div>
     );
