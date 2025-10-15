@@ -19,11 +19,6 @@ export function MessageList({ conversations }: MessageListProps) {
   const [replyingTo, setReplyingTo] = React.useState<string | null>(null);
   const [replyText, setReplyText] = React.useState("");
 
-  const sortedConversations = React.useMemo(() => {
-    const validConversations = conversations.filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()));
-    return validConversations.sort((a, b) => parseISO(b.timestamp!).getTime() - parseISO(a.timestamp!).getTime());
-  }, [conversations]);
-
   const handleReply = (conversationId: string) => {
     console.log(`Replying to ${conversationId}: ${replyText}`);
     // Here you would typically send the reply to your backend
@@ -31,7 +26,7 @@ export function MessageList({ conversations }: MessageListProps) {
     setReplyText("");
   };
 
-  if (sortedConversations.length === 0) {
+  if (conversations.length === 0) {
     return (
       <div className="text-center text-muted-foreground py-10">
         <p>No messages found.</p>
@@ -47,7 +42,7 @@ export function MessageList({ conversations }: MessageListProps) {
       value={replyingTo || undefined}
       onValueChange={setReplyingTo}
     >
-      {sortedConversations.map((convo) => (
+      {conversations.map((convo) => (
         <AccordionItem value={convo.id} key={convo.id}>
           <AccordionTrigger>
             <div className="flex items-center gap-4 w-full">
