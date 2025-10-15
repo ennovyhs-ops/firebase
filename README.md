@@ -9,30 +9,31 @@ A web-based application for sport coach to communicate and manage player.
 ## Features
 
 - **Authentication & Personalization**
-  - Simple login system for different user types (Coach, Player, Parent).
-  - Coach, Player and Parent use email and password to register own account.
-    - Coach to create new team or request join existing team by entering 8-digit code set by existing coach of team.
-    - Player/Parent after login, needs to enter a team 8-digit code to request joining team, to be approved by coach. 
+ - Simple login system for different user types (Coach, Player, Parent).
+ - Coach, Player and Parent use email and password to register own account.
+   - Coach to create new team or request join existing team by entering 8-digit code set by existing coach of team.
+   - Player/Parent after login, needs to enter a team 8-digit code to request joining team, to be approved by coach. 
   
 - **Coach View:**
  - **Team Selection**
-    - Coach select team from respective managing team list.
+   - Coach select team from respective managing team list.
  - **Dashboards**
-    - View team dashboard with upcoming events and activities and latest messages notofications.
+   - View team dashboard with upcoming events and activities and latest messages notofications.
  - **Roster Management**
-    - View a responsive list of all players on the team, with name, number and position, with sort and filter function.
-    - Coach confirm new player join request, badge with count to notify coach new request.
-    - Add notes to player for coach personal reference and records.
-    - Click a player to open a detailed modal view with full contact information and coaches notes for the player.
+   - View a responsive list of all players on the team, with name, number and position, with sort and filter function.
+   - Coach confirm new player join request, badge with count to notify coach new request.
+   - Add notes to player for coach personal reference and records.
+   - Click a player to open a detailed modal view with full contact information and coaches notes for the player.
     - Full roster management including photo, first name, last name, nickname, number, position, birth month and year,email and phone (add, view, edit, delete players and respective parent contact information).
-    - Add new players with details like photo, first name, last name, nickname, number, position, email, phone, birth month and year, parent info, and contact details.
-    - Edit and delete players directly from the player detail view.
-    - Add new player or parent using a coach set 8-digit team code for access with coach approval to confirm join. 
+   - Add new players with details like photo, first name, last name, nickname, number, position, email, phone, birth month and year, parent info, and contact details.
+   - Edit and delete players directly from the player detail view.
+   - Add new player or parent using a coach set 8-digit team code for access with coach approval to confirm join. 
  - **Message**
-    - Select and view messaage list, with sort and filter options.
-    - Coaches can compose and send or reply messages with a subject and body.
-    - Targeted messaging to different groups (everyone, just players, just parents and/or individual players with option to forward to respecitve parent).
-    - Centralized message history for coaches, players, and parents.
+   - Select and view message list, with sort and filter options.
+   - Messages in string
+   - Coaches can compose and send or reply messages with a subject and body.
+   - Targeted messaging to different groups (everyone, just players, just parents and/or individual players with option to forward to respecitve parent).
+  - Centralized message history for coaches, players, and parents.
     - Notification badge with count.
  - **Events**
    - Coaches can create new and manage team events (Practice, Game, Meeting, Other) with date, time, location, and details.
@@ -60,7 +61,8 @@ A web-based application for sport coach to communicate and manage player.
    - view team' coaches name
    - Only viewing a responsive list of all players on the team, with name, number and position, with sort and filter function. 
  - **Message**
-   - Select and view messaage list, with sort and filter options.
+   - Select and view message list, with sort and filter options.
+   - Messages in string
    - Player can compose and send or reply messages with a subject and body.
    - Targeted messaging to just coach or everyone.
    - Centralized message history for coaches, players, and parents.
@@ -87,7 +89,8 @@ A web-based application for sport coach to communicate and manage player.
  - **Team Roster**    
    - Only viewing a responsive list of all players on the team, with name, number and position, with sort and filter function. 
  - **Message**
-   - Select and view messaage list, with sort and filter options.
+   - Select and view message list, with sort and filter options.
+   - Messages in string
    - Parent can compose and send or reply messages with a subject and body.
    - Targeted messaging to just coach, everyone or just parent.
    - Centralized message history for coaches, players, and parents.
