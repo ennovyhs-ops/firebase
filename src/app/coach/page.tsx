@@ -278,7 +278,7 @@ export default function CoachDashboard() {
                                                     </Avatar>
                                                     <div>
                                                         <div className="font-medium">{player.name}</div>
-                                                        <div className="text-sm text-muted-foreground md:hidden">
+                                                        <div className="text-sm text-muted-foreground">
                                                             #{player.number} • {player.position}
                                                         </div>
                                                     </div>
@@ -459,5 +459,7 @@ export default function CoachDashboard() {
         </div>
     );
 }
+
+    
 
     
