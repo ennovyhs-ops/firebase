@@ -1,11 +1,17 @@
 
 "use client";
 
-import RosterPage from "../roster/page";
+import { useAppContext } from "@/context/app-context";
+import DashboardPage from "../dashboard/page";
+import TeamSelectionPage from "../teams/page";
 
 
 export default function CoachDashboard() {
-    return <RosterPage />;
-}
+    const { selectedTeam } = useAppContext();
 
-    
+    if (!selectedTeam) {
+        return <TeamSelectionPage />;
+    }
+
+    return <DashboardPage />;
+}

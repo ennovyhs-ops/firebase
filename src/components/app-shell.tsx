@@ -7,10 +7,9 @@ import LoginPage from '@/app/login/page';
 import CoachDashboard from '@/app/coach/page';
 import PlayerDashboard from '@/app/player/page';
 import ParentDashboard from '@/app/parent/page';
-import TeamSelectionPage from '@/app/teams/page';
 
 export function AppShell() {
-  const { currentUser, currentAccountType, selectedTeam } = useAppContext();
+  const { currentUser, currentAccountType } = useAppContext();
 
   if (!currentUser) {
     return <LoginPage />;
@@ -19,7 +18,7 @@ export function AppShell() {
   const renderDashboard = () => {
     switch(currentAccountType) {
         case 'coach':
-            return selectedTeam ? <CoachDashboard /> : <TeamSelectionPage />;
+            return <CoachDashboard />;
         case 'player':
             return <PlayerDashboard />;
         case 'parent':
