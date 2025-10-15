@@ -5,7 +5,8 @@ import React from 'react';
 import { useAppContext } from '@/context/app-context';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users } from 'lucide-react';
+import { Users, ChevronRight } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 export default function TeamSelectionPage() {
     const { teams, setSelectedTeam, currentUser, setCurrentUser } = useAppContext();
@@ -25,28 +26,39 @@ export default function TeamSelectionPage() {
                     </div>
                     <Button variant="secondary" size="sm" onClick={handleLogout} className="mt-4 sm:mt-0">Logout</Button>
                 </header>
-                <div className="grid md:grid-cols-2 gap-6">
-                    {teams.map((team) => (
-                        <Card key={team.id} className="hover:shadow-lg transition-shadow">
-                            <CardHeader>
-                                <div className='flex items-center gap-4'>
-                                    <div className="bg-primary text-primary-foreground p-3 rounded-lg">
-                                        <Users className="h-6 w-6" />
-                                    </div>
-                                    <div>
-                                        <CardTitle>{team.name}</CardTitle>
-                                        <CardDescription>{team.sport}</CardDescription>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                <Button className="w-full" onClick={() => setSelectedTeam(team)}>
-                                    Manage Team
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
+                <Card>
+                    <CardContent className="p-0">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Team</TableHead>
+                                    <TableHead>Sport</TableHead>
+                                    <TableHead className="text-right">Action</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {teams.map((team) => (
+                                    <TableRow key={team.id}>
+                                        <TableCell>
+                                            <div className="flex items-center gap-3">
+                                                <div className="bg-primary text-primary-foreground p-2 rounded-lg">
+                                                    <Users className="h-5 w-5" />
+                                                </div>
+                                                <span className="font-medium">{team.name}</span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>{team.sport}</TableCell>
+                                        <TableCell className="text-right">
+                                            <Button size="sm" onClick={() => setSelectedTeam(team)}>
+                                                Manage <ChevronRight className="ml-2 h-4 w-4" />
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
                  {teams.length === 0 && (
                     <Card>
                         <CardContent className="p-10 text-center">
