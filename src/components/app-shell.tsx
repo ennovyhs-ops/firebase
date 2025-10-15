@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/card";
 
 import { useAuth, useUser } from "@/firebase";
-import { signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { signOut, GoogleAuthProvider, signInWithPopup, signInAnonymously } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -136,7 +136,7 @@ function UserNav() {
               alt={user?.displayName || "Coach"}
             />
             <AvatarFallback>
-              {user?.displayName?.charAt(0) || "C"}
+              {user?.isAnonymous ? 'A' : (user?.displayName?.charAt(0) || "C")}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -145,10 +145,10 @@ function UserNav() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {user?.displayName || "Coach"}
+              {user?.isAnonymous ? "Anonymous User" : (user?.displayName || "Coach")}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {user?.email || "coach@example.com"}
+              {user?.isAnonymous ? user.uid : (user?.email || "coach@example.com")}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -209,14 +209,14 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const handleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Error signing in with Google", error);
+  React.useEffect(() => {
+    if (!isUserLoading && !user) {
+      signInAnonymously(auth).catch((error) => {
+        console.error("Anonymous sign-in failed:", error);
+      });
     }
-  };
+  }, [isUserLoading, user, auth]);
+
 
   // While loading or on the server, show a loading indicator.
   if (isUserLoading || !isClient) {
@@ -227,25 +227,13 @@ function AppShellInternal({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // If the user is not logged in, show the sign-in card.
+  // If the user is not logged in (which they will be shortly via anonymous)
+  // show a loading state instead of the sign-in card.
   if (!user) {
     return (
-      <div className="flex h-screen items-center justify-center bg-background">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">Welcome to Sixx</CardTitle>
-            <CardDescription>
-              Sign in to manage your sports team.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full" onClick={handleSignIn}>
-                <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 126 21.2 174 58.6l-67.4 66.5c-24.2-23.2-56.2-37.4-92.6-37.4-69.8 0-128.8 58.8-128.8 130.3s59 130.3 128.8 130.3c81.5 0 114.3-51.5 119.1-76.2h-119.1v-87.5h223.1c1.3 12.8 1.9 26.6 1.9 40.8z"></path></svg>
-              Sign In with Google
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+        <div className="flex h-screen items-center justify-center">
+            Signing in...
+        </div>
     );
   }
 
@@ -292,5 +280,3 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     // Let the internal component handle the logic once the client has mounted
     return <AppShellInternal>{children}</AppShellInternal>;
   }
-
-    
