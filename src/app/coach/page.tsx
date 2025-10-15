@@ -10,6 +10,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useAppContext } from '@/context/app-context';
 import type { Message, ScheduleEvent } from '@/lib/types';
+import { Home, Users, MessageSquare, Calendar, Send } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
 
 type Tab = 'dashboard' | 'players' | 'messages' | 'schedule' | 'send';
 
@@ -126,164 +129,189 @@ export default function CoachDashboard() {
         alert('Event added successfully!');
     }
 
-    const tabs: { id: Tab; label: string }[] = [
-        { id: 'dashboard', label: 'Dashboard' },
-        { id: 'players', label: 'Players' },
-        { id: 'messages', label: 'Messages' },
-        { id: 'schedule', label: 'Schedule' },
-        { id: 'send', label: 'Send Message' },
+    const tabs: { id: Tab; label: string, icon: React.ElementType }[] = [
+        { id: 'dashboard', label: 'Dashboard', icon: Home },
+        { id: 'players', label: 'Players', icon: Users },
+        { id: 'messages', label: 'Messages', icon: MessageSquare },
+        { id: 'schedule', label: 'Schedule', icon: Calendar },
+        { id: 'send', label: 'Send', icon: Send },
     ];
     
     return (
-        <div className="bg-white rounded-2xl p-4 md:p-8 shadow-2xl">
-            <header className="flex flex-col sm:flex-row justify-between sm:items-center pb-4 mb-6 border-b-2">
-                <div>
-                    <h1 className="text-2xl font-bold text-primary">{currentUser?.name}'s Dashboard</h1>
-                    <p className="text-sm text-muted-foreground">Head Coach</p>
-                </div>
-                <Button variant="secondary" size="sm" onClick={handleLogout} className="mt-4 sm:mt-0">Logout</Button>
-            </header>
+        <div className="pb-24">
+            <div className="bg-white rounded-2xl p-4 md:p-8 shadow-2xl">
+                <header className="flex flex-col sm:flex-row justify-between sm:items-center pb-4 mb-6 border-b-2">
+                    <div>
+                        <h1 className="text-2xl font-bold text-primary">{currentUser?.name}'s Dashboard</h1>
+                        <p className="text-sm text-muted-foreground">Head Coach</p>
+                    </div>
+                    <Button variant="secondary" size="sm" onClick={handleLogout} className="mt-4 sm:mt-0">Logout</Button>
+                </header>
 
-            <div className="flex space-x-1 border-b-2 mb-6 overflow-x-auto">
+                <div className={activeTab === 'dashboard' ? 'block' : 'hidden'}>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div className="stat-card text-center p-6 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
+                            <p className="text-4xl font-bold">{players.length}</p>
+                            <p className="text-sm opacity-90">Total Players</p>
+                        </div>
+                        <div className="stat-card text-center p-6 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
+                            <p className="text-4xl font-bold">{schedule.length}</p>
+                            <p className="text-sm opacity-90">Upcoming Events</p>
+                        </div>
+                    </div>
+
+                    <h3 className="text-xl font-bold mt-8 mb-4">Recent Activity</h3>
+                    <div>
+                        {messages.slice(0, 3).map((msg, i) => (
+                            <Card key={i} className="mb-4">
+                                <CardHeader>
+                                    <div className="flex justify-between">
+                                        <CardTitle className="text-md">Message Sent: {msg.subject}</CardTitle>
+                                        <p className="text-xs text-muted-foreground">{msg.time}</p>
+                                    </div>
+                                    <CardDescription>Sent to: {msg.to}</CardDescription>
+                                </CardHeader>
+                            </Card>
+                        ))}
+                        {messages.length === 0 && <p className="text-muted-foreground text-center py-8">No recent activity.</p>}
+                    </div>
+                </div>
+
+                <div className={activeTab === 'players' ? 'block' : 'hidden'}>
+                    <h2 className="text-xl font-bold mb-4">Team Roster</h2>
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {players.map((p, i) => <PlayerCard key={i} {...p} />)}
+                    </div>
+                </div>
+
+                <div className={activeTab === 'messages' ? 'block' : 'hidden'}>
+                    <h2 className="text-xl font-bold mb-4">All Messages</h2>
+                    <div>
+                        {messages.map((msg, i) => <MessageCard key={i} {...msg} />)}
+                        {messages.length === 0 && <p className="text-muted-foreground text-center py-8">No messages.</p>}
+                    </div>
+                </div>
+
+                <div className={activeTab === 'schedule' ? 'block' : 'hidden'}>
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-bold">Team Schedule</h2>
+                        <Button size="sm" onClick={() => setShowAddEventForm(true)}>+ Add Event</Button>
+                    </div>
+                    {showAddEventForm && (
+                        <Card className="mb-6">
+                            <CardHeader><CardTitle>Add New Event</CardTitle></CardHeader>
+                            <CardContent>
+                                <form onSubmit={handleAddEvent} className="space-y-4">
+                                    <div className="space-y-2">
+                                        <Label>Event Type</Label>
+                                        <Select name="type" required>
+                                            <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="Practice">Practice</SelectItem>
+                                                <SelectItem value="Game">Game</SelectItem>
+                                                <SelectItem value="Meeting">Meeting</SelectItem>
+                                                <SelectItem value="Other">Other</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="grid sm:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label>Date</Label>
+                                            <Input type="date" name="date" required />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label>Time</Label>
+                                            <Input type="time" name="time" required />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>Location</Label>
+                                        <Input name="location" placeholder="Enter location" required />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>Details</Label>
+                                        <Textarea name="details" placeholder="Additional information..." />
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <Button type="submit">Add Event</Button>
+                                        <Button type="button" variant="secondary" onClick={() => setShowAddEventForm(false)}>Cancel</Button>
+                                    </div>
+                                </form>
+                            </CardContent>
+                        </Card>
+                    )}
+                    <div>
+                        {schedule.map(e => <ScheduleItem key={e.id} {...e} />)}
+                        {schedule.length === 0 && <p className="text-muted-foreground text-center py-8">No events scheduled.</p>}
+                    </div>
+                </div>
+
+                <div className={activeTab === 'send' ? 'block' : 'hidden'}>
+                    <h2 className="text-xl font-bold mb-4">Send New Message</h2>
+                    <Card>
+                        <CardContent className="pt-6">
+                            <form onSubmit={handleSendMessage} className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label>Send To</Label>
+                                    <Select name="to" defaultValue="all">
+                                        <SelectTrigger><SelectValue placeholder="Select recipients" /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">All Players & Parents</SelectItem>
+                                            <SelectItem value="players">All Players</SelectItem>
+                                            <SelectItem value="parents">All Parents</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Subject</Label>
+                                    <Input name="subject" placeholder="Message subject" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Message</Label>
+                                    <Textarea name="body" placeholder="Type your message here..." />
+                                </div>
+                                <Button type="submit" className="w-full">Send Message</Button>
+                            </form>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+            
+            <div className="fixed bottom-0 left-0 right-0 bg-background border-t shadow-t-lg md:hidden">
+                <div className="flex justify-around">
+                    {tabs.map(tab => (
+                        <Button 
+                            key={tab.id}
+                            variant="ghost"
+                            className={cn(
+                                "flex flex-col items-center justify-center h-16 w-full rounded-none transition-colors duration-300",
+                                activeTab === tab.id ? 'text-primary' : 'text-muted-foreground'
+                            )}
+                            onClick={() => setActiveTab(tab.id)}
+                        >
+                            <tab.icon className="h-6 w-6" />
+                            <span className="text-xs">{tab.label}</span>
+                        </Button>
+                    ))}
+                </div>
+            </div>
+             <div className="hidden md:flex fixed bottom-4 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm border rounded-full shadow-lg p-1 z-10">
                 {tabs.map(tab => (
                     <Button 
                         key={tab.id}
                         variant="ghost"
-                        className={`whitespace-nowrap rounded-none text-muted-foreground transition-all duration-300 border-b-4 ${activeTab === tab.id ? 'border-primary text-primary' : 'border-transparent'}`}
+                        className={cn(
+                            "flex items-center gap-2 px-4 py-2 rounded-full transition-colors duration-300",
+                            activeTab === tab.id ? 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+                        )}
                         onClick={() => setActiveTab(tab.id)}
                     >
-                        {tab.label}
+                        <tab.icon className="h-5 w-5" />
+                        <span>{tab.label}</span>
                     </Button>
                 ))}
             </div>
-
-            <div className={activeTab === 'dashboard' ? 'block' : 'hidden'}>
-                <div className="grid md:grid-cols-2 gap-6">
-                    <div className="stat-card text-center p-6 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-                        <p className="text-4xl font-bold">{players.length}</p>
-                        <p className="text-sm opacity-90">Total Players</p>
-                    </div>
-                     <div className="stat-card text-center p-6 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-                        <p className="text-4xl font-bold">{schedule.length}</p>
-                        <p className="text-sm opacity-90">Upcoming Events</p>
-                    </div>
-                </div>
-
-                <h3 className="text-xl font-bold mt-8 mb-4">Recent Activity</h3>
-                <div>
-                    {messages.slice(0, 3).map((msg, i) => (
-                        <Card key={i} className="mb-4">
-                            <CardHeader>
-                                <div className="flex justify-between">
-                                    <CardTitle className="text-md">Message Sent: {msg.subject}</CardTitle>
-                                    <p className="text-xs text-muted-foreground">{msg.time}</p>
-                                </div>
-                                <CardDescription>Sent to: {msg.to}</CardDescription>
-                            </CardHeader>
-                        </Card>
-                    ))}
-                    {messages.length === 0 && <p className="text-muted-foreground text-center py-8">No recent activity.</p>}
-                </div>
-            </div>
-
-            <div className={activeTab === 'players' ? 'block' : 'hidden'}>
-                <h2 className="text-xl font-bold mb-4">Team Roster</h2>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {players.map((p, i) => <PlayerCard key={i} {...p} />)}
-                </div>
-            </div>
-
-            <div className={activeTab === 'messages' ? 'block' : 'hidden'}>
-                <h2 className="text-xl font-bold mb-4">All Messages</h2>
-                <div>
-                    {messages.map((msg, i) => <MessageCard key={i} {...msg} />)}
-                    {messages.length === 0 && <p className="text-muted-foreground text-center py-8">No messages.</p>}
-                </div>
-            </div>
-
-            <div className={activeTab === 'schedule' ? 'block' : 'hidden'}>
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold">Team Schedule</h2>
-                    <Button size="sm" onClick={() => setShowAddEventForm(true)}>+ Add Event</Button>
-                </div>
-                {showAddEventForm && (
-                     <Card className="mb-6">
-                        <CardHeader><CardTitle>Add New Event</CardTitle></CardHeader>
-                        <CardContent>
-                             <form onSubmit={handleAddEvent} className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label>Event Type</Label>
-                                    <Select name="type" required>
-                                        <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="Practice">Practice</SelectItem>
-                                            <SelectItem value="Game">Game</SelectItem>
-                                            <SelectItem value="Meeting">Meeting</SelectItem>
-                                            <SelectItem value="Other">Other</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="grid sm:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <Label>Date</Label>
-                                        <Input type="date" name="date" required />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label>Time</Label>
-                                        <Input type="time" name="time" required />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label>Location</Label>
-                                    <Input name="location" placeholder="Enter location" required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label>Details</Label>
-                                    <Textarea name="details" placeholder="Additional information..." />
-                                </div>
-                                <div className="flex gap-2">
-                                    <Button type="submit">Add Event</Button>
-                                    <Button type="button" variant="secondary" onClick={() => setShowAddEventForm(false)}>Cancel</Button>
-                                </div>
-                            </form>
-                        </CardContent>
-                    </Card>
-                )}
-                <div>
-                    {schedule.map(e => <ScheduleItem key={e.id} {...e} />)}
-                    {schedule.length === 0 && <p className="text-muted-foreground text-center py-8">No events scheduled.</p>}
-                </div>
-            </div>
-
-            <div className={activeTab === 'send' ? 'block' : 'hidden'}>
-                <h2 className="text-xl font-bold mb-4">Send New Message</h2>
-                <Card>
-                    <CardContent className="pt-6">
-                        <form onSubmit={handleSendMessage} className="space-y-4">
-                             <div className="space-y-2">
-                                <Label>Send To</Label>
-                                <Select name="to" defaultValue="all">
-                                    <SelectTrigger><SelectValue placeholder="Select recipients" /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="all">All Players & Parents</SelectItem>
-                                        <SelectItem value="players">All Players</SelectItem>
-                                        <SelectItem value="parents">All Parents</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-2">
-                                <Label>Subject</Label>
-                                <Input name="subject" placeholder="Message subject" />
-                            </div>
-                             <div className="space-y-2">
-                                <Label>Message</Label>
-                                <Textarea name="body" placeholder="Type your message here..." />
-                            </div>
-                            <Button type="submit" className="w-full">Send Message</Button>
-                        </form>
-                    </CardContent>
-                </Card>
-            </div>
         </div>
     );
-}
+
+    
