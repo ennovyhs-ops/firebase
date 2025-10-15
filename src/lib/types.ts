@@ -17,6 +17,9 @@ export type Player = {
     email: string;
     phone: string;
     photo?: string;
+    birthMonth?: string;
+    birthYear?: string;
+    notes?: string;
 };
 
 export type Message = {

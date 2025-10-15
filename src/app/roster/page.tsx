@@ -14,7 +14,6 @@ import {
   DialogFooter,
   DialogClose,
   DialogDescription,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   DropdownMenu,
@@ -29,7 +28,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import type { Player } from '@/lib/types';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import CoachLayout from '../coach/layout';
-
+import { Textarea } from '@/components/ui/textarea';
+import { Separator } from '@/components/ui/separator';
 
 export default function RosterPage() {
     const { players, setPlayers } = useAppContext();
@@ -56,6 +56,9 @@ export default function RosterPage() {
             parent: formData.get('parent') as string,
             email: formData.get('email') as string,
             phone: formData.get('phone') as string,
+            birthMonth: formData.get('birthMonth') as string,
+            birthYear: formData.get('birthYear') as string,
+            notes: formData.get('notes') as string,
         };
 
         if (dialogState === 'add') {
@@ -141,24 +144,36 @@ export default function RosterPage() {
 
                 {/* Add/Edit Dialog */}
                 <Dialog open={dialogState === 'add' || dialogState === 'edit'} onOpenChange={closeDialog}>
-                    <DialogContent>
+                    <DialogContent className="sm:max-w-[480px]">
                         <DialogHeader>
                             <DialogTitle>{dialogState === 'add' ? 'Add New Player' : `Edit ${selectedPlayer?.name}`}</DialogTitle>
                         </DialogHeader>
-                        <form onSubmit={handleFormSubmit} className="space-y-4">
+                        <form onSubmit={handleFormSubmit} className="space-y-4 max-h-[80vh] overflow-y-auto pr-6">
                              <div className="space-y-2">
                                 <Label htmlFor="name">Player Name</Label>
                                 <Input id="name" name="name" defaultValue={selectedPlayer?.name} required />
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="position">Position</Label>
-                                <Input id="position" name="position" defaultValue={selectedPlayer?.position} required />
+                             <div className="flex gap-4">
+                                <div className="space-y-2 flex-1">
+                                    <Label htmlFor="number">Jersey Number</Label>
+                                    <Input id="number" name="number" defaultValue={selectedPlayer?.number} required />
+                                </div>
+                                <div className="space-y-2 flex-1">
+                                    <Label htmlFor="position">Position</Label>
+                                    <Input id="position" name="position" defaultValue={selectedPlayer?.position} required />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="number">Jersey Number</Label>
-                                <Input id="number" name="number" defaultValue={selectedPlayer?.number} required />
+                            <div className="flex gap-4">
+                                <div className="space-y-2 flex-1">
+                                    <Label htmlFor="birthMonth">Birth Month</Label>
+                                    <Input id="birthMonth" name="birthMonth" defaultValue={selectedPlayer?.birthMonth} placeholder="e.g., January" />
+                                </div>
+                                <div className="space-y-2 flex-1">
+                                    <Label htmlFor="birthYear">Birth Year</Label>
+                                    <Input id="birthYear" name="birthYear" defaultValue={selectedPlayer?.birthYear} placeholder="e.g., 2010" />
+                                </div>
                             </div>
-                            <div className="space-y-2">
+                             <div className="space-y-2">
                                 <Label htmlFor="parent">Parent/Guardian Name</Label>
                                 <Input id="parent" name="parent" defaultValue={selectedPlayer?.parent} required />
                             </div>
@@ -170,7 +185,11 @@ export default function RosterPage() {
                                 <Label htmlFor="phone">Contact Phone</Label>
                                 <Input id="phone" name="phone" type="tel" defaultValue={selectedPlayer?.phone} required />
                             </div>
-                            <DialogFooter>
+                            <div className="space-y-2">
+                                <Label htmlFor="notes">Coach's Notes (Private)</Label>
+                                <Textarea id="notes" name="notes" defaultValue={selectedPlayer?.notes} />
+                            </div>
+                            <DialogFooter className="pt-4 sticky bottom-0 bg-background">
                                 <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
                                 <Button type="submit">{dialogState === 'add' ? 'Add Player' : 'Save Changes'}</Button>
                             </DialogFooter>
@@ -192,15 +211,29 @@ export default function RosterPage() {
                                 </div>
                             </DialogHeader>
                             <div className="py-4 space-y-6">
-                                <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <p className="text-sm"><Label className="w-24 inline-block font-semibold">Birthdate:</Label> {selectedPlayer.birthMonth} {selectedPlayer.birthYear}</p>
+                                </div>
+                                <Separator />
+                                <div className="space-y-2">
                                     <h3 className="font-semibold text-lg">Player Contact</h3>
-                                    <p className="text-sm"><Label className="w-20 inline-block">Email:</Label> {selectedPlayer.email}</p>
-                                    <p className="text-sm"><Label className="w-20 inline-block">Phone:</Label> {selectedPlayer.phone}</p>
+                                    <p className="text-sm"><Label className="w-24 inline-block">Email:</Label> {selectedPlayer.email}</p>
+                                    <p className="text-sm"><Label className="w-24 inline-block">Phone:</Label> {selectedPlayer.phone}</p>
                                 </div>
-                                <div className="space-y-4">
+                                <Separator />
+                                <div className="space-y-2">
                                     <h3 className="font-semibold text-lg">Parent/Guardian</h3>
-                                    <p className="text-sm"><Label className="w-20 inline-block">Name:</Label> {selectedPlayer.parent}</p>
+                                    <p className="text-sm"><Label className="w-24 inline-block">Name:</Label> {selectedPlayer.parent}</p>
                                 </div>
+                                {selectedPlayer.notes && (
+                                    <>
+                                        <Separator />
+                                        <div className="space-y-2">
+                                            <h3 className="font-semibold text-lg">Coach's Notes</h3>
+                                            <p className="text-sm whitespace-pre-wrap">{selectedPlayer.notes}</p>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                             <DialogFooter className="sm:justify-between gap-2">
                                 <Button variant="destructive" onClick={() => openDialog('delete', selectedPlayer)}>Delete Player</Button>
