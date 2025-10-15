@@ -38,9 +38,7 @@ export function MessageList({ conversations }: MessageListProps) {
     <Accordion 
       type="single" 
       collapsible 
-      className="w-full" 
-      value={replyingTo || undefined}
-      onValueChange={setReplyingTo}
+      className="w-full"
     >
       {conversations.map((convo) => (
         <AccordionItem value={convo.id} key={convo.id}>
@@ -64,25 +62,19 @@ export function MessageList({ conversations }: MessageListProps) {
             <div className="whitespace-pre-wrap px-4 py-2 bg-muted/50 rounded-md">
               {convo.body}
             </div>
-            <div className="mt-4 px-4">
-              <Separator className="my-4" />
-              <div className="space-y-2">
+            <Separator className="my-4" />
+            <div className="px-4 space-y-2">
                 <Textarea 
                   placeholder="Type your reply..." 
-                  value={replyingTo === convo.id ? replyText : ""}
-                  onChange={(e) => {
-                    if (replyingTo !== convo.id) setReplyingTo(convo.id);
-                    setReplyText(e.target.value)
-                  }}
-                  className="w-full"
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
                 />
                 <div className="flex justify-end">
-                   <Button onClick={() => handleReply(convo.id)} disabled={!replyText}>
+                   <Button onClick={() => handleReply(convo.id)} disabled={!replyText.trim()}>
                     Send Reply
                   </Button>
                 </div>
               </div>
-            </div>
           </AccordionContent>
         </AccordionItem>
       ))}

@@ -32,10 +32,10 @@ export default function LoginPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center p-4">
-            <Card className="w-full max-w-sm bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl">
+            <Card className="w-full max-w-sm">
                 <CardHeader className="text-center">
-                    <CardTitle className="text-3xl font-bold text-primary">⚽ TeamConnect</CardTitle>
-                    <CardDescription className="text-sm">Sports Team Management Platform</CardDescription>
+                    <CardTitle className="text-3xl font-bold text-primary">TeamConnect</CardTitle>
+                    <CardDescription>Sports Team Management Platform</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-3 gap-2 mb-6">
@@ -43,7 +43,7 @@ export default function LoginPage() {
                             <Button 
                                 key={type} 
                                 variant={currentAccountType === type ? "default" : "outline"}
-                                className={cn("capitalize transition-all duration-300", currentAccountType === type && "bg-primary text-primary-foreground")}
+                                className="capitalize"
                                 onClick={() => setCurrentAccountType(type)}
                             >
                                 {type}
@@ -59,7 +59,7 @@ export default function LoginPage() {
                             <Label htmlFor="password">Password</Label>
                             <Input id="password" name="password" type="password" required placeholder="Enter password" />
                         </div>
-                        <Button type="submit" className="w-full bg-primary hover:bg-primary/90">Login</Button>
+                        <Button type="submit" className="w-full">Login</Button>
                     </form>
                     <p className="text-center text-xs text-muted-foreground mt-4">
                         Demo: coach/coach123, player1/player123, parent1/parent123
