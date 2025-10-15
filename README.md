@@ -1,15 +1,22 @@
 # Firebase Studio
 
 This is a NextJS starter in Firebase Studio.
+
 # firebase
 
 A web-based application for sport coach to communicate and manage player. 
 
 ## Features
 
+- **Authentication & Personalization**
+  - Simple login system for different user types (Coach, Player, Parent).
+  - Coach, Player and Parent use email and password to register own account.
+    - Coach to create new team or request join existing team by entering 8-digit code set by existing coach of team.
+    - Player/Parent after login, needs to enter a team 8-digit code to request joining team, to be approved by coach. 
+  
 - **User Roles & Dashboards**
   - **Coach View:**
-    - Select and manage multiple teams.
+    - First to select and manage multiple teams.
     - View team dashboard with upcoming events and activities and latest messages notofications.
     - Full roster management including photo, first name, last name, nickname, number, position, birth month and year,email and phone (add, view, edit, delete players and respective parent contact information).
     - Add notes to player for coach personal reference and recording
@@ -59,9 +66,7 @@ A web-based application for sport coach to communicate and manage player.
   - A dedicated flow (`analyze-performance-data.ts`) to analyze game statistics and player data.
   - Provides overall team analysis, player-specific recommendations, and strategic adjustments.
 
-- **Authentication & Personalization**
-  - Simple login system for different user types (Coach, Player, Parent).
-  - Use email and password to register account.
-  - Additional coach join team by email invitation link only. 
-  - Player/Parent to enter a team 8-digit code to access team. 
-  - Coaches can upload and display a custom logo and name for their team.
+- **Team Settings**
+  - Existing coach to a team may add new coach to join team to help manage by email invitation link only. 
+  - Coach can upload and display a custom logo and name for their team.
+ 
