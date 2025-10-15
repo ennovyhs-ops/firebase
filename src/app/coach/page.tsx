@@ -226,11 +226,7 @@ export default function CoachDashboard() {
                 </header>
 
                 <div className={activeTab === 'dashboard' ? 'block' : 'hidden'}>
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <div className="stat-card text-center p-6 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-                            <p className="text-4xl font-bold">{players.length}</p>
-                            <p className="text-sm opacity-90">Total Players</p>
-                        </div>
+                    <div className="grid grid-cols-1 gap-6">
                         <div className="stat-card text-center p-6 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
                             <p className="text-4xl font-bold">{schedule.length}</p>
                             <p className="text-sm opacity-90">Upcoming Events</p>
@@ -636,3 +632,5 @@ export default function CoachDashboard() {
         </div>
     );
 }
+
+    
