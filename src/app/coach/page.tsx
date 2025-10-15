@@ -53,7 +53,7 @@ function ScheduleItem({ type, date, time, location, details }: Omit<ScheduleEven
 
 
 export default function CoachDashboard() {
-    const { currentUser, players, setPlayers, messages, setMessages, schedule, setSchedule, selectedTeam, setSelectedTeam, teams, setTeams } = useAppContext();
+    const { currentUser, players, setPlayers, messages, setMessages, schedule, setSchedule, selectedTeam, setSelectedTeam, teams, setTeams, setCurrentUser } = useAppContext();
     const [activeTab, setActiveTab] = useState<Tab>('dashboard');
     const [showAddEventForm, setShowAddEventForm] = useState(false);
     const [isAddPlayerOpen, setIsAddPlayerOpen] = useState(false);
@@ -81,6 +81,7 @@ export default function CoachDashboard() {
         setMessages([newMessage, ...messages]);
         alert('Message sent!');
         e.currentTarget.reset();
+        setActiveTab('messages');
     };
     
     const handleAddEvent = (e: React.FormEvent<HTMLFormElement>) => {
@@ -146,13 +147,17 @@ export default function CoachDashboard() {
             reader.readAsDataURL(file);
         }
     };
+     
+    const handleLogout = () => {
+        setSelectedTeam(null);
+        setCurrentUser(null);
+    };
 
     const tabs: { id: Tab; label: string, icon: React.ElementType }[] = [
         { id: 'dashboard', label: 'Dashboard', icon: Home },
         { id: 'players', label: 'Players', icon: Users },
         { id: 'messages', label: 'Messages', icon: MessageSquare },
         { id: 'schedule', label: 'Schedule', icon: Calendar },
-        { id: 'send', label: 'Send', icon: Send },
         { id: 'settings', label: 'Settings', icon: Settings },
     ];
     
@@ -167,10 +172,16 @@ export default function CoachDashboard() {
                             <p className="text-sm text-muted-foreground">{currentUser?.name} - Head Coach</p>
                         </div>
                     </div>
-                    <Button variant="outline" size="sm" onClick={handleSwitchTeam} className="mt-4 sm:mt-0">
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Switch Team
-                    </Button>
+                     <div className="flex items-center gap-2 mt-4 sm:mt-0">
+                        <Button variant="outline" size="sm" onClick={() => setActiveTab('send')}>
+                            <Send className="mr-2 h-4 w-4" />
+                            New Message
+                        </Button>
+                         <Button variant="ghost" size="sm" onClick={handleSwitchTeam}>
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Switch Team
+                        </Button>
+                    </div>
                 </header>
 
                 <div className={activeTab === 'dashboard' ? 'block' : 'hidden'}>
@@ -281,7 +292,13 @@ export default function CoachDashboard() {
                 </div>
 
                 <div className={activeTab === 'messages' ? 'block' : 'hidden'}>
-                    <h2 className="text-xl font-bold mb-4">All Messages</h2>
+                     <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-bold">All Messages</h2>
+                        <Button size="sm" onClick={() => setActiveTab('send')}>
+                            <Send className="mr-2 h-4 w-4" />
+                            New Message
+                        </Button>
+                    </div>
                     <div>
                         {messages.map((msg, i) => <MessageCard key={i} message={msg} id={i} />)}
                         {messages.length === 0 && <p className="text-muted-foreground text-center py-8">No messages.</p>}
@@ -343,7 +360,12 @@ export default function CoachDashboard() {
                 </div>
 
                 <div className={activeTab === 'send' ? 'block' : 'hidden'}>
-                    <h2 className="text-xl font-bold mb-4">Send New Message</h2>
+                     <div className="flex items-center gap-2 mb-4">
+                        <Button variant="ghost" size="icon" onClick={() => setActiveTab('messages')}>
+                            <ArrowLeft />
+                        </Button>
+                        <h2 className="text-xl font-bold">Send New Message</h2>
+                    </div>
                     <Card>
                         <CardContent className="pt-6">
                             <form onSubmit={handleSendMessage} className="space-y-4">
