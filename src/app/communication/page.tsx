@@ -44,11 +44,14 @@ export default function CommunicationPage() {
       );
     }
 
-    // Sort
+    // Stable Sort
     conversations.sort((a, b) => {
       const dateA = parseISO(a.timestamp!).getTime();
       const dateB = parseISO(b.timestamp!).getTime();
-      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+      const order = sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+      if (order !== 0) return order;
+      // If dates are equal, maintain original order for stability
+      return allConversations.indexOf(a) - allConversations.indexOf(b);
     });
 
     return conversations;
