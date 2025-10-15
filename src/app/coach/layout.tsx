@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, Calendar, MessageSquare } from 'lucide-react';
+import { Home, Users, Calendar, MessageSquare, UserCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
     { href: '/roster', icon: Users, label: 'Roster' },
     { href: '/schedule', icon: Calendar, label: 'Schedule' },
     { href: '/communication', icon: MessageSquare, label: 'Messages' },
+    { href: '/profile', icon: UserCircle, label: 'Profile' },
 ];
 
 export default function CoachLayout({ children }: { children: React.ReactNode }) {
@@ -23,7 +24,7 @@ export default function CoachLayout({ children }: { children: React.ReactNode })
                 {children}
             </main>
             <footer className="fixed bottom-0 left-0 right-0 bg-background border-t">
-                <nav className="grid grid-cols-4 h-16 items-center">
+                <nav className="grid grid-cols-5 h-16 items-center">
                     {navItems.map((item) => (
                         <Link key={item.href} href={item.href} className="flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-primary transition-colors">
                             <item.icon className={cn("size-6", pathname.startsWith(item.href) && "text-primary")} />
@@ -35,5 +36,3 @@ export default function CoachLayout({ children }: { children: React.ReactNode })
         </div>
     );
 }
-
-    
