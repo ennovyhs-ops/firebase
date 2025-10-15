@@ -11,9 +11,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useAppContext } from '@/context/app-context';
 import type { Message, ScheduleEvent, Player } from '@/lib/types';
-import { Home, Users, MessageSquare, Calendar, Send, UserPlus, ArrowLeft, Settings, Upload, Mail, Phone, User as UserIcon } from 'lucide-react';
+import { Home, Users, MessageSquare, Calendar, Send, UserPlus, ArrowLeft, Settings, Upload, Mail, Phone, User as UserIcon, Trash2, Edit } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -60,7 +61,8 @@ export default function CoachDashboard() {
     const [logoPreview, setLogoPreview] = useState<string | null>(selectedTeam?.logo || null);
     const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
     const [isPlayerDetailOpen, setIsPlayerDetailOpen] = useState(false);
-
+    const [isEditPlayerOpen, setIsEditPlayerOpen] = useState(false);
+    const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
     const handleSwitchTeam = () => {
         setSelectedTeam(null);
@@ -113,6 +115,7 @@ export default function CoachDashboard() {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const newPlayer: Player = {
+            id: `p${Date.now()}`,
             name: formData.get("name") as string,
             position: formData.get("position") as string,
             number: formData.get("number") as string,
@@ -131,6 +134,37 @@ export default function CoachDashboard() {
         e.currentTarget.reset();
         alert('Player added successfully!');
     };
+    
+    const handleEditPlayer = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!selectedPlayer) return;
+
+        const formData = new FormData(e.currentTarget);
+        const updatedPlayer: Player = {
+            ...selectedPlayer,
+            name: formData.get("name") as string,
+            position: formData.get("position") as string,
+            number: formData.get("number") as string,
+            parent: formData.get("parent") as string,
+            email: formData.get("email") as string,
+        };
+
+        setPlayers(players.map(p => p.id === selectedPlayer.id ? updatedPlayer : p));
+        setSelectedPlayer(updatedPlayer);
+        setIsEditPlayerOpen(false);
+        alert('Player updated successfully!');
+    };
+
+    const handleDeletePlayer = () => {
+        if (!selectedPlayer) return;
+
+        setPlayers(players.filter(p => p.id !== selectedPlayer.id));
+        setIsDeleteConfirmOpen(false);
+        setIsPlayerDetailOpen(false);
+        setSelectedPlayer(null);
+        alert('Player deleted successfully!');
+    };
+
 
      const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -160,6 +194,11 @@ export default function CoachDashboard() {
         setSelectedPlayer(player);
         setIsPlayerDetailOpen(true);
     };
+
+    const openEditDialog = () => {
+        setIsPlayerDetailOpen(false);
+        setIsEditPlayerOpen(true);
+    }
 
     const tabs: { id: Tab; label: string, icon: React.ElementType }[] = [
         { id: 'dashboard', label: 'Dashboard', icon: Home },
@@ -275,8 +314,8 @@ export default function CoachDashboard() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {players.map((player, index) => (
-                                        <TableRow key={index} onClick={() => handlePlayerRowClick(player)} className="cursor-pointer">
+                                    {players.map((player) => (
+                                        <TableRow key={player.id} onClick={() => handlePlayerRowClick(player)} className="cursor-pointer">
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     <Avatar>
@@ -477,7 +516,76 @@ export default function CoachDashboard() {
                                     </div>
                                 </div>
                             </div>
+                            <DialogFooter className="flex-row justify-end gap-2">
+                                <Button variant="outline" onClick={openEditDialog}>
+                                    <Edit className="mr-2 h-4 w-4" /> Edit
+                                </Button>
+                                <AlertDialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
+                                    <AlertDialogTrigger asChild>
+                                        <Button variant="destructive">
+                                            <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. This will permanently delete the player
+                                                and remove their data from our servers.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction onClick={handleDeletePlayer}>Delete</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            </DialogFooter>
                         </>
+                    )}
+                </DialogContent>
+            </Dialog>
+
+            {/* Edit Player Dialog */}
+             <Dialog open={isEditPlayerOpen} onOpenChange={setIsEditPlayerOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Edit Player</DialogTitle>
+                        <DialogDescription>
+                            Update the details for {selectedPlayer?.name}. Click save when you're done.
+                        </DialogDescription>
+                    </DialogHeader>
+                    {selectedPlayer && (
+                        <form onSubmit={handleEditPlayer} className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="edit-name">Player Name</Label>
+                                <Input id="edit-name" name="name" defaultValue={selectedPlayer.name} required />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="edit-position">Position</Label>
+                                    <Input id="edit-position" name="position" defaultValue={selectedPlayer.position} required />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="edit-number">Jersey Number</Label>
+                                    <Input id="edit-number" name="number" type="text" defaultValue={selectedPlayer.number} required />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="edit-parent">Parent/Guardian</Label>
+                                <Input id="edit-parent" name="parent" defaultValue={selectedPlayer.parent} required />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="edit-email">Parent's Email</Label>
+                                <Input id="edit-email" name="email" type="email" defaultValue={selectedPlayer.email} required />
+                            </div>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button type="button" variant="secondary">Cancel</Button>
+                                </DialogClose>
+                                <Button type="submit">Save Changes</Button>
+                            </DialogFooter>
+                        </form>
                     )}
                 </DialogContent>
             </Dialog>
@@ -519,7 +627,3 @@ export default function CoachDashboard() {
         </div>
     );
 }
-
-    
-
-    

@@ -10,6 +10,7 @@ export type User = {
 }
 
 export type Player = {
+    id: string;
     name: string;
     position: string;
     number: string;
