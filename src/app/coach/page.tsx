@@ -263,8 +263,6 @@ export default function CoachDashboard() {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>Player</TableHead>
-                                        <TableHead className="hidden md:table-cell">Position</TableHead>
-                                        <TableHead className="text-center">#</TableHead>
                                         <TableHead className="hidden md:table-cell">Parent/Guardian</TableHead>
                                         <TableHead className="hidden md:table-cell">Email</TableHead>
                                     </TableRow>
@@ -278,11 +276,14 @@ export default function CoachDashboard() {
                                                         {player.photo && <AvatarImage src={player.photo} alt={player.name} />}
                                                         <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
                                                     </Avatar>
-                                                    <span className="font-medium">{player.name}</span>
+                                                    <div>
+                                                        <div className="font-medium">{player.name}</div>
+                                                        <div className="text-sm text-muted-foreground md:hidden">
+                                                            #{player.number} • {player.position}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="hidden md:table-cell">{player.position}</TableCell>
-                                            <TableCell className="text-center">{player.number}</TableCell>
                                             <TableCell className="hidden md:table-cell">{player.parent}</TableCell>
                                             <TableCell className="hidden md:table-cell">{player.email}</TableCell>
                                         </TableRow>
