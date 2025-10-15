@@ -20,6 +20,8 @@ import {
 import { schedule as allSchedule, conversations as allConversations } from '@/lib/data';
 import { format, parseISO } from 'date-fns';
 import { Separator } from "@/components/ui/separator";
+import { ScheduleItem } from "@/components/schedule-item";
+
 
 export function DashboardClient() {
 
@@ -57,16 +59,10 @@ export function DashboardClient() {
               <div className="space-y-4 flex-grow flex flex-col justify-between">
                 <div className="space-y-3">
                   {upcomingEvents.map((event, index) => (
-                    <div key={event.id}>
+                    <React.Fragment key={event.id}>
                       {index > 0 && <Separator className="my-3" />}
-                      <div>
-                        <h3 className="font-semibold text-primary leading-tight">{event.type}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {format(new Date(event.date), "EEE, MMM d")} @ {event.time}
-                        </p>
-                        <p className="text-sm">{event.location}</p>
-                      </div>
-                    </div>
+                      <ScheduleItem event={event} />
+                    </React.Fragment>
                   ))}
                 </div>
                 <Button asChild size="sm" className="w-full mt-4">
