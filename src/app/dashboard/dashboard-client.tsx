@@ -17,10 +17,8 @@ import {
   CalendarDays,
   MessageSquare,
 } from "lucide-react";
-import { PageHeader } from "@/components/page-header";
-import { schedule as allSchedule } from '../schedule/data';
+import { schedule as allSchedule, conversations as allConversations } from '@/lib/data';
 import { format, parseISO } from 'date-fns';
-import { conversations as allConversations } from "../communication/data";
 import { Separator } from "@/components/ui/separator";
 
 export function DashboardClient() {
@@ -33,16 +31,17 @@ export function DashboardClient() {
 
   const conversations = React.useMemo(() => {
      // Ensure timestamps are valid before sorting
-    const validConversations = allConversations.filter(c => !isNaN(parseISO(c.timestamp).getTime()));
-    return validConversations.sort((a,b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime()).slice(0,3);
+    const validConversations = allConversations.filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()));
+    return validConversations.sort((a,b) => parseISO(b.timestamp!).getTime() - parseISO(a.timestamp!).getTime()).slice(0,3);
   }, []);
 
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <PageHeader
-        title="Welcome Back, Coach!"
-      />
+        <div className="mb-8">
+            <h1 className="text-3xl font-bold tracking-tight">Welcome Back, Coach!</h1>
+            <p className="text-muted-foreground">Here's a summary of what's happening with your team.</p>
+        </div>
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <Card className="flex flex-col">
            <CardHeader>
@@ -61,9 +60,9 @@ export function DashboardClient() {
                     <div key={event.id}>
                       {index > 0 && <Separator className="my-3" />}
                       <div>
-                        <h3 className="font-semibold text-primary leading-tight">{event.title} ({event.type})</h3>
+                        <h3 className="font-semibold text-primary leading-tight">{event.type}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {format(new Date(event.date), "EEE, MMM d")} @ {event.startTime}
+                          {format(new Date(event.date), "EEE, MMM d")} @ {event.time}
                         </p>
                         <p className="text-sm">{event.location}</p>
                       </div>
@@ -100,7 +99,7 @@ export function DashboardClient() {
                             <Link href={`/communication?id=${convo.id}`} className="font-medium text-primary hover:underline leading-tight">
                                 {convo.subject}
                             </Link>
-                            <p className="text-xs text-muted-foreground truncate">To: {convo.recipient}</p>
+                            <p className="text-xs text-muted-foreground truncate">To: {Array.isArray(convo.recipient) ? convo.recipient.join(', ') : convo.recipient}</p>
                         </div>
                     ))}
                 </div>

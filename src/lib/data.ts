@@ -1,6 +1,5 @@
 
-
-import type { User, Player, ScheduleEvent, Team } from './types';
+import type { User, Player, ScheduleEvent, Team, Conversation } from './types';
 
 export const users: Record<string, User> = {
     coach: { username: 'coach', password: 'coach123', name: 'Coach Johnson' },
@@ -40,10 +39,7 @@ export const teams: Team[] = [
 ];
 
 
-// This is the data that was in communication/data.ts and schedule/data.ts
-// I'm keeping it here to be re-integrated if needed.
-
-export const conversations = [
+export const conversations: Conversation[] = [
   {
     id: "msg001",
     recipient: "All Players & Parents",
@@ -66,5 +62,3 @@ export const conversations = [
     timestamp: "2024-04-27T11:45:00Z"
   }
 ];
-
-    

@@ -9,22 +9,29 @@ import PlayerDashboard from '@/app/player/page';
 import ParentDashboard from '@/app/parent/page';
 import TeamSelectionPage from '@/app/teams/page';
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell() {
   const { currentUser, currentAccountType, selectedTeam } = useAppContext();
 
   if (!currentUser) {
     return <LoginPage />;
   }
 
-  if (currentAccountType === 'coach' && !selectedTeam) {
-    return <TeamSelectionPage />;
+  const renderDashboard = () => {
+    switch(currentAccountType) {
+        case 'coach':
+            return selectedTeam ? <CoachDashboard /> : <TeamSelectionPage />;
+        case 'player':
+            return <PlayerDashboard />;
+        case 'parent':
+            return <ParentDashboard />;
+        default:
+            return <LoginPage />;
+    }
   }
 
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">
-        {currentAccountType === 'coach' && <CoachDashboard />}
-        {currentAccountType === 'player' && <PlayerDashboard />}
-        {currentAccountType === 'parent' && <ParentDashboard />}
+        {renderDashboard()}
     </div>
   );
 }

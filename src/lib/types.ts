@@ -1,5 +1,4 @@
 
-
 export type AccountType = 'coach' | 'player' | 'parent';
 
 export type User = {
@@ -28,6 +27,14 @@ export type Message = {
     time: string;
 };
 
+export interface Conversation {
+  id: string;
+  recipient: string | string[];
+  subject: string;
+  body: string;
+  timestamp?: string;
+}
+
 export type ScheduleEvent = {
     id: string;
     type: 'Practice' | 'Game' | 'Meeting' | 'Other';
@@ -43,5 +50,3 @@ export type Team = {
     sport: string;
     logo?: string;
 }
-
-    
