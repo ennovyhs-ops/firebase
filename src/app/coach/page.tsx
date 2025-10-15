@@ -13,26 +13,11 @@ import type { Message, ScheduleEvent, Player } from '@/lib/types';
 import { Home, Users, MessageSquare, Calendar, Send, UserPlus, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 
 type Tab = 'dashboard' | 'players' | 'messages' | 'schedule' | 'send';
-
-function PlayerCard({ name, position, number, parent, email }: { name: string, position: string, number: string, parent: string, email: string }) {
-    return (
-        <Card className="text-center bg-white shadow-lg rounded-xl">
-            <CardContent className="p-6">
-                <div className="w-20 h-20 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
-                    {name.charAt(0)}
-                </div>
-                <p className="font-bold text-lg">{name}</p>
-                <p className="text-sm text-muted-foreground">Position: {position}</p>
-                <p className="text-sm text-muted-foreground">Number: #{number}</p>
-                <p className="text-sm text-muted-foreground mt-2">Parent: {parent}</p>
-                <p className="text-sm text-muted-foreground">{email}</p>
-            </CardContent>
-        </Card>
-    );
-}
 
 function MessageCard({ message, id }: { message: string, id: number }) {
     return (
@@ -234,9 +219,39 @@ export default function CoachDashboard() {
                             </DialogContent>
                         </Dialog>
                     </div>
-                    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {players.map((p, i) => <PlayerCard key={i} {...p} />)}
-                    </div>
+                     <Card>
+                        <CardContent className="p-0">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Player</TableHead>
+                                        <TableHead>Position</TableHead>
+                                        <TableHead className="text-center">#</TableHead>
+                                        <TableHead>Parent/Guardian</TableHead>
+                                        <TableHead>Email</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {players.map((player, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell>
+                                                <div className="flex items-center gap-3">
+                                                    <Avatar>
+                                                        <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
+                                                    </Avatar>
+                                                    <span className="font-medium">{player.name}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell>{player.position}</TableCell>
+                                            <TableCell className="text-center">{player.number}</TableCell>
+                                            <TableCell>{player.parent}</TableCell>
+                                            <TableCell>{player.email}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 <div className={activeTab === 'messages' ? 'block' : 'hidden'}>
