@@ -16,14 +16,17 @@ import {
   BarChart3,
   CalendarDays,
   MessageSquare,
+  SwitchCamera,
 } from "lucide-react";
 import { schedule as allSchedule, conversations as allConversations } from '@/lib/data';
 import { format, parseISO } from 'date-fns';
 import { Separator } from "@/components/ui/separator";
 import { ScheduleItem } from "@/components/schedule-item";
+import { useAppContext } from "@/context/app-context";
 
 
 export function DashboardClient() {
+  const { setSelectedTeam } = useAppContext();
 
   const upcomingEvents = React.useMemo(() => {
     // Ensure dates are valid before sorting
@@ -130,6 +133,13 @@ export function DashboardClient() {
         </CardContent>
         </Card>
       </div>
+
+       <div className="mt-12 text-center">
+          <Button variant="outline" onClick={() => setSelectedTeam(null)}>
+            <SwitchCamera className="mr-2 size-4" />
+            Switch Team
+          </Button>
+        </div>
     </div>
   );
 }
