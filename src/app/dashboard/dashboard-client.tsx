@@ -16,23 +16,31 @@ import {
   BarChart3,
   CalendarDays,
   MessageSquare,
+  SwitchCamera,
 } from "lucide-react";
 import { schedule as allSchedule, conversations as allConversations } from '@/lib/data';
-import { format, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { Separator } from "@/components/ui/separator";
 import { ScheduleItem } from "@/components/schedule-item";
+import { useAppContext } from "@/context/app-context";
 
 export function DashboardClient() {
+  const { setSelectedTeam } = useAppContext();
 
   const upcomingEvents = React.useMemo(() => {
-    // Ensure dates are valid before sorting
     const validEvents = allSchedule.filter(e => !isNaN(new Date(e.date).getTime()));
     return validEvents.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 2);
   }, []);
 
   const conversations = React.useMemo(() => {
     const validConversations = [...allConversations].filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()));
-    return validConversations.sort((a, b) => parseISO(b.timestamp!).getTime() - parseISO(a.timestamp!).getTime()).slice(0, 3);
+    return validConversations.sort((a, b) => {
+        const dateA = parseISO(a.timestamp!).getTime();
+        const dateB = parseISO(b.timestamp!).getTime();
+        if (dateB !== dateA) return dateB - dateA;
+        // Secondary sort for stability if timestamps are identical
+        return a.id.localeCompare(b.id);
+    }).slice(0, 3);
   }, []);
 
 
@@ -127,6 +135,12 @@ export function DashboardClient() {
             </Button>
         </CardContent>
         </Card>
+      </div>
+      <div className="mt-8 text-center">
+          <Button variant="outline" onClick={() => setSelectedTeam(null)}>
+              <SwitchCamera className="mr-2" />
+              Switch Team
+          </Button>
       </div>
     </div>
   );

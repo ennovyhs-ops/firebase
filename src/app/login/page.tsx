@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAppContext } from '@/context/app-context';
 import type { AccountType } from '@/lib/types';
-import { cn } from '@/lib/utils';
 
 export default function LoginPage() {
     const { setCurrentUser, users, currentAccountType, setCurrentAccountType } = useAppContext();
@@ -31,10 +30,10 @@ export default function LoginPage() {
     const accountTypes: AccountType[] = ['coach', 'player', 'parent'];
 
     return (
-        <div className="flex min-h-screen items-center justify-center p-4">
+        <div className="flex min-h-screen items-center justify-center bg-muted/40 p-4">
             <Card className="w-full max-w-sm">
                 <CardHeader className="text-center">
-                    <CardTitle className="text-3xl font-bold text-primary">TeamConnect</CardTitle>
+                    <CardTitle className="text-3xl font-bold">TeamConnect</CardTitle>
                     <CardDescription>Sports Team Management Platform</CardDescription>
                 </CardHeader>
                 <CardContent>
