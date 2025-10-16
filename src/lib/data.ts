@@ -10,12 +10,12 @@ export const users: Record<string, User> = {
 };
 
 export const players: Player[] = [
-    { id: 'p1', name: 'Alex Martinez', position: 'Forward', number: '10', parent: 'Maria Martinez', email: 'maria@email.com', phone: '111-222-3333', photo: 'https://picsum.photos/seed/p1/200', birthMonth: "May", birthYear: "2010", notes: "Excellent dribbler, needs to work on left-foot finishing." },
-    { id: 'p2', name: 'Sam Chen', position: 'Midfielder', number: '7', parent: 'David Chen', email: 'david@email.com', phone: '222-333-4444', photo: 'https://picsum.photos/seed/p2/200', birthMonth: "July", birthYear: "2011", notes: "" },
-    { id: 'p3', name: 'Jordan Smith', position: 'Defender', number: '5', parent: 'John Smith', email: 'john@email.com', phone: '333-444-5555', photo: 'https://picsum.photos/seed/p3/200', birthMonth: "August", birthYear: "2010", notes: "Strong tackler, but can be overly aggressive at times." },
-    { id: 'p4', name: 'Taylor Brown', position: 'Goalkeeper', number: '1', parent: 'Lisa Brown', email: 'lisa@email.com', phone: '444-555-6666', photo: 'https://picsum.photos/seed/p4/200', birthMonth: "February", birthYear: "2010", notes: "" },
-    { id: 'p5', name: 'Casey Davis', position: 'Forward', number: '11', parent: 'Mike Davis', email: 'mike@email.com', phone: '555-666-7777', photo: 'https://picsum.photos/seed/p5/200', birthMonth: "November", birthYear: "2011", notes: "" },
-    { id: 'p6', name: 'Morgan Lee', position: 'Midfielder', number: '8', parent: 'Sarah Lee', email: 'sarah@email.com', phone: '666-777-8888', photo: 'https://picsum.photos/seed/p6/200', birthMonth: "September", birthYear: "2010", notes: "Great field vision." }
+    { id: 'p1', name: 'Alex Martinez', nickname: 'Alex', position: 'Forward', number: '10', parent: 'Maria Martinez', email: 'alex@email.com', phone: '111-222-3333', photo: 'https://picsum.photos/seed/p1/200', birthMonth: "May", birthYear: "2010", notes: "Excellent dribbler, needs to work on left-foot finishing." },
+    { id: 'p2', name: 'Sam Chen', nickname: 'Sam', position: 'Midfielder', number: '7', parent: 'David Chen', email: 'sam@email.com', phone: '222-333-4444', photo: 'https://picsum.photos/seed/p2/200', birthMonth: "July", birthYear: "2011", notes: "" },
+    { id: 'p3', name: 'Jordan Smith', nickname: 'Jordan', position: 'Defender', number: '5', parent: 'John Smith', email: 'jordan@email.com', phone: '333-444-5555', photo: 'https://picsum.photos/seed/p3/200', birthMonth: "August", birthYear: "2010", notes: "Strong tackler, but can be overly aggressive at times." },
+    { id: 'p4', name: 'Taylor Brown', nickname: 'Taylor', position: 'Goalkeeper', number: '1', parent: 'Lisa Brown', email: 'taylor@email.com', phone: '444-555-6666', photo: 'https://picsum.photos/seed/p4/200', birthMonth: "February", birthYear: "2010", notes: "" },
+    { id: 'p5', name: 'Casey Davis', nickname: 'Casey', position: 'Forward', number: '11', parent: 'Mike Davis', email: 'casey@email.com', phone: '555-666-7777', photo: 'https://picsum.photos/seed/p5/200', birthMonth: "November", birthYear: "2011", notes: "" },
+    { id: 'p6', name: 'Morgan Lee', nickname: 'Morgan', position: 'Midfielder', number: '8', parent: 'Sarah Lee', email: 'morgan@email.com', phone: '666-777-8888', photo: 'https://picsum.photos/seed/p6/200', birthMonth: "September", birthYear: "2010", notes: "Great field vision." }
 ];
 
 export const messages: string[] = [
@@ -42,21 +42,21 @@ export const teams: Team[] = [
 export const conversations: Conversation[] = [
   {
     id: "msg001",
-    recipient: "All Players & Parents",
+    recipient: ["All Players", "All Parents", "Everyone"],
     subject: "Practice Canceled Today (April 29)",
     body: "Hi Team,\n\nDue to the heavy rain and waterlogged fields, we're canceling practice today, April 29th. Please stay safe and dry.\n\nWe'll see you at Wednesday's practice.\n\nThanks,\nCoach",
     timestamp: "2025-04-29T13:30:00.000Z"
   },
   {
     id: "msg002",
-    recipient: "All Players",
+    recipient: ["All Players"],
     subject: "Skills Clinic This Saturday",
     body: "Hi Players,\n\nReminder that we have a special skills clinic this Saturday from 10 AM to 12 PM at the main field. We'll be focusing on dribbling and shooting drills. Come ready to work hard!\n\nBest,\nCoach",
     timestamp: "2025-04-28T18:00:00.000Z"
   },
   {
     id: "msg003",
-    recipient: "All Parents",
+    recipient: ["All Parents"],
     subject: "Fundraiser Update & Volunteer Request",
     body: "Dear Parents,\n\nThank you to everyone who has participated in our car wash fundraiser! We've raised $500 so far. We still need a few more parent volunteers for this weekend's event. If you're available to help out for an hour or two, please sign up here: [link].\n\nYour support is greatly appreciated!\n\nThanks,\nCoach",
     timestamp: "2025-04-27T11:45:00.000Z"

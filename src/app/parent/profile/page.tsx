@@ -22,10 +22,17 @@ export default function ProfilePage() {
     return (
         <ParentLayout>
             <div className="container mx-auto px-4 py-8">
+                 <div className="flex items-center justify-between mb-8">
+                    <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
+                    <Button variant="destructive" onClick={handleLogout} size="sm">
+                        <LogOut className="mr-2" />
+                        Logout
+                    </Button>
+                </div>
                  <div className="grid gap-8 md:grid-cols-2">
                     <Card>
                         <CardHeader>
-                            <CardTitle>My Profile</CardTitle>
+                            <CardTitle>My Information</CardTitle>
                             <CardDescription>Your personal information.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -35,13 +42,8 @@ export default function ProfilePage() {
                             </div>
                              <div className="space-y-2">
                                 <Label>Role</Label>
-                                <p className="font-semibold">Parent</p>
+                                <p className="font-semibold">Parent/Guardian</p>
                             </div>
-                            <Separator />
-                            <Button variant="destructive" onClick={handleLogout}>
-                                <LogOut className="mr-2" />
-                                Logout
-                            </Button>
                         </CardContent>
                     </Card>
 
@@ -57,7 +59,7 @@ export default function ProfilePage() {
                                      <AvatarFallback>{child.name.charAt(0)}</AvatarFallback>
                                     <div>
                                         <p className="font-bold text-xl">{child.name}</p>
-                                        <p className="text-md text-muted-foreground">Team: {selectedTeam?.name || "N/A"}</p>
+                                        <p className="text-md text-muted-foreground">Team: {selectedTeam?.name || "Falcons"}</p>
                                     </div>
                                </div>
                                 <Separator />

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useAppContext } from '@/context/app-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogOut, SwitchCamera, User, Mail, Phone, Edit, Settings, Trash2, Upload, KeyRound } from 'lucide-react';
+import { LogOut, SwitchCamera, User, Mail, Phone, Edit, Trash2, Upload, KeyRound } from 'lucide-react';
 import CoachLayout from '../coach/layout';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
@@ -103,7 +103,7 @@ export default function ProfilePage() {
                              <div className="space-y-2">
                                 <Label htmlFor="joinCode">Team Join Code</Label>
                                 <div className="flex items-center gap-2">
-                                    <Input id="joinCode" defaultValue="A8K2F9B1" className="font-mono" />
+                                    <Input id="joinCode" defaultValue="A8K2F9B1" readOnly className="font-mono bg-muted" />
                                     <Button variant="secondary">
                                         <KeyRound className="mr-2" />
                                         Generate New

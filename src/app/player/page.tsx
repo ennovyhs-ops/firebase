@@ -1,8 +1,6 @@
 
-import SchedulePage from "./schedule/page";
+import { redirect } from 'next/navigation';
 
-export default function PlayerDashboard() {
-    return (
-        <SchedulePage />
-    );
+export default function PlayerPage() {
+    redirect('/player/dashboard');
 }

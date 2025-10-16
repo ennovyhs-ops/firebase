@@ -1,17 +1,8 @@
 
-"use client";
+import { redirect } from 'next/navigation';
 
-import { useAppContext } from "@/context/app-context";
-import DashboardPage from "../dashboard/page";
-import TeamSelectionPage from "../teams/page";
-
-
-export default function CoachDashboard() {
-    const { selectedTeam } = useAppContext();
-
-    if (!selectedTeam) {
-        return <TeamSelectionPage />;
-    }
-
-    return <DashboardPage />;
+export default function CoachPage() {
+    // The coach's root page should just redirect to their dashboard.
+    // The dashboard content is in its own route.
+    redirect('/coach/dashboard');
 }

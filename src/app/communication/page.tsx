@@ -23,11 +23,12 @@ export default function CommunicationPage() {
   const [filterGroup, setFilterGroup] = useState("all");
   const [isComposeOpen, setIsComposeOpen] = useState(false);
   const [conversations, setConversations] = useState(allConversations);
+  const [selectedRecipients, setSelectedRecipients] = useState<string[]>([]);
 
   const recipientOptions = [
     { value: 'everyone', label: 'Everyone' },
-    { value: 'players', label: 'Players' },
-    { value: 'parents', label: 'Parents' },
+    { value: 'players', label: 'All Players' },
+    { value: 'parents', label: 'All Parents' },
     ...players.map(p => ({ value: p.id, label: p.name })),
   ];
 
@@ -80,9 +81,13 @@ export default function CommunicationPage() {
     const formData = new FormData(e.currentTarget);
     const subject = formData.get('subject') as string;
     const body = formData.get('body') as string;
-    const recipients = JSON.parse(formData.get('recipients') as string) as string[];
+    
+    if (!subject || !body || selectedRecipients.length === 0) {
+        alert("Please fill out all fields and select recipients.");
+        return;
+    }
 
-    const recipientLabels = recipients.map(r => {
+    const recipientLabels = selectedRecipients.map(r => {
         const option = recipientOptions.find(o => o.value === r);
         return option ? option.label : r;
     });
@@ -96,6 +101,7 @@ export default function CommunicationPage() {
     };
 
     setConversations(prev => [newMessage, ...prev]);
+    setSelectedRecipients([]);
     setIsComposeOpen(false);
   };
 
@@ -105,7 +111,7 @@ export default function CommunicationPage() {
             <div className="flex items-center justify-between mb-8">
                  <div className="flex items-center">
                     <Button asChild variant="ghost" size="icon" className="mr-2">
-                        <Link href="/dashboard">
+                        <Link href="/coach/dashboard">
                             <ArrowLeft />
                         </Link>
                     </Button>
@@ -131,13 +137,9 @@ export default function CommunicationPage() {
                                     placeholder="Select recipients..."
                                     searchPlaceholder="Search..."
                                     emptyPlaceholder="No recipients found."
-                                    value={[]}
-                                    onValueChange={(values) => {
-                                        const hiddenInput = document.getElementById('recipients-hidden') as HTMLInputElement;
-                                        if(hiddenInput) hiddenInput.value = JSON.stringify(values);
-                                    }}
+                                    value={selectedRecipients}
+                                    onValueChange={setSelectedRecipients}
                                 />
-                                <input type="hidden" name="recipients" id="recipients-hidden" defaultValue="[]" />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="subject">Subject</Label>

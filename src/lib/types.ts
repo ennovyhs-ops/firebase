@@ -11,6 +11,7 @@ export type User = {
 export type Player = {
     id: string;
     name: string;
+    nickname?: string;
     position: string;
     number: string;
     parent: string;

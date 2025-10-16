@@ -70,7 +70,7 @@ export function DashboardClient() {
                   ))}
                 </div>
                 <Button asChild size="sm" className="w-full mt-4">
-                  <Link href="/schedule">
+                  <Link href="/coach/schedule">
                     View Full Schedule <ArrowRight className="ml-2 size-4" />
                   </Link>
                 </Button>
@@ -96,7 +96,7 @@ export function DashboardClient() {
                  <div className="space-y-3">
                     {conversations.map(convo => (
                         <div key={convo.id} className="text-sm">
-                            <Link href={`/communication?id=${convo.id}`} className="font-medium text-primary hover:underline leading-tight">
+                            <Link href={`/coach/communication?id=${convo.id}`} className="font-medium text-primary hover:underline leading-tight">
                                 {convo.subject}
                             </Link>
                             <p className="text-xs text-muted-foreground truncate">To: {Array.isArray(convo.recipient) ? convo.recipient.join(', ') : convo.recipient}</p>
@@ -109,7 +109,7 @@ export function DashboardClient() {
                 </div>
             )}
             <Button asChild className="w-full mt-4">
-                <Link href="/communication">
+                <Link href="/coach/communication">
                 View All Messages <ArrowRight className="ml-2 size-4" />
                 </Link>
             </Button>
