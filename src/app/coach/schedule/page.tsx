@@ -40,7 +40,7 @@ export default function SchedulePage() {
       <div className="flex items-center justify-between mb-8">
           <div className="flex items-center">
             <Button asChild variant="ghost" size="icon" className="mr-2">
-            <Link href="/dashboard">
+            <Link href="/coach/dashboard">
               <ArrowLeft />
             </Link>
           </Button>

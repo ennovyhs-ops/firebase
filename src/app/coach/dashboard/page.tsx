@@ -24,7 +24,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScheduleItem } from "@/components/schedule-item";
 import { useAppContext } from "@/context/app-context";
 
-export function DashboardClient() {
+export default function CoachDashboard() {
   const { setSelectedTeam } = useAppContext();
 
   const upcomingEvents = React.useMemo(() => {
