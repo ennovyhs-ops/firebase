@@ -1,6 +1,5 @@
 
 "use client";
-import ParentLayout from "./layout";
 import {
   Card,
   CardContent,
@@ -31,13 +30,12 @@ export default function ParentDashboard() {
 
   const conversations = React.useMemo(() => {
     return [...allConversations]
-        .filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()) && c.recipient.includes("Parent"))
+        .filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()) && (c.recipient.includes("Parent") || c.recipient.includes("All")))
         .sort((a, b) => parseISO(b.timestamp!).getTime() - parseISO(a.timestamp!).getTime())
         .slice(0, 3);
   }, []);
 
   return (
-    <ParentLayout>
        <div className="container mx-auto px-4 py-8">
         <div className="grid gap-6 sm:grid-cols-2">
             <Card className="flex flex-col">
@@ -108,6 +106,5 @@ export default function ParentDashboard() {
             </Card>
         </div>
       </div>
-    </ParentLayout>
   );
 }

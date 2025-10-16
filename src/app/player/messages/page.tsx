@@ -6,6 +6,7 @@ import { MessageList } from '@/components/message-list';
 import { conversations } from '@/lib/data';
 
 export default function MessagesPage() {
+    const playerMessages = conversations.filter(c => c.recipient.includes("Player") || c.recipient.includes("All"));
     return (
         <div className="container mx-auto px-4 py-8">
             <Card>
@@ -13,7 +14,7 @@ export default function MessagesPage() {
                     <CardTitle>Team Messages</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <MessageList conversations={conversations.filter(c => c.recipient.includes("Player"))} />
+                    <MessageList conversations={playerMessages} />
                 </CardContent>
             </Card>
         </div>
