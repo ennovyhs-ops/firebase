@@ -2,14 +2,13 @@
 "use client";
 
 import type { ScheduleEvent } from '@/lib/types';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { Card, CardContent } from '@/components/ui/card';
 
 export function ScheduleItem({ event }: { event: ScheduleEvent }) {
-    // The date string from data is treated as local time, so creating a new Date object
-    // without specifying a time zone will use the browser's local time zone.
-    // We add a time to it to avoid timezone issues when just a date is provided.
-    const eventDate = new Date(`${event.date}T00:00:00`);
+    // The date string from data is treated as local time.
+    // To avoid hydration errors, parse the date string consistently.
+    const eventDate = parse(event.date, 'yyyy-MM-dd', new Date());
 
     return (
         <div className="flex items-start gap-4">

@@ -31,12 +31,14 @@ import CoachLayout from '../coach/layout';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 
+type DialogState = 'add' | 'edit' | 'view' | 'delete' | null;
+
 export default function RosterPage() {
     const { players, setPlayers } = useAppContext();
     const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-    const [dialogState, setDialogState] = useState<'add' | 'edit' | 'view' | 'delete' | null>(null);
+    const [dialogState, setDialogState] = useState<DialogState>(null);
 
-    const openDialog = (state: 'add' | 'edit' | 'view' | 'delete', player?: Player) => {
+    const openDialog = (state: DialogState, player?: Player) => {
         setSelectedPlayer(player || null);
         setDialogState(state);
     }
