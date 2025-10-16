@@ -34,8 +34,8 @@ export default function ParentLayout({ children }: { children: React.ReactNode }
                 <nav className="grid grid-cols-4 h-16 items-center">
                     {navItems.map((item) => (
                         <Link key={item.href} href={item.href} className="flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-primary transition-colors">
-                            <item.icon className={cn("size-6", (pathname.startsWith(item.href) && item.href !== '/') || pathname === item.href ? "text-primary" : "")} />
-                            <span className={cn("text-xs", (pathname.startsWith(item.href) && item.href !== '/') || pathname === item.href ? "text-primary font-semibold" : "")}>{item.label}</span>
+                            <item.icon className={cn("size-6", (pathname.startsWith(item.href) && item.href !== '/parent') || pathname === item.href ? "text-primary" : "")} />
+                            <span className={cn("text-xs", (pathname.startsWith(item.href) && item.href !== '/parent') || pathname === item.href ? "text-primary font-semibold" : "")}>{item.label}</span>
                         </Link>
                     ))}
                 </nav>

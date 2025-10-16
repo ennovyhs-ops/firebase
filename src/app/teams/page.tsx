@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useAppContext } from '@/context/app-context';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, ChevronRight, LogOut, PlusCircle, UserPlus } from 'lucide-react';
+import { Users, ChevronRight, LogOut, PlusCircle } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -124,7 +124,7 @@ export default function TeamSelectionPage() {
                     <Dialog open={isJoinOpen} onOpenChange={setIsJoinOpen}>
                         <DialogTrigger asChild>
                             <Button>
-                                <UserPlus className="mr-2" />
+                                <PlusCircle className="mr-2" />
                                 Join Team
                             </Button>
                         </DialogTrigger>
