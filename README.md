@@ -9,28 +9,31 @@ A web-based application for sport coach to communicate and manage player.
 ## Features
 
 - **Authentication & Personalization**
- - Simple login system for different user types (Coach, Player, Parent).
+ - Simple login system for different user types (Coach, Player, Parent) from dropdown.
  - Coach, Player and Parent use email and password to register own account.
-   - Coach to create new team or request join existing team by entering 8-digit code set by existing coach of team.
-   - Player/Parent after login, needs to enter a team 8-digit code to request joining team, to be approved by coach. 
+   - Coach to create new team or request join existing team by entering 8-alphanumeric code set by existing coach of team.
+   - Player after login, needs to enter a team 8-alphanumeric code to request joining team, to be approved by coach. 
+   - Parent after login, needs to enter Player email to confirm Parent account linkage with Player and a team 8-alphanumeric code to request joining team, to be approved by coach. 
   
 - **Coach View:**
  - **Team Selection**
-   - Coach select team from respective managing team list.
+   - Coach select joined team from respective managing team list.
+   - Option to create new or join other teams.
  - **Dashboards**
    - View team dashboard with upcoming events and activities and latest messages notofications.
  - **Roster Management**
-   - View a responsive list of all players on the team, with name, number and position, with sort and filter function.
-   - Coach confirm new player join request, badge with count to notify coach new request.
-   - Add notes to player for coach personal reference and records.
+   - View a responsive list of all players on the team, with profile photo, name, nickname, number and position, with sort and filter function.
    - Click a player to open a detailed modal view with full contact information and coaches notes for the player.
-    - Full roster management including photo, first name, last name, nickname, number, position, birth month and year,email and phone (add, view, edit, delete players and respective parent contact information).
-   - Add new players with details like photo, first name, last name, nickname, number, position, email, phone, birth month and year, parent info, and contact details.
-   - Edit and delete players directly from the player detail view.
-   - Add new player or parent using a coach set 8-digit team code for access with coach approval to confirm join. 
+   - In detailed modal view, Coach may add notes to Player for coach personal reference and records.
+   - Full roster management and edit including profile photo, first name, last name, nickname, number, position, birth month and year, email and phone (add, view, edit, delete players and respective parent contact information).
+   - Coach need to confirm new player/parent join team request, show badge with count to notify coach new request.   
+   - coach may add/edit new players with details like profile photo, first name, last name, nickname, number, position, email, phone, birth month and year, parent info, and contact details.
+   - Coach option to add note, edit or delete players directly from the player detail view.
+   - Coach to approve Player/Parent request to unjoin team. 
+   - Shortcut for Coach to set 8-alphanumeric code to add new player or parent. 
  - **Message**
    - Select and view message list, with sort and filter options.
-   - Messages in string
+   - Messages display in conversation view
    - Coaches can compose and send or reply messages with a subject and body.
    - Targeted messaging to different groups (everyone, just players, just parents and/or individual players with option to forward to respecitve parent).
   - Centralized message history for coaches, players, and parents.
@@ -45,10 +48,11 @@ A web-based application for sport coach to communicate and manage player.
    - **Team Setting**
      - Existing coach to a team may add new coach to join team to help manage by email invitation link. 
      - Coach can upload and display a custom logo and change name for team.
-     - Option to select and change managning team
+     - Option to select and change managning team.
+     - Create/edit 8-alphanumeric code for Player/Parent to join teams. Each team has its own unique 8-alphanumeric code.
      - Delete team
    - **Profile Setting**
-     - Profile Settings to change name, profile photo, contact email and phone.
+     - Profile Settings to edit profile photo, name, contact email and phone.
      - Delete account
  - Bottom navigation bar to navigate between different pages.
 
@@ -59,10 +63,10 @@ A web-based application for sport coach to communicate and manage player.
    - If joined mulitple teams, provide display all or filter option.
  - **Team Roster**    
    - view team' coaches name
-   - Only viewing a responsive list of all players on the team, with name, number and position, with sort and filter function. 
+   - Only viewing a responsive list of all players on the team, only display profile photo, name, nickname, number and position, with sort and filter function. 
  - **Message**
    - Select and view message list, with sort and filter options.
-   - Messages in string
+   - Messages display in conversation view
    - Player can compose and send or reply messages with a subject and body.
    - Targeted messaging to just coach or everyone.
    - Centralized message history for coaches, players, and parents.
@@ -74,10 +78,12 @@ A web-based application for sport coach to communicate and manage player.
    - Player to indicate own attendance to events and activities from options (Attend, Late, Injured, Absent), with time stamp to record.
  - **Setting**
    - **Team Setting**
-     - Add 8-digit code to request to join new teams.
-     - Send request to respective team coach to unjoin team.
+     - Allow to enter other 8-alphanumeric code to request to join more teams.
+     - Send request to respective team coach to unjoin team, needs team's coach approval.
+     - Display all joined teams.
    - **Profile Setting**
-     - Profile settings to edit name, nickname, profile photo, contact email and phone.
+     - Profile settings to edit profile photo, name, nickname,  contact email and phone.
+     - Display linked Parent accounts, if any. Needs Parent approval if unlinked by Player.
      - Delete account.
  - Bottom navigation bar to navigate between different pages.
  
@@ -87,10 +93,10 @@ A web-based application for sport coach to communicate and manage player.
    - Use colour code to display different teams.
    - If joined mulitple teams or have children, provide display all or filter option. 
  - **Team Roster**    
-   - Only viewing a responsive list of all players on the team, with name, number and position, with sort and filter function. 
+   - Only viewing a responsive list of all players on the team only display profile photo, name, nickname, number and position, with sort and filter function. 
  - **Message**
    - Select and view message list, with sort and filter options.
-   - Messages in string
+   - Messages display in conversation view
    - Parent can compose and send or reply messages with a subject and body.
    - Targeted messaging to just coach, everyone or just parent.
    - Centralized message history for coaches, players, and parents.
@@ -102,11 +108,14 @@ A web-based application for sport coach to communicate and manage player.
    - Parent to indicate Player attendance to events and activities from options (Attend, Late, Injured, Absent), with time stamp to record.
  - **Setting**
    - **Team Setting**
-     - Add 8-digit code to request to join new teams.
-     - Send request to respective team coach to unjoin team.
+     - Allow to enter other 8-alphanumeric code to request to join more teams.
+     - Send request to respective team coach to unjoin team, needs team's coach approval.
+     - Display all joined teams.
    - **Profile Setting**
-     - Profile settings to edit name, nickname, profile photo, contact email and phone.
+     - Profile settings to edit name, nickname, contact email and phone.
      - View and edit respective child Player profile information (first name, last name, contact email and number).
+     - Enter Players' registered email to link with respecitve Player account.
+     - Display linked Player accounts, if any. Needs Player approval if unlinked by Parent.
      - Delete account.
 - Bottom navigation bar to navigate between different pages.
 
