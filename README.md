@@ -27,7 +27,7 @@ A web-based application for sport coach to communicate and manage player.
    - In detailed modal view, Coach may add notes to Player for coach personal reference and records.
    - Full roster management and edit including profile photo, first name, last name, nickname, number, position, birth month and year, email and phone (add, view, edit, delete players and respective parent contact information).
    - Coach need to confirm new player/parent join team request, show badge with count to notify coach new request.   
-   - coach may add/edit new players with details like profile photo, first name, last name, nickname, number, position, email, phone, birth month and year, parent info, and contact details.
+   - coach may add/edit new players with details like profile photo, first name, last name, nickname, number, position, email, phone, birth month and year, parent's name, and contact details.
    - Coach option to add note, edit or delete players directly from the player detail view.
    - Coach to approve Player/Parent request to unjoin team. 
    - Shortcut for Coach to set 8-alphanumeric code to add new player or parent. 
