@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAppContext } from '@/context/app-context';
 import type { AccountType } from '@/lib/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function LoginPage() {
     const { setCurrentUser, users, currentAccountType, setCurrentAccountType } = useAppContext();
@@ -33,23 +34,24 @@ export default function LoginPage() {
         <div className="flex min-h-screen items-center justify-center bg-muted/40 p-4">
             <Card className="w-full max-w-sm">
                 <CardHeader className="text-center">
-                    <CardTitle className="text-3xl font-bold">TeamConnect</CardTitle>
-                    <CardDescription>Sports Team Management Platform</CardDescription>
+                    <CardTitle className="text-3xl font-bold">Sixx</CardTitle>
+                    <CardDescription>Sports Management Hub</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-3 gap-2 mb-6">
-                        {accountTypes.map(type => (
-                            <Button 
-                                key={type} 
-                                variant={currentAccountType === type ? "default" : "outline"}
-                                className="capitalize"
-                                onClick={() => setCurrentAccountType(type)}
-                            >
-                                {type}
-                            </Button>
-                        ))}
-                    </div>
                     <form onSubmit={handleLogin} className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="account-type">I am a</Label>
+                             <Select onValueChange={(value) => setCurrentAccountType(value as AccountType)} defaultValue={currentAccountType}>
+                                <SelectTrigger id="account-type">
+                                    <SelectValue placeholder="Select account type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {accountTypes.map(type => (
+                                        <SelectItem key={type} value={type} className="capitalize">{type}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
                         <div className="space-y-2">
                             <Label htmlFor="username">Username</Label>
                             <Input id="username" name="username" required placeholder="Enter username" />
