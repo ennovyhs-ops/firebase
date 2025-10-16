@@ -16,13 +16,11 @@ interface MessageListProps {
 }
 
 export function MessageList({ conversations }: MessageListProps) {
-  const [replyingTo, setReplyingTo] = React.useState<string | null>(null);
   const [replyText, setReplyText] = React.useState("");
 
   const handleReply = (conversationId: string) => {
     console.log(`Replying to ${conversationId}: ${replyText}`);
     // Here you would typically send the reply to your backend
-    setReplyingTo(null);
     setReplyText("");
   };
 

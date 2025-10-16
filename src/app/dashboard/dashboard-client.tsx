@@ -28,19 +28,17 @@ export function DashboardClient() {
   const { setSelectedTeam } = useAppContext();
 
   const upcomingEvents = React.useMemo(() => {
-    const validEvents = allSchedule.filter(e => !isNaN(new Date(e.date).getTime()));
-    return validEvents.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 2);
+    return allSchedule
+        .filter(e => !isNaN(new Date(e.date).getTime()))
+        .sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        .slice(0, 2);
   }, []);
 
   const conversations = React.useMemo(() => {
-    const validConversations = [...allConversations].filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()));
-    return validConversations.sort((a, b) => {
-        const dateA = parseISO(a.timestamp!).getTime();
-        const dateB = parseISO(b.timestamp!).getTime();
-        if (dateB !== dateA) return dateB - dateA;
-        // Secondary sort for stability if timestamps are identical
-        return a.id.localeCompare(b.id);
-    }).slice(0, 3);
+    return [...allConversations]
+        .filter(c => c.timestamp && !isNaN(parseISO(c.timestamp).getTime()))
+        .sort((a, b) => parseISO(b.timestamp!).getTime() - parseISO(a.timestamp!).getTime())
+        .slice(0, 3);
   }, []);
 
 

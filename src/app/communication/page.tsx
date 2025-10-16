@@ -12,10 +12,10 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { parseISO } from 'date-fns';
-import CoachLayout from '../coach/layout';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { MultiSelectCombobox } from '@/components/ui/multi-select-combobox';
+import CoachLayout from '../coach/layout';
 
 export default function CommunicationPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,14 +55,21 @@ export default function CommunicationPage() {
     }
 
     convos.sort((a, b) => {
-      const dateA = a.timestamp ? parseISO(a.timestamp).getTime() : 0;
-      const dateB = b.timestamp ? parseISO(b.timestamp).getTime() : 0;
-      
-      if (sortOrder === 'newest') {
-          return dateB - dateA;
-      } else {
-          return dateA - dateB;
-      }
+        const dateA = a.timestamp ? parseISO(a.timestamp).getTime() : 0;
+        const dateB = b.timestamp ? parseISO(b.timestamp).getTime() : 0;
+        
+        let comparison = 0;
+        if (sortOrder === 'newest') {
+            comparison = dateB - dateA;
+        } else {
+            comparison = dateA - dateB;
+        }
+        
+        if (comparison === 0) {
+            return a.id.localeCompare(b.id);
+        }
+        
+        return comparison;
     });
 
     return convos;

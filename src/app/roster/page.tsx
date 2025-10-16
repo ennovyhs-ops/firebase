@@ -31,21 +31,21 @@ import CoachLayout from '../coach/layout';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 
-type DialogState = 'add' | 'edit' | 'view' | 'delete' | null;
+type DialogState = {
+    type: 'add' | 'edit' | 'view' | 'delete' | null;
+    player?: Player | null;
+}
 
 export default function RosterPage() {
     const { players, setPlayers } = useAppContext();
-    const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-    const [dialogState, setDialogState] = useState<DialogState>(null);
+    const [dialog, setDialog] = useState<DialogState>({ type: null, player: null });
 
-    const openDialog = (state: DialogState, player?: Player) => {
-        setSelectedPlayer(player || null);
-        setDialogState(state);
+    const openDialog = (type: DialogState['type'], player?: Player) => {
+        setDialog({ type, player });
     }
     
     const closeDialog = () => {
-        setDialogState(null);
-        setSelectedPlayer(null);
+        setDialog({ type: null, player: null });
     }
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -63,16 +63,16 @@ export default function RosterPage() {
             notes: formData.get('notes') as string,
         };
 
-        if (dialogState === 'add') {
+        if (dialog.type === 'add') {
             const newPlayer: Player = {
                 id: `p${players.length + 1}`,
                 ...playerDetails,
                 photo: `https://picsum.photos/seed/p${players.length + 1}/200`
             };
             setPlayers([...players, newPlayer]);
-        } else if (dialogState === 'edit' && selectedPlayer) {
+        } else if (dialog.type === 'edit' && dialog.player) {
             const updatedPlayer: Player = {
-                ...selectedPlayer,
+                ...dialog.player,
                 ...playerDetails
             };
             setPlayers(players.map(p => p.id === updatedPlayer.id ? updatedPlayer : p));
@@ -81,11 +81,13 @@ export default function RosterPage() {
     };
     
     const handleDeletePlayer = () => {
-        if (selectedPlayer) {
-            setPlayers(players.filter(p => p.id !== selectedPlayer.id));
+        if (dialog.player) {
+            setPlayers(players.filter(p => p.id !== dialog.player!.id));
         }
         closeDialog();
     };
+
+    const selectedPlayer = dialog.player;
 
     return (
         <CoachLayout>
@@ -145,10 +147,10 @@ export default function RosterPage() {
                 </Card>
 
                 {/* Add/Edit Dialog */}
-                <Dialog open={dialogState === 'add' || dialogState === 'edit'} onOpenChange={closeDialog}>
+                <Dialog open={dialog.type === 'add' || dialog.type === 'edit'} onOpenChange={closeDialog}>
                     <DialogContent className="sm:max-w-[480px]">
                         <DialogHeader>
-                            <DialogTitle>{dialogState === 'add' ? 'Add New Player' : `Edit ${selectedPlayer?.name}`}</DialogTitle>
+                            <DialogTitle>{dialog.type === 'add' ? 'Add New Player' : `Edit ${selectedPlayer?.name}`}</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleFormSubmit} className="space-y-4 max-h-[80vh] overflow-y-auto pr-6">
                              <div className="space-y-2">
@@ -193,14 +195,14 @@ export default function RosterPage() {
                             </div>
                             <DialogFooter className="pt-4 sticky bottom-0 bg-background">
                                 <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
-                                <Button type="submit">{dialogState === 'add' ? 'Add Player' : 'Save Changes'}</Button>
+                                <Button type="submit">{dialog.type === 'add' ? 'Add Player' : 'Save Changes'}</Button>
                             </DialogFooter>
                         </form>
                     </DialogContent>
                 </Dialog>
 
                 {/* View Details Dialog */}
-                <Dialog open={dialogState === 'view'} onOpenChange={closeDialog}>
+                <Dialog open={dialog.type === 'view'} onOpenChange={closeDialog}>
                      {selectedPlayer && (
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
@@ -249,7 +251,7 @@ export default function RosterPage() {
                 </Dialog>
                 
                 {/* Delete Confirmation */}
-                <AlertDialog open={dialogState === 'delete'} onOpenChange={closeDialog}>
+                <AlertDialog open={dialog.type === 'delete'} onOpenChange={closeDialog}>
                     <AlertDialogContent>
                         <AlertDialogHeader>
                             <AlertDialogTitle>Are you sure?</AlertDialogTitle>

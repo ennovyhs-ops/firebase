@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 export function ScheduleItem({ event }: { event: ScheduleEvent }) {
     // The date string from data is treated as local time.
-    // To avoid hydration errors, parse the date string consistently.
+    // parseISO assumes UTC, use parse to handle local date strings 'yyyy-MM-dd'
     const eventDate = parse(event.date, 'yyyy-MM-dd', new Date());
 
     return (
