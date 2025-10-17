@@ -6,14 +6,16 @@ This is a NextJS starter in Firebase Studio.
 
 A web-based application for sport coach to communicate and manage player. 
 
+
+
 ## Features
 
 - **Authentication & Personalization**
  - Simple login system for different user types (Coach, Player, Parent) from dropdown.
  - Coach, Player and Parent use email and password to register own account.
-   - Coach to create new team or request join existing team by entering 8-alphanumeric code set by existing coach of team.
-   - Player after login, needs to enter a team 8-alphanumeric code to request joining team, to be approved by coach. 
-   - Parent after login, needs to enter Player email to confirm Parent account linkage with Player and a team 8-alphanumeric code to request joining team, to be approved by coach. 
+ - Coach to create new team or request join existing team by entering 8-alphanumeric code set by existing coach of team.
+ - Player after login, needs to enter a team 8-alphanumeric code to request joining team, to be approved by coach. 
+ - Parent after login, needs to enter Player email to confirm Parent account linkage with Player and a team 8-alphanumeric code to request joining team, to be approved by coach. 
   
 - **Coach View:**
  - **Team Selection**
@@ -21,19 +23,20 @@ A web-based application for sport coach to communicate and manage player.
    - Option to create new or join other teams.
  - **Dashboards**
    - View team dashboard with upcoming events and activities and latest messages notofications.
+   - Upcoming events and activities and latest messages are expandable to show the three latest and clickable to go into detailed modal.
  - **Roster Management**
    - View a responsive list of all players on the team, with profile photo, name, nickname, number and position, with sort and filter function.
    - Click a player to open a detailed modal view with full contact information and coaches notes for the player.
    - In detailed modal view, Coach may add notes to Player for coach personal reference and records.
    - Full roster management and edit including profile photo, first name, last name, nickname, number, position, birth month and year, email and phone (add, view, edit, delete players and respective parent contact information).
-   - Coach need to confirm new player/parent join team request, show badge with count to notify coach new request.   
+   - Coach need to confirm new player/parent join team request, show badge with count to notify coach new request.  
    - coach may add/edit new players with details like profile photo, first name, last name, nickname, number, position, email, phone, birth month and year, parent's name, and contact details.
    - Coach option to add note, edit or delete players directly from the player detail view.
    - Coach to approve Player/Parent request to unjoin team. 
    - Shortcut for Coach to set 8-alphanumeric code to add new player or parent. 
  - **Message**
    - Select and view message list, with sort and filter options.
-   - Messages display in conversation view
+   - Messages display in conversation view.
    - Coaches can compose and send or reply messages with a subject and body.
    - Targeted messaging to different groups (everyone, just players, just parents and/or individual players with option to forward to respecitve parent).
   - Centralized message history for coaches, players, and parents.
@@ -49,24 +52,25 @@ A web-based application for sport coach to communicate and manage player.
      - Existing coach to a team may add new coach to join team to help manage by email invitation link. 
      - Coach can upload and display a custom logo and change name for team.
      - Option to select and change managning team.
-     - Create/edit 8-alphanumeric code for Player/Parent to join teams. Each team has its own unique 8-alphanumeric code.
+     - Create/edit 8-alphanumeric code for Player and Parent to join teams. Each team has its own unique 8-alphanumeric code.
      - Delete team
    - **Profile Setting**
      - Profile Settings to edit profile photo, name, contact email and phone.
-     - Delete account
+     - Delete account.
  - Bottom navigation bar to navigate between different pages.
 
 - **Player View:**
  - **Dashboards**
    - View personal dashboard on upcoming events and activities and latest messages notofications of all joined teams.
-   - Use colour code to display different teams.
-   - If joined mulitple teams, provide display all or filter option.
+   - Upcoming events and activities and latest messages are expandable to show the three latest and clickable to go into detailed modal.
+   - If Player has joined mulitple teams, provide option to filter with multiple selection or display all for easier viewing.
+   - When displaying multiple team up coming events and activities, use colour code to display different teams.
  - **Team Roster**    
-   - view team' coaches name
+   - View team's coaches name.
    - Only viewing a responsive list of all players on the team, only display profile photo, name, nickname, number and position, with sort and filter function. 
  - **Message**
    - Select and view message list, with sort and filter options.
-   - Messages display in conversation view
+   - Messages display in conversation view.
    - Player can compose and send or reply messages with a subject and body.
    - Targeted messaging to just coach or everyone.
    - Centralized message history for coaches, players, and parents.
@@ -89,14 +93,15 @@ A web-based application for sport coach to communicate and manage player.
  
 - **Parent View:**
  - **Dashboards**
-   - View and manage their children's dashboard on upcoming events and activities and latest messages notofications of all joined teams.
-   - Use colour code to display different teams.
-   - If joined mulitple teams or have children, provide display all or filter option. 
+   - View and manage respective children Player dashboard on upcoming events and activities and latest messages notofications of all joined teams.
+   - Upcoming events and activities and latest messages are expandable to show the three latest and clickable to go into detailed modal.
+   - If joined respective child Player has joined mulitple teams or have multiple child Player, provide option to   filter with multiple selection or display all easier viewing.
+   - When displaying multiple team up coming events and activities, use colour code to display different teams.
  - **Team Roster**    
    - Only viewing a responsive list of all players on the team only display profile photo, name, nickname, number and position, with sort and filter function. 
  - **Message**
    - Select and view message list, with sort and filter options.
-   - Messages display in conversation view
+   - Messages display in conversation view.
    - Parent can compose and send or reply messages with a subject and body.
    - Targeted messaging to just coach, everyone or just parent.
    - Centralized message history for coaches, players, and parents.
@@ -122,4 +127,5 @@ A web-based application for sport coach to communicate and manage player.
 - **AI-Powered Performance Analysis**
   - A dedicated flow (`analyze-performance-data.ts`) to analyze game statistics and player data.
   - Provides overall team analysis, player-specific recommendations, and strategic adjustments.
+
 
