@@ -11,10 +11,13 @@ A web-based application for sport coach to communicate and manage player.
 ## Features
 - **Authentication & Personalization**
  - Simple login system for different user types (Coach, Player, Parent) from dropdown.
+ - Button to show password and forget password reset request by email input.
+   - send reset password link via registered email.
  - Coach, Player and Parent use email and password to register own account.
  - Coach to create new team or request join existing team by entering 8-alphanumeric code set by existing coach of team.
  - Player after login, needs to enter a team 8-alphanumeric code to request joining team, to be approved by coach. 
  - Parent after login, needs to enter Player email to confirm Parent account linkage with Player and a team 8-alphanumeric code to request joining team, to be approved by coach. 
+ - 
   
 - **Coach View:**
  - **Team Selection**
