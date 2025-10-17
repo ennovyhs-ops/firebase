@@ -1,7 +1,7 @@
 
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -9,9 +9,11 @@ import { Label } from '@/components/ui/label';
 import { useAppContext } from '@/context/app-context';
 import type { AccountType } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
     const { setCurrentUser, users, currentAccountType, setCurrentAccountType } = useAppContext();
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -58,7 +60,26 @@ export default function LoginPage() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="password">Password</Label>
-                            <Input id="password" name="password" type="password" required placeholder="Enter password" />
+                            <div className="relative">
+                                <Input 
+                                    id="password" 
+                                    name="password" 
+                                    type={showPassword ? 'text' : 'password'} 
+                                    required 
+                                    placeholder="Enter password" 
+                                    className="pr-10"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    className="absolute inset-y-0 right-0 h-full px-3"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <EyeOff /> : <Eye />}
+                                    <span className="sr-only">{showPassword ? 'Hide password' : 'Show password'}</span>
+                                </Button>
+                            </div>
                         </div>
                         <Button type="submit" className="w-full">Login</Button>
                     </form>
