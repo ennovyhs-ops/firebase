@@ -12,9 +12,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useAppContext } from '@/context/app-context';
 
 export default function MessagesPage() {
-    const [conversations, setConversations] = useState(allConversations.filter(c => c.recipient.toString().toLowerCase().includes("parent") || c.recipient.toString().toLowerCase().includes("everyone")));
+    const { currentUser } = useAppContext();
+    const [conversations, setConversations] = useState(allConversations.filter(c => 
+        c.recipient.toString().toLowerCase().includes("parent") || 
+        c.recipient.toString().toLowerCase().includes("everyone")
+    ));
     const [isComposeOpen, setIsComposeOpen] = useState(false);
 
     const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,6 +28,11 @@ export default function MessagesPage() {
         const subject = formData.get('subject') as string;
         const body = formData.get('body') as string;
         const recipients = formData.get('recipients') as string;
+
+        if (!subject || !body || !recipients) {
+            alert('Please fill all fields.');
+            return;
+        }
 
         const newMessage = {
             id: `msg${conversations.length + 1}`,
@@ -50,7 +60,7 @@ export default function MessagesPage() {
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Compose Message</DialogTitle>
-                            <DialogDescription>Send a message to the coach.</DialogDescription>
+                            <DialogDescription>Send a message to the coach or team.</DialogDescription>
                         </DialogHeader>
                         <form onSubmit={handleSendMessage} className="space-y-4">
                             <div className="space-y-2">
