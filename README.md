@@ -1,15 +1,14 @@
 # Firebase Studio
-
 This is a NextJS starter in Firebase Studio.
 
 # firebase
-
 A web-based application for sport coach to communicate and manage player. 
 
 
+## Design
+- Black, Blue and White colour based.
 
 ## Features
-
 - **Authentication & Personalization**
  - Simple login system for different user types (Coach, Player, Parent) from dropdown.
  - Coach, Player and Parent use email and password to register own account.
